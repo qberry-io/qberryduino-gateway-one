@@ -1,4 +1,4 @@
-//  Copyright (c) 2018-present, Deniz KANMAZ  All rights reserved.
+//  Copyright (c) 2018-present, Deniz KANMAZ All rights reserved.
 //  This source code is licensed under the GNU GENERAL PUBLIC
 //  LICENCE V3. Use of this source code is governed by a license
 //  that can be found in the LICENSE file.
@@ -9,7 +9,7 @@
 //  LICENSE file for more details.
 
 //  You should have received a copy of the LICENSE file along with
-//  with this program. If not, see <http://www.gnu.org/licenses/>.
+//  this program. If not, see <http://www.gnu.org/licenses/>.
 
 //  E-mail: denizkanmaz@gmail.com
 
