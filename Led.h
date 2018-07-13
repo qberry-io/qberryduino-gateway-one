@@ -1,4 +1,4 @@
-//  Copyright (c) 2018-present, Deniz KANMAZ All rights reserved.
+//  Copyright (c) 2018-present, Deniz Kanmaz. All rights reserved.
 //  This source code is licensed under the GNU GENERAL PUBLIC
 //  LICENCE V3. Use of this source code is governed by a license
 //  that can be found in the LICENSE file.
@@ -47,14 +47,14 @@ class Led
 
     void indicateStarting() {
 
-      mainSerialManager.println("starting");
+      // mainSerialManager.println("starting");
 
       for (i = 0; i < ledPinsLength; i++) {
-        mainSerialManager.println((String)ledPins[i]);
+        // mainSerialManager.println((String)ledPins[i]);
         digitalWrite(ledPins[i], HIGH);
         delay(250);
         digitalWrite(ledPins[i], LOW);
-        mainSerialManager.println((String)ledPins[i]);
+        // mainSerialManager.println((String)ledPins[i]);
       }
 
     }

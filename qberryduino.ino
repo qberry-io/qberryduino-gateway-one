@@ -1,4 +1,4 @@
-//  Copyright (c) 2018-present, Deniz KANMAZ All rights reserved.
+//  Copyright (c) 2018-present, Deniz Kanmaz. All rights reserved.
 //  This source code is licensed under the GNU GENERAL PUBLIC
 //  LICENCE V3. Use of this source code is governed by a license
 //  that can be found in the LICENSE file.
@@ -30,6 +30,14 @@ Led _led;
 MainSerial _mainSerial;
 Modem _modem;
 
+// Definitions of Server
+const PROGMEM String SERVER_ADDRES = "";
+const PROGMEM int TCP_PORT = 0;
+
+// Definitions of APN
+const PROGMEM String APN_NAME = "internet";
+const PROGMEM String APN_USER = "";
+const PROGMEM String APN_PASS = "";
 
 // Definitions of development / maintenance stuff
 const PROGMEM boolean DEBUG_MODE = true;
@@ -55,40 +63,20 @@ const PROGMEM int MODEM_BAUD_RATE = 9600;
 // Current State
 int i; // Used in loops only
 
-
-
 void initSerial() {
   Serial.begin(SERIAL_BAUD_RATE);
 }
 
-void initModem() {
-  _led.indicateConnecting();
-  //step1();
-
-  _led.indicateConnecting();
-  //step2();
-
-  _led.indicateConnecting();
-  //step3();
-
-  if (true) {
-    _led.indicateConnected();
-  } else {
-    _led.indicateConnectionError();
-  }
-}
-
-
-
 void setup() {
   if (DEBUG_MODE) {
     _mainSerial.init(SERIAL_BAUD_RATE);
-    _mainSerial.println(F("*** Debug mode enabled ***"));
+    //_mainSerial.println(F("*** Debug mode enabled ***"));
   }
   _led.init(LED_PINS, LED_PINS_LENGTH, _mainSerial);
   _led.indicateStarting();
   _led.indicatePoweredOn();
-  _modem.init(MODEM_RX_PIN, MODEM_TX_PIN, MODEM_BAUD_RATE, _led);
+  _modem.init(MODEM_RX_PIN, MODEM_TX_PIN, MODEM_BAUD_RATE, APN_NAME, APN_USER, APN_PASS, _led, _mainSerial);
+  _modem.connectToTCP(SERVER_ADDRES, TCP_PORT);
 }
 
 void loop() {
