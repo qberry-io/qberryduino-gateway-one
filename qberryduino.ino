@@ -16,6 +16,7 @@
 #include "MainSerial.h"
 #include "Led.h"
 #include "Modem.h"
+#include "Messaging.h"
 /*
   serial.h
   leds.h
@@ -29,10 +30,12 @@
 Led _led;
 MainSerial _mainSerial;
 Modem _modem;
+Messaging _messaging = Messaging();
 
 // Definitions of Server
 char SERVER_ADDRES [] = "37.48.83.216";
 const PROGMEM int TCP_PORT = 23101;
+char PASSWORD[] = "123456";
 
 // Definitions of APN
 const PROGMEM String APN_NAME = "internet";
@@ -44,7 +47,10 @@ const PROGMEM boolean DEBUG_MODE = true;
 const PROGMEM int SERIAL_BAUD_RATE = 9600;
 
 // Definitions of device
-const char * DEVICE_MODEL = "";
+const PROGMEM byte DEVICE_IDENTITY_LENGTH = 19;
+char DEVICE_IDENTITY_PREFIX[] = "900";
+char DEVICE_IDENTITY[DEVICE_IDENTITY_LENGTH];
+char DEVICE_MODEL[] = "qbdone";
 
 // Definitions of leds
 const PROGMEM byte LED_PINS_LENGTH = 4;
@@ -76,7 +82,16 @@ void setup() {
   _led.indicateStarting();
   _led.indicatePoweredOn();
   _modem.init(MODEM_RX_PIN, MODEM_TX_PIN, MODEM_BAUD_RATE, APN_NAME, APN_USER, APN_PASS, _led, _mainSerial);
-  _modem.connectToTCP(SERVER_ADDRES, TCP_PORT);
+
+  if (!_modem.connectToTCP(SERVER_ADDRES, TCP_PORT)) {
+    // restart
+    return;
+  }
+
+  (String(DEVICE_IDENTITY_PREFIX) + String(_modem.getImei())).toCharArray(DEVICE_IDENTITY, DEVICE_IDENTITY_LENGTH);
+  // DEVICE_IDENTITY = _modem.getImei();
+  _modem.sendMessage(_messaging.hello(DEVICE_IDENTITY, PASSWORD, DEVICE_MODEL));
+
 }
 
 void loop() {

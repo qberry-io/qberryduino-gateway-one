@@ -35,6 +35,7 @@ class Modem
     char * apnPassword;
     int i;
     char ichr;
+    char imei[16];
 
     // TODO: Try to find another way.
     SoftwareSerial ss = SoftwareSerial(-1, -1);
@@ -115,13 +116,20 @@ class Modem
       delay(500);
     }
 
-    void connectToTCP(char address[], int port) {
+    char* getImei() {
+      Serial.println(imei);
+      return imei;
+    }
+
+    boolean connectToTCP(char address[], int port) {
       // WriteLine("", DELAY_500);
       // ss.write(0x1A);
       WriteLine(at.setResultMode(2), DELAY_250);
       delay(DELAY_250);
       ledManager.indicateConnecting();
-      WriteLine(at.getImei(), DELAY_250);
+
+      String(WriteLine(at.getImei(), DELAY_250)).substring(7, 22).toCharArray(imei, 16);
+
       delay(DELAY_250);
       ledManager.indicateConnecting();
       WriteLine(at.closeTCP(), DELAY_250);
@@ -158,12 +166,23 @@ class Modem
       WriteLine(at.getLocalIP(), DELAY_3000);
       delay(DELAY_250);
       ledManager.indicateConnecting();
+      
       if (WriteLine(at.startTCPConnection(address, (String) port), DELAY_3000).lastIndexOf(F("CONNECT OK")) > 0) {
         ledManager.indicateConnected();
+        delay(DELAY_250);
+        return true;
       } else {
         ledManager.indicateConnectionError();
+        delay(DELAY_250);
+        return false;
       }
-      delay(DELAY_250);
+    }
 
+    boolean sendMessage(String msg){
+      WriteLine(at.activateCIPSendMode(), DELAY_1000);
+      WriteLine(msg, DELAY_250);
+      ss.write(0x1A);
+      delay(DELAY_250);
+      ledManager.indicateTCPSend();
     }
 };

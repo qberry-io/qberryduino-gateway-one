@@ -18,7 +18,7 @@ class Led
 {
   private:
     MainSerial mainSerialManager;
-  
+
     byte ledPinsLength;
     byte * ledPins;
     int i;
@@ -32,14 +32,18 @@ class Led
       return ledPins[1];
     }
 
+    byte getBlueLedPin() {
+      return ledPins[3];
+    }
+
   public:
     void init(byte * lPins, byte lPinsLength, MainSerial msManager) {
       ledPins = lPins;
       ledPinsLength = lPinsLength;
       mainSerialManager = msManager;
-      
+
       for (i = 0; i < ledPinsLength; i++) {
-        
+
         pinMode(ledPins[i], OUTPUT);
         digitalWrite(ledPins[i], LOW);
       }
@@ -56,7 +60,6 @@ class Led
         digitalWrite(ledPins[i], LOW);
         // mainSerialManager.println((String)ledPins[i]);
       }
-
     }
 
     // Blinks Yellow indicators only one time.
@@ -65,6 +68,14 @@ class Led
       delay(250);
       digitalWrite(getYellowLedPin(), LOW);
       delay(250);
+    }
+
+    // Blinks Yellow indicators only one time.
+    void indicateTCPSend() {
+      digitalWrite(getBlueLedPin(), HIGH);
+      delay(500);
+      digitalWrite(getBlueLedPin(), LOW);
+      delay(500);
     }
 
     // Powers on Red indicators indefinitely.

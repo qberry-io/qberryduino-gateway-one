@@ -118,4 +118,9 @@ class AT
     String startTCPConnection(String address, String port) {
       return mergeWithPrefix("CIPSTART=" + capsulateWithDoubleQuote(F("TCP")) + "," + capsulateWithDoubleQuote(address) + "," + capsulateWithDoubleQuote(port));
     }
+
+    // For more: http://m2msupport.net/m2msupport/atcipsend-send-data-through-tcp-or-udp-connection/
+    String activateCIPSendMode() {
+      return mergeWithPrefix(F("CIPSEND"));
+    }
 };
