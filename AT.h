@@ -13,8 +13,6 @@
 
 //  E-mail: denizkanmaz@gmail.com
 
-#include "avr/pgmspace.h"
-
 class AT
 {
   private:

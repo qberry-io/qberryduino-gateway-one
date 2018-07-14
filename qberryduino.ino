@@ -31,13 +31,13 @@ MainSerial _mainSerial;
 Modem _modem;
 
 // Definitions of Server
-const PROGMEM String SERVER_ADDRES = "";
-const PROGMEM int TCP_PORT = 0;
+char SERVER_ADDRES [] = "37.48.83.216";
+const PROGMEM int TCP_PORT = 23101;
 
 // Definitions of APN
 const PROGMEM String APN_NAME = "internet";
-const PROGMEM String APN_USER = "";
-const PROGMEM String APN_PASS = "";
+char APN_USER [] = "";
+char APN_PASS [] = "";
 
 // Definitions of development / maintenance stuff
 const PROGMEM boolean DEBUG_MODE = true;

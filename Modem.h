@@ -16,9 +16,12 @@
 #include "AT.h"
 #include <SoftwareSerial.h>
 
-const PROGMEM unsigned int SS_BUFFER_SIZE = 8;
-const PROGMEM int DELAY_250 = 250;
-const PROGMEM int DELAY_3000 = 3000;
+// const PROGMEM unsigned int SS_BUFFER_SIZE = 8;
+const PROGMEM byte DELAY_250 = 250;
+const PROGMEM unsigned int DELAY_1000 = 1000;
+const PROGMEM unsigned int DELAY_2000 = 2000;
+const PROGMEM unsigned int DELAY_3000 = 3000;
+const PROGMEM unsigned int DELAY_7000 = 7000;
 
 class Modem
 {
@@ -27,10 +30,11 @@ class Modem
     MainSerial mainSerial;
     AT at = AT();
     String ssBuffer;
-    int i;
     String apnName;
-    String apnUser;
-    String apnPassword;
+    char * apnUser;
+    char * apnPassword;
+    int i;
+    char ichr;
 
     // TODO: Try to find another way.
     SoftwareSerial ss = SoftwareSerial(-1, -1);
@@ -57,18 +61,18 @@ class Modem
 
       i = 0;
       while (ss.available() != 0) {
-        char chr = ss.read();
+        ichr = ss.read();
         // printReceived((String)chr);
-        if (chr != '\r'
-            && chr != '\n'
-            && chr != '\0'
-            && chr != '\b'
-            && chr != '\a'
-            && chr != '\f'
-            && chr != '\t'
-            && chr != '\v') {
-          ssBuffer = ssBuffer + chr ;
-          // ssBuffer[i] = chr;
+        if (ichr != '\r'
+            && ichr != '\n'
+            && ichr != '\0'
+            && ichr != '\b'
+            && ichr != '\a'
+            && ichr != '\f'
+            && ichr != '\t'
+            && ichr != '\v') {
+          ssBuffer = ssBuffer + ichr ;
+          // ssBuffer[i] = ichr;
           i++;
         }
       }
@@ -89,8 +93,8 @@ class Modem
               byte tx,
               int baudRate,
               String apnN,
-              String apnUsername,
-              String apnPass,
+              char apnUsername[],
+              char apnPass[],
               Led lm,
               MainSerial ms) {
 
@@ -111,7 +115,7 @@ class Modem
       delay(500);
     }
 
-    void connectToTCP(String address, int port) {
+    void connectToTCP(char address[], int port) {
       // WriteLine("", DELAY_500);
       // ss.write(0x1A);
       WriteLine(at.setResultMode(2), DELAY_250);
@@ -123,7 +127,7 @@ class Modem
       WriteLine(at.closeTCP(), DELAY_250);
       delay(DELAY_250);
       ledManager.indicateConnecting();
-      WriteLine(at.resetToFactoryDefault(), 2000);
+      WriteLine(at.resetToFactoryDefault(), DELAY_2000);
       delay(DELAY_250);
       ledManager.indicateConnecting();
       WriteLine(at.resetIPSession(), DELAY_250);
@@ -138,9 +142,9 @@ class Modem
       delay(DELAY_250);
       ledManager.indicateConnecting();
       WriteLine(at.setConnectionModeSingle(), DELAY_250);
-      delay(7000);
+      delay(DELAY_7000);
       ledManager.indicateConnecting();
-      WriteLine(at.setupPDPContext(apnName, apnUser, apnPassword), 2000);
+      WriteLine(at.setupPDPContext(apnName, apnUser, apnPassword), DELAY_2000);
       delay(DELAY_3000);
       ledManager.indicateConnecting();
 
@@ -148,7 +152,7 @@ class Modem
       delay(DELAY_3000);
       ledManager.indicateConnecting();
 
-      WriteLine(at.bringGPRSCalls(), 1000);
+      WriteLine(at.bringGPRSCalls(), DELAY_1000);
       delay(DELAY_3000);
       ledManager.indicateConnecting();
       WriteLine(at.getLocalIP(), DELAY_3000);
