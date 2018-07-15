@@ -16,12 +16,16 @@
 #include "AT.h"
 #include <SoftwareSerial.h>
 
-// const PROGMEM unsigned int SS_BUFFER_SIZE = 8;
+const PROGMEM unsigned int SS_BUFFER_SIZE = 256;
+const PROGMEM byte DELAY_60 = 60;
 const PROGMEM byte DELAY_250 = 250;
 const PROGMEM unsigned int DELAY_1000 = 1000;
 const PROGMEM unsigned int DELAY_2000 = 2000;
 const PROGMEM unsigned int DELAY_3000 = 3000;
 const PROGMEM unsigned int DELAY_7000 = 7000;
+
+const PROGMEM String MC_TO_MODEM = "MC > Modem: ";
+const PROGMEM String MODEM_TO_MC = "MC < Modem: ";
 
 class Modem
 {
@@ -41,9 +45,12 @@ class Modem
     SoftwareSerial ss = SoftwareSerial(-1, -1);
 
     void clearSerial() {
-      while ( ss.available() > 0) {
+      //Serial.println("$$$");
+      while (ss.available() > 0) {
         ss.read();
+        // Serial.write(ss.read());
       }
+      //Serial.println("&&&");
     }
 
     void clearBuffer() {
@@ -53,15 +60,15 @@ class Modem
     String WriteLine(String message, int delayer) {
       clearSerial();
       clearBuffer();
-
-      message = message; //+ "\r\n";
+      
       ss.println(message);
-      //char c = ss.read();
       printSent(message);
       delay(delayer);
 
       i = 0;
+      //Serial.println("$$$");
       while (ss.available() != 0) {
+
         ichr = ss.read();
         // printReceived((String)chr);
         if (ichr != '\r'
@@ -72,21 +79,51 @@ class Modem
             && ichr != '\f'
             && ichr != '\t'
             && ichr != '\v') {
-          ssBuffer = ssBuffer + ichr ;
+          ssBuffer = (ssBuffer + ichr);
           // ssBuffer[i] = ichr;
           i++;
+          //Serial.print(ichr);
         }
+
       }
+      //Serial.println("&&&");
       printReceived(ssBuffer);
       return ssBuffer;
     }
 
+    char * WriteLine2(String message, int delayer) {
+      clearSerial();
+      ss.println(message);
+      printSent(message);
+      delay(delayer);
+
+      static char ssBuffer2 [SS_BUFFER_SIZE];
+      // int i = 0;
+      i = 0;
+      while (ss.available() != 0) {
+        ichr = ss.read();
+        if (ichr != '\r'
+            && ichr != '\n'
+            && ichr != '\0'
+            && ichr != '\b'
+            && ichr != '\a'
+            && ichr != '\f'
+            && ichr != '\t'
+            && ichr != '\v') {
+          ssBuffer2[i] = ichr;
+          i++;
+        }
+      }
+      printReceived(ssBuffer2);
+      return ssBuffer2;
+    }
+
     void printReceived(String text) {
-      mainSerial.println("MC < Modem: " + text);
+      mainSerial.println(MODEM_TO_MC + text);
     }
 
     void printSent(String text) {
-      mainSerial.println("MC > Modem: " + text);
+      mainSerial.println(MC_TO_MODEM + text);
     }
 
   public:
@@ -116,11 +153,20 @@ class Modem
       delay(500);
     }
 
+    // Gets the imei of the mobile terminal.
     char* getImei() {
-      Serial.println(imei);
       return imei;
     }
 
+    // Gets CGNSS data from the module..
+    char * getCGNSSData() {
+      //static char cgnssResp [256] = "";
+      // WriteLine(at.getCGNSSData(), DELAY_60).toCharArray(cgnssResp, 256);
+      return WriteLine2(at.getCGNSSData(), DELAY_60);
+      //return cgnssResp;
+    }
+
+    // Makes a TCP connection to given address and port.
     boolean connectToTCP(char address[], int port) {
       // WriteLine("", DELAY_500);
       // ss.write(0x1A);
@@ -166,7 +212,7 @@ class Modem
       WriteLine(at.getLocalIP(), DELAY_3000);
       delay(DELAY_250);
       ledManager.indicateConnecting();
-      
+
       if (WriteLine(at.startTCPConnection(address, (String) port), DELAY_3000).lastIndexOf(F("CONNECT OK")) > 0) {
         ledManager.indicateConnected();
         delay(DELAY_250);
@@ -178,7 +224,7 @@ class Modem
       }
     }
 
-    boolean sendMessage(String msg){
+    boolean sendMessage(String msg) {
       WriteLine(at.activateCIPSendMode(), DELAY_1000);
       WriteLine(msg, DELAY_250);
       ss.write(0x1A);

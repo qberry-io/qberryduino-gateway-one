@@ -123,4 +123,9 @@ class AT
     String activateCIPSendMode() {
       return mergeWithPrefix(F("CIPSEND"));
     }
+
+    // Gets GNSS data.
+    String getCGNSSData() {
+      return mergeWithPrefix(F("CGNSINF"));
+    }
 };

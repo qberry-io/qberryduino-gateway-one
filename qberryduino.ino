@@ -17,6 +17,7 @@
 #include "Led.h"
 #include "Modem.h"
 #include "Messaging.h"
+#include "CGNSS.h"
 /*
   serial.h
   leds.h
@@ -66,8 +67,13 @@ const PROGMEM int MODEM_BAUD_RATE = 9600;
 // const byte RF_TX_PIN = 10;
 // const uint64_t rfPipe = 0xE8E8F0F0E1LL;
 
+//
+const PROGMEM int CURR_INTERVAL = 15000;
+
 // Current State
 int i; // Used in loops only
+unsigned long now = 0;
+unsigned long lastCurrTime = 0;
 
 void initSerial() {
   Serial.begin(SERIAL_BAUD_RATE);
@@ -96,5 +102,27 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
+  now = millis();
+  if (now > (lastCurrTime + CURR_INTERVAL)) {
+    
 
+    _messaging.hello(DEVICE_IDENTITY, PASSWORD, DEVICE_MODEL);
+    delay(500);
+    lastCurrTime = millis();
+    
+
+    //char* rawGNSSData = _modem.getCGNSSData();
+    // Serial.println(_modem.getCGNSSData());
+    Serial.println("---");
+    _messaging.curr(DEVICE_IDENTITY, PASSWORD, DEVICE_MODEL, CGNSS::parseNMEAData2(_modem.getCGNSSData()));
+    // Serial.println(CGNSS::parseNMEAData(rawGNSSData)[1]);
+
+    // Get gps
+    // parse it
+    // create curr message and
+    // send it
+
+    // check for incoming sms
+    // check for incoming tcp packets
+  }
 }
