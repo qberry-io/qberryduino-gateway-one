@@ -93,28 +93,28 @@ class Messaging
 
       t =   keyval(11, CURR)
             + keyval(12, devId)
-            + keyval(13, pass);
-      // + keyval(104, devModel)
-      //  + keyval(105, VERSION);
+            + keyval(13, pass)
+            // + keyval(14, devModel)
+            + keyval(15, VERSION);
 
 
       cgnsI = CGNSS_START_INDEX;
-      for (i = 0; i < 20; i++) {
+      for (i = 0; i < 10; i++) {
 
-        if (i == 1
+        //if (i == 1
             //|| i == 2
-            || i == 3
-            || i == 4
-            || i == 5
-            || i == 6
-            || i == 7
-            //  || i == 8
-            //|| i == 14
-            //|| i == 15
-            //          || i == 16
-           ) {
+       //     || i == 3
+      //      || i == 4
+     //       || i == 5
+     //       || i == 6
+     //       || i == 7
+     //       || i == 8
+            // || i == 14
+           // || i == 15
+           // || i == 16
+   //        ) {
           t += keyval(cgnsI, cgnsData[i]);
-        }
+  //      }
 
         // Serial.println(keyval(cgnsI, cgnsData[i]));
         cgnsI++;

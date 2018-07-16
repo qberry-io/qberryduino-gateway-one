@@ -128,4 +128,10 @@ class AT
     String getCGNSSData() {
       return mergeWithPrefix(F("CGNSINF"));
     }
+
+    // Gets battery status.
+    // For more: http://m2msupport.net/m2msupport/atcbc-battery-charge/
+    String getBatteryStat(){
+      return mergeWithPrefix(F("CBC"));
+    }
 };

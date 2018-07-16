@@ -16,7 +16,7 @@
 #include "AT.h"
 #include <SoftwareSerial.h>
 
-const PROGMEM unsigned int SS_BUFFER_SIZE = 256;
+const PROGMEM unsigned int SS_BUFFER_SIZE = 120;
 const PROGMEM byte DELAY_60 = 60;
 const PROGMEM byte DELAY_250 = 250;
 const PROGMEM unsigned int DELAY_1000 = 1000;
@@ -57,6 +57,7 @@ class Modem
       ssBuffer = "";
     }
 
+    // TODO: Let them use WriteLine2!
     String WriteLine(String message, int delayer) {
       clearSerial();
       clearBuffer();
@@ -164,6 +165,10 @@ class Modem
       // WriteLine(at.getCGNSSData(), DELAY_60).toCharArray(cgnssResp, 256);
       return WriteLine2(at.getCGNSSData(), DELAY_60);
       //return cgnssResp;
+    }
+
+    char * getBatteryStat(){
+      return WriteLine2(at.getBatteryStat(), DELAY_250);
     }
 
     // Makes a TCP connection to given address and port.

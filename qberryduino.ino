@@ -17,7 +17,7 @@
 #include "Led.h"
 #include "Modem.h"
 #include "Messaging.h"
-#include "CGNSS.h"
+#include "Parse.h"
 /*
   serial.h
   leds.h
@@ -49,7 +49,7 @@ const PROGMEM int SERIAL_BAUD_RATE = 9600;
 
 // Definitions of device
 const PROGMEM byte DEVICE_IDENTITY_LENGTH = 19;
-char DEVICE_IDENTITY_PREFIX[] = "900";
+char DEVICE_IDENTITY_PREFIX[] = "90";
 char DEVICE_IDENTITY[DEVICE_IDENTITY_LENGTH];
 char DEVICE_MODEL[] = "qbdone";
 
@@ -114,7 +114,11 @@ void loop() {
     //char* rawGNSSData = _modem.getCGNSSData();
     // Serial.println(_modem.getCGNSSData());
     Serial.println("---");
-    _messaging.curr(DEVICE_IDENTITY, PASSWORD, DEVICE_MODEL, CGNSS::parseNMEAData2(_modem.getCGNSSData()));
+    //// _messaging.curr(DEVICE_IDENTITY, PASSWORD, DEVICE_MODEL, Parse::parseNMEAData2(_modem.getCGNSSData()));
+    //delay(1000);
+    char test [10] = String(_modem.getCGNSSData());
+    _messaging.curr(DEVICE_IDENTITY, PASSWORD, DEVICE_MODEL, Parse::parseNMEAData2(test, _modem.getBatteryStat()));
+    
     // Serial.println(CGNSS::parseNMEAData(rawGNSSData)[1]);
 
     // Get gps

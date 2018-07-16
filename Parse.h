@@ -13,23 +13,31 @@
 
 //  E-mail: denizkanmaz@gmail.com
 
-const PROGMEM byte LINES_LENGTH = 10;
+const PROGMEM byte LINES_LENGTH = 12;
 static String s[LINES_LENGTH];
 
-class CGNSS {
+class Parse {
   private:
     int lineIndex = 0;
     int rawCharIndex = 0;
+    int i;
   public:
 
     static void clear() {
-      for (int i = 0; i < LINES_LENGTH; i++) {
+      int i;
+      for (i = 0; i < LINES_LENGTH; i++) {
         s[i] = "";
       }
     }
 
 
-    static String* parseNMEAData2(char* rawNMEAData) {
+    static String* parseNMEAData2(char* rawNMEAData, char * rawBattData) {
+      Serial.println("+++");
+      Serial.println(rawBattData);
+      Serial.println("+++");
+      Serial.println("===");
+      Serial.println(rawNMEAData);
+      Serial.println("===");
 
       clear();
 
@@ -96,7 +104,55 @@ class CGNSS {
 
       }
 
+
+      //////////////////////
+
+      lineIndex = 0;
+
+      for (rawCharIndex = 0; rawCharIndex < String(rawBattData).length(); rawCharIndex++) {
+
+        if (String(rawBattData[rawCharIndex]) == ",") {
+          //Serial.println("comma");
+          lineIndex++;
+
+
+          if (//lineIndex == 0
+             lineIndex == 1
+              || lineIndex == 2
+              //|| lineIndex == 3
+             ) {
+            actualLineIndex++;
+          }
+
+          continue;
+        }
+
+
+
+        if (//lineIndex == 0
+             lineIndex == 1
+            || lineIndex == 2
+           // || lineIndex == 3
+           ) {
+          s[actualLineIndex] += String(rawBattData[rawCharIndex]);
+          Serial.println(s[actualLineIndex]);
+        }
+
+        /*
+                if (lineIndex == 0) {
+                  // TODO: Try to find an efficient way.
+                  s[lineIndex] = String(rawNMEAData[rawCharIndex]);
+                  //Serial.println(s[lineIndex]);
+                } else {
+                  s[lineIndex] += String(rawNMEAData[rawCharIndex]);
+                  //Serial.println(s[lineIndex]);
+                }
+
+        */
+
+
+      }
+
       return s;
     }
 };
-
