@@ -13,7 +13,8 @@
 
 //  E-mail: denizkanmaz@gmail.com
 
-static String s[20];
+const PROGMEM byte LINES_LENGTH = 8;
+static String s[LINES_LENGTH];
 
 class CGNSS {
   private:
@@ -22,7 +23,7 @@ class CGNSS {
   public:
    
     static void clear() {
-      for (int i = 0; i < 20; i++) {
+      for (int i = 0; i < LINES_LENGTH; i++) {
         s[i] = "";
       }
     }
@@ -50,13 +51,14 @@ class CGNSS {
             //|| lineIndex == 2
             || lineIndex == 3
             || lineIndex == 4
-            // || lineIndex == 5
-            // || lineIndex == 6
-            //  || lineIndex == 7
+            || lineIndex == 5
+            || lineIndex == 6
+            || lineIndex == 7
             //  || lineIndex == 8
             //|| lineIndex == 14
             //|| lineIndex == 15
-            || lineIndex == 16) {
+            //|| lineIndex == 16
+            ) {
           s[lineIndex] += String(rawNMEAData[rawCharIndex]);
           Serial.println(s[lineIndex]);
         }

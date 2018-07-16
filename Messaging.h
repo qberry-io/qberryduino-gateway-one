@@ -16,9 +16,9 @@
 char VERSION[] = "1.0.0";
 const char MARKER = '$';
 const char SPLITTER = '|';
-char HELLO[] = "hello";
+char HELLO[] = "hola";
 char CURR[] = "curr";
-const int CGNSS_START_INDEX = 1001;
+const int CGNSS_START_INDEX = 101;
 
 
 
@@ -58,62 +58,62 @@ class Messaging
     String hello(char devId[], char pass[], char devModel[]) {
       return
         message(
-          keyval(101, HELLO)
-          + keyval(102, devId)
-          + keyval(103, pass)
-          + keyval(104, devModel)
-          + keyval(105, VERSION)
+          keyval(11, HELLO)
+          + keyval(12, devId)
+          + keyval(13, pass)
+          + keyval(14, devModel)
+          + keyval(15, VERSION)
         );
     }
 
     String curr(char devId[], char pass[], char devModel[], String cgnsData[]) {
       /*
-        <GNSS run status>
-        <Fix status>
-        <UTC date & Time>
-        <Latitude>
-        <Longitude>
-        <MSL Altitude>
-        <Speed Over Ground>
-        <Course Over Ground>
-        <Fix Mode>
-        <Reserved1>
-        <HDOP>
-        <PDOP>
-        <VDOP>
-        <Reserved2>
-        <GNSS Satellites in View>
-        <GNSS Satellites Used>
-        <GLONASS Satellites Used>
-        <Reserved3>
-        <C/N0 max>
-        <HPA>
-        <VPA>
+        0: <GNSS run status>
+        1: <Fix status>
+        2: <UTC date & Time>
+        3: <Latitude>
+        4: <Longitude>
+        5: <MSL Altitude>
+        6: <Speed Over Ground>
+        7: <Course Over Ground>
+        8: <Fix Mode>
+        9: <Reserved1>
+        10: <HDOP>
+        11: <PDOP>
+        12: <VDOP>
+        13: <Reserved2>
+        14: <GNSS Satellites in View>
+        15: <GNSS Satellites Used>
+        16: <GLONASS Satellites Used>
+        17: <Reserved3>
+        18: <C/N0 max>
+        19: <HPA>
+        20: <VPA>
       */
 
-      t =   keyval(101, CURR)
-            + keyval(102, devId)
-            + keyval(103, pass);
-           // + keyval(104, devModel)
-          //  + keyval(105, VERSION);
+      t =   keyval(11, CURR)
+            + keyval(12, devId)
+            + keyval(13, pass);
+      // + keyval(104, devModel)
+      //  + keyval(105, VERSION);
 
 
       cgnsI = CGNSS_START_INDEX;
       for (i = 0; i < 20; i++) {
 
-       if (i == 1
+        if (i == 1
             //|| i == 2
-           || i == 3
-          || i == 4
-            // || i == 5
-            // || i == 6
-            //  || i == 7
+            || i == 3
+            || i == 4
+            || i == 5
+            || i == 6
+            || i == 7
             //  || i == 8
             //|| i == 14
             //|| i == 15
-  //          || i == 16
-            ) {
-           t += keyval(cgnsI, cgnsData[i]);
+            //          || i == 16
+           ) {
+          t += keyval(cgnsI, cgnsData[i]);
         }
 
         // Serial.println(keyval(cgnsI, cgnsData[i]));

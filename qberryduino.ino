@@ -68,7 +68,7 @@ const PROGMEM int MODEM_BAUD_RATE = 9600;
 // const uint64_t rfPipe = 0xE8E8F0F0E1LL;
 
 //
-const PROGMEM int CURR_INTERVAL = 15000;
+const PROGMEM int CURR_INTERVAL = 5000;
 
 // Current State
 int i; // Used in loops only
