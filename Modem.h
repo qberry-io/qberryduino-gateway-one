@@ -57,6 +57,42 @@ class Modem
       ssBuffer = "";
     }
 
+
+    String Write(String message, int delayer) {
+      clearSerial();
+      clearBuffer();
+      
+      ss.print(message);
+      ss.write(0x1A);
+      printSent(message);
+      delay(delayer);
+
+      i = 0;
+      //Serial.println("$$$");
+      while (ss.available() != 0) {
+
+        ichr = ss.read();
+        // printReceived((String)chr);
+        if (ichr != '\r'
+            && ichr != '\n'
+            && ichr != '\0'
+            && ichr != '\b'
+            && ichr != '\a'
+            && ichr != '\f'
+            && ichr != '\t'
+            && ichr != '\v') {
+          ssBuffer = (ssBuffer + ichr);
+          // ssBuffer[i] = ichr;
+          i++;
+          //Serial.print(ichr);
+        }
+
+      }
+      //Serial.println("&&&");
+      printReceived(ssBuffer);
+      return ssBuffer;
+    }
+
     // TODO: Let them use WriteLine2!
     String WriteLine(String message, int delayer) {
       clearSerial();
@@ -231,8 +267,8 @@ class Modem
 
     boolean sendMessage(String msg) {
       WriteLine(at.activateCIPSendMode(), DELAY_1000);
-      WriteLine(msg, DELAY_250);
-      ss.write(0x1A);
+      Write(msg, DELAY_250);
+      
       delay(DELAY_250);
       ledManager.indicateTCPSend();
     }

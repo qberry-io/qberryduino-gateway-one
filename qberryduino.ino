@@ -17,7 +17,8 @@
 #include "Led.h"
 #include "Modem.h"
 #include "Messaging.h"
-#include "Parse.h"
+#include "CGNSS.h"
+
 /*
   serial.h
   leds.h
@@ -68,7 +69,7 @@ const PROGMEM int MODEM_BAUD_RATE = 9600;
 // const uint64_t rfPipe = 0xE8E8F0F0E1LL;
 
 //
-const PROGMEM int CURR_INTERVAL = 5000;
+const PROGMEM int CURR_INTERVAL = 15000;
 
 // Current State
 int i; // Used in loops only
@@ -104,22 +105,25 @@ void loop() {
   // put your main code here, to run repeatedly:
   now = millis();
   if (now > (lastCurrTime + CURR_INTERVAL)) {
-    
+
 
     _messaging.hello(DEVICE_IDENTITY, PASSWORD, DEVICE_MODEL);
     delay(500);
     lastCurrTime = millis();
-    
+
 
     //char* rawGNSSData = _modem.getCGNSSData();
     // Serial.println(_modem.getCGNSSData());
     Serial.println("---");
-    //// _messaging.curr(DEVICE_IDENTITY, PASSWORD, DEVICE_MODEL, Parse::parseNMEAData2(_modem.getCGNSSData()));
-    //delay(1000);
-    char test [10] = String(_modem.getCGNSSData());
-    _messaging.curr(DEVICE_IDENTITY, PASSWORD, DEVICE_MODEL, Parse::parseNMEAData2(test, _modem.getBatteryStat()));
-    
-    // Serial.println(CGNSS::parseNMEAData(rawGNSSData)[1]);
+
+    _modem.sendMessage(_messaging.curr(DEVICE_IDENTITY, PASSWORD, DEVICE_MODEL, CGNSS::parseNMEAData2(_modem.getCGNSSData())));
+
+    //Serial.println(_messaging.curr(DEVICE_IDENTITY, PASSWORD, DEVICE_MODEL, CGNSS::parseNMEAData2(_modem.getCGNSSData())));
+
+    delay(1000);
+
+    _modem.sendMessage(_messaging.curr2(DEVICE_IDENTITY, PASSWORD, DEVICE_MODEL, CGNSS::parseBatt(_modem.getBatteryStat())));
+
 
     // Get gps
     // parse it

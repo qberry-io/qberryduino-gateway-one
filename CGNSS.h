@@ -13,7 +13,7 @@
 
 //  E-mail: denizkanmaz@gmail.com
 
-const PROGMEM byte LINES_LENGTH = 10;
+const PROGMEM byte LINES_LENGTH = 8;
 static String s[LINES_LENGTH];
 
 class CGNSS {
@@ -26,6 +26,62 @@ class CGNSS {
       for (int i = 0; i < LINES_LENGTH; i++) {
         s[i] = "";
       }
+    }
+
+
+    static String* parseBatt(char * rawBattData) {
+      //Serial.println("+++");
+      //Serial.println(rawBattData);
+      //Serial.println("+++");
+
+      clear();
+
+      int actualLineIndex = 0;
+      int lineIndex = 0;
+      int rawCharIndex = 0;
+
+      for (rawCharIndex = 0; rawCharIndex < String(rawBattData).length(); rawCharIndex++) {
+
+        if (String(rawBattData[rawCharIndex]) == ",") {
+          //Serial.println("comma");
+
+          if (lineIndex == 0
+              || lineIndex == 1
+              || lineIndex == 2
+              //|| lineIndex == 3
+             ) {
+            actualLineIndex++;
+          }
+
+          lineIndex++;
+
+          continue;
+        }
+
+
+
+        if (   lineIndex == 0
+               || lineIndex == 1
+               || lineIndex == 2
+               //|| lineIndex == 3
+           ) {
+          if (lineIndex == 0) {
+            if (rawCharIndex > 11) {
+              s[actualLineIndex] += String(rawBattData[rawCharIndex]);
+             ///////////// Serial.println(s[actualLineIndex]);
+            }
+          } else {
+            s[actualLineIndex] += String(rawBattData[rawCharIndex]);
+            //////////////Serial.println(s[actualLineIndex]);
+          }
+
+        }
+
+
+
+      }
+
+      return s;
     }
 
 
@@ -42,7 +98,7 @@ class CGNSS {
 
         if (String(rawNMEAData[rawCharIndex]) == ",") {
           //Serial.println("comma");
-          lineIndex++;
+
 
 
           if (lineIndex == 1
@@ -53,12 +109,14 @@ class CGNSS {
               || lineIndex == 6
               || lineIndex == 7
               || lineIndex == 8
-              || lineIndex == 14
+              //   || lineIndex == 14
               || lineIndex == 15
-              || lineIndex == 16
+              //|| lineIndex == 16
              ) {
             actualLineIndex++;
           }
+
+          lineIndex++;
 
           continue;
         }
@@ -73,12 +131,12 @@ class CGNSS {
             || lineIndex == 6
             || lineIndex == 7
             || lineIndex == 8
-            || lineIndex == 14
+            //|| lineIndex == 14
             || lineIndex == 15
-            || lineIndex == 16
+            //|| lineIndex == 16
            ) {
           s[actualLineIndex] += String(rawNMEAData[rawCharIndex]);
-          Serial.println(s[actualLineIndex]);
+          ///////////////////Serial.println(s[actualLineIndex]);
         }
 
         /*
