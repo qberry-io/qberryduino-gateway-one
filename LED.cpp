@@ -18,7 +18,6 @@
 
  
 #include "LED.h"
-#include <stdint.h>
 #include "Arduino.h"
 
 // Gets the Red indicator pin.
@@ -89,9 +88,9 @@ void LED::indicateTCPSendSuccess() {
 // _ _ _ _
 void LED::indicateTCPSendFailed() {
   for (i = 0; i < 4; i++) {
-    digitalWrite(getBlueLedPin(), HIGH);
+    writeHigh(getBlueLedPin());
     delay(LONG);
-    digitalWrite(getBlueLedPin(), LOW);
+    writeLow(getBlueLedPin());
     delay(LONG);
   }
 }

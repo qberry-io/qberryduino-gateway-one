@@ -81,12 +81,6 @@ String AT::enableGNSS() {
   return ATCommand(F("CGNSPWR=1"));
 }
 
-// Turns off GNSS power in Simcom modules
-// For mode: http://m2msupport.net/m2msupport/at-cgnspwr-gnss-power-control/
-String AT::disableGNSS() {
-  return ATCommand(F("CGNSPWR=0"));
-}
-
 // Defines the last NMEA sentence that parsed.
 // “GGA” refer to ”GPGGA” or "GLGGA" or "GNGGA"
 // “GSA” refer to ”GPGSA” or "GLGSA" or "GNGSA"

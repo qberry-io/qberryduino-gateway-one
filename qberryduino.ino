@@ -85,7 +85,6 @@ void setup() {
   // Initialize the main serial if debug mode enabled.
   if (DEBUG_MODE) {
     _mainSerial.init(SERIAL_BAUD_RATE);
-    _mainSerial.println(F("*** Debug mode enabled ***"));
   }
 
   // Initialize LED indicators.

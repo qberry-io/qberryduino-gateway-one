@@ -19,7 +19,7 @@
 #include "AT.h"
 #include <SoftwareSerial.h>
 
-const PROGMEM unsigned int SS_BUFFER_SIZE = 120;
+const PROGMEM unsigned int SS_BUFFER_SIZE = 117;
 const PROGMEM byte DELAY_60 = 60;
 const PROGMEM byte DELAY_250 = 250;
 const PROGMEM unsigned int DELAY_1000 = 1000;
@@ -27,8 +27,6 @@ const PROGMEM unsigned int DELAY_2000 = 2000;
 const PROGMEM unsigned int DELAY_3000 = 3000;
 const PROGMEM unsigned int DELAY_7000 = 7000;
 
-const PROGMEM String MC_TO_MODEM = "MC > Modem: ";
-const PROGMEM String MODEM_TO_MC = "MC < Modem: ";
 
 class Modem
 {
@@ -58,13 +56,23 @@ class Modem
     }
 
     void printReceived(String text) {
-      mainSerial.println(MODEM_TO_MC + text);
+      mainSerial.println(text);
     }
 
     void printSent(String text) {
-      mainSerial.println(MC_TO_MODEM + text);
+      mainSerial.println(text);
     }
 
+    boolean isSpecialChar(char chr) {
+      return ichr == '\r'
+             || ichr == '\n'
+             || ichr == '\0'
+             || ichr == '\b'
+             || ichr == '\a'
+             || ichr == '\f'
+             || ichr == '\t'
+             || ichr == '\v';
+    }
 
     String write(String message, int delayer) {
       clearSerial();
@@ -80,14 +88,7 @@ class Modem
       while (ss.available() != 0) {
 
         ichr = ss.read();
-        if (ichr != '\r'
-            && ichr != '\n'
-            && ichr != '\0'
-            && ichr != '\b'
-            && ichr != '\a'
-            && ichr != '\f'
-            && ichr != '\t'
-            && ichr != '\v') {
+        if (!isSpecialChar(ichr)) {
           ssBuffer = (ssBuffer + ichr);
           i++;
         }
@@ -112,14 +113,7 @@ class Modem
 
         ichr = ss.read();
         // printReceived((String)chr);
-        if (ichr != '\r'
-            && ichr != '\n'
-            && ichr != '\0'
-            && ichr != '\b'
-            && ichr != '\a'
-            && ichr != '\f'
-            && ichr != '\t'
-            && ichr != '\v') {
+        if (!isSpecialChar(ichr)) {
           ssBuffer = (ssBuffer + ichr);
           i++;
         }
@@ -140,14 +134,7 @@ class Modem
       i = 0;
       while (ss.available() != 0) {
         ichr = ss.read();
-        if (ichr != '\r'
-            && ichr != '\n'
-            && ichr != '\0'
-            && ichr != '\b'
-            && ichr != '\a'
-            && ichr != '\f'
-            && ichr != '\t'
-            && ichr != '\v') {
+        if (!isSpecialChar(ichr)) {
           ssBuffer2[i] = ichr;
           i++;
         }

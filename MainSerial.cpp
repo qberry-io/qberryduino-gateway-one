@@ -16,8 +16,6 @@
 //  Description: "MainSerial.cpp" is a helper class that includes functions
 //  for printing out to Main Serial.
 
-// #include <stdint.h>
-
 #include "MainSerial.h"
 #include "Arduino.h"
 

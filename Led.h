@@ -16,7 +16,6 @@
 //  Description: "LED.h" is a helper class that includes functions
 //  for indication using LEDs.
 
-
 #include <stdint.h>
 
 class LED
