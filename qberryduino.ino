@@ -90,8 +90,7 @@ void setup() {
 
   // Initialize LED indicators.
   _led.init(LED_PINS,
-            LED_PINS_LENGTH,
-            _mainSerial);
+            LED_PINS_LENGTH);
 
   // Indicate for "Starting Up!".
   _led.indicateStarting();

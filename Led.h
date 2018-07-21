@@ -16,122 +16,69 @@
 //  Description: "LED.h" is a helper class that includes functions
 //  for indication using LEDs.
 
-const int PROGMEM SHORT = 100;
-const int PROGMEM LONG = 500;
+// #ifndef LED_h
+#define LED_h
+#include <stdint.h>
 
 class LED
 {
   private:
-    MainSerial mainSerial;
-    byte ledPinsLength;
-    byte * ledPins;
+  int SHORT = 100;
+  int  LONG = 500;
+    uint8_t ledPinsLength;
+    uint8_t * ledPins;
     int i;
 
     // Gets the Red indicator pin.
-    byte getRedLedPin() {
-      return ledPins[0];
-    }
+    uint8_t getRedLedPin();
 
     // Gets the Yellow indicator pin.
-    byte getYellowLedPin() {
-      return ledPins[1];
-    }
+    uint8_t getYellowLedPin();
 
     // Gets the Blue indicator pin.
-    byte getBlueLedPin() {
-      return ledPins[3];
-    }
+    uint8_t getBlueLedPin();
 
     // Writes LOW to given pin number.
-    void writeLow(byte ledPin) {
-      digitalWrite(ledPin, LOW);
-    }
+    void writeLow(uint8_t ledPin);
 
     // Writes HIGH to given pin number.
-    void writeHigh(byte ledPin) {
-      digitalWrite(ledPin, HIGH);
-    }
+    void writeHigh(uint8_t ledPin);
 
   public:
   
     // Initializes the helper.
-    void init(byte * lPins, byte lPinsLength, MainSerial ms) {
-      ledPins = lPins;
-      ledPinsLength = lPinsLength;
-      mainSerial = ms;
-
-      for (i = 0; i < ledPinsLength; i++) {
-        pinMode(ledPins[i], OUTPUT);
-        writeLow(ledPins[i]);
-      }
-    }
+    void init(uint8_t * lPins, uint8_t lPinsLength);
 
     // Blinks all the indicators with an order from up to down.
-    void indicateStarting() {
-      for (i = 0; i < ledPinsLength; i++) {
-        writeHigh(ledPins[i]);
-        delay(250);
-        writeLow(ledPins[i]);
-      }
-    }
+    void indicateStarting();
 
     // Blinks the Yellow indicator only one time with a
     // SHORT interval.
     // .
-    void indicateConnecting() {
-      writeHigh(getYellowLedPin());
-      delay(SHORT);
-      writeLow(getYellowLedPin());
-    }
+    void indicateConnecting();
 
     // Blinks the Blue indicator only one time with a
     // SHORT interval.
     // .
-    void indicateTCPSendSuccess() {
-      writeHigh(getBlueLedPin());
-      delay(SHORT);
-      writeLow(getBlueLedPin());
-    }
+    void indicateTCPSendSuccess();
 
     // Blinks the Red and the Blue indicator four times with a
     // LONG interval.
     // _ _ _ _
-    void indicateTCPSendFailed() {
-      for (i = 0; i < 4; i++) {
-        digitalWrite(getBlueLedPin(), HIGH);
-        delay(LONG);
-        digitalWrite(getBlueLedPin(), LOW);
-        delay(LONG);
-      }
-    }
+    void indicateTCPSendFailed();
 
     // Blinks the Red and the Yellow indicatators together
     // four times with a LONG interval.
     // _ _ _ _
-    void indicateConnectionError() {
-      for (i = 0; i < 4; i++) {
-        writeHigh(getRedLedPin());
-        writeHigh(getYellowLedPin());
-        delay(LONG);
-        writeLow(getRedLedPin());
-        writeLow(getYellowLedPin());
-        delay(LONG);
-      }
-    }
+    void indicateConnectionError();
 
     // Powers on Red indicators indefinitely.
-    void indicatePoweredOn() {
-      writeHigh(getRedLedPin());
-    }
+    void indicatePoweredOn();
 
     // Powers on the Yellow indicator indefinitely.
-    void indicateConnected() {
-      writeHigh(getYellowLedPin());
-    }
+    void indicateConnected();
 
     // Powers off the Yellow indicators indefinitely.
-    void indicateDisconnected() {
-      writeLow(getYellowLedPin());
-    }
+    void indicateDisconnected();
 };
 
