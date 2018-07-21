@@ -61,6 +61,8 @@ int i; // Used in loops only
 unsigned long now = 0;
 unsigned long lastCurrTime = 0;
 
+void(* reset) (void) = 0;
+
 void initSerial() {
   Serial.begin(SERIAL_BAUD_RATE);
 }
@@ -76,29 +78,32 @@ void setup() {
   _modem.init(MODEM_RX_PIN, MODEM_TX_PIN, MODEM_BAUD_RATE, APN_NAME, APN_USER, APN_PASS, _led, _mainSerial);
 
   if (!_modem.connectToTCP(SERVER_ADDRES, TCP_PORT)) {
-    // restart
+    reset();
     return;
   }
 
   (String(DEVICE_IDENTITY_PREFIX) + String(_modem.getImei())).toCharArray(DEVICE_IDENTITY, DEVICE_IDENTITY_LENGTH);
-  // DEVICE_IDENTITY = _modem.getImei();
   _modem.sendMessage(_messaging.hello(DEVICE_IDENTITY, PASSWORD, DEVICE_MODEL));
 
 }
 
 void loop() {
-  
+
   now = millis();
   if (now > (lastCurrTime + CURR_INTERVAL)) {
     lastCurrTime = millis();
 
     // Get CGNSS data, parse it, create curr message and send.
-    _modem.sendMessage(_messaging.currCGNS(DEVICE_IDENTITY, PASSWORD, DEVICE_MODEL, _cgnss.parseNMEAData(_modem.getCGNSSData())));
+    if (!_modem.sendMessage(_messaging.currCGNS(DEVICE_IDENTITY, PASSWORD, DEVICE_MODEL, _cgnss.parseNMEAData(_modem.getCGNSSData())))) {
+      reset();
+    }
 
-    delay(1000);
+    //  delay(1000);
 
     // Get Batt data, parse it, create curr message and send.
-    _modem.sendMessage(_messaging.currBatt(DEVICE_IDENTITY, PASSWORD, DEVICE_MODEL, _cgnss.parseBatt(_modem.getBatteryStat())));
+    if (!_modem.sendMessage(_messaging.currBatt(DEVICE_IDENTITY, PASSWORD, DEVICE_MODEL, _cgnss.parseBatt(_modem.getBatteryStat())))) {
+      reset();
+    }
 
     // check for incoming sms
     // check for incoming tcp packets

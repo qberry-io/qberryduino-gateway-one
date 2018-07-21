@@ -70,12 +70,24 @@ class Led
       delay(250);
     }
 
-    // Blinks Yellow indicators only one time.
-    void indicateTCPSend() {
+    // Blinks the blue indicator only one time.
+    void indicateTCPSendSuccess() {
       digitalWrite(getBlueLedPin(), HIGH);
       delay(500);
       digitalWrite(getBlueLedPin(), LOW);
       delay(500);
+    }
+
+    
+    void indicateTCPSendFailed() {
+      digitalWrite(getBlueLedPin(), HIGH);
+      delay(250);
+      digitalWrite(getBlueLedPin(), LOW);
+      delay(250);
+      digitalWrite(getBlueLedPin(), HIGH);
+      delay(250);
+      digitalWrite(getBlueLedPin(), LOW);
+      delay(250);
     }
 
     // Powers on Red indicators indefinitely.
@@ -86,6 +98,11 @@ class Led
     // Powers on Yellow indicators indefinitely.
     void indicateConnected() {
       digitalWrite(getYellowLedPin(), HIGH);
+    }
+
+    // Powers off the yellow indicators indefinitely.
+    void indicateDisconnected() {
+      digitalWrite(getYellowLedPin(), LOW);
     }
 
     // Blinks Red and Yellow indicatators four times.

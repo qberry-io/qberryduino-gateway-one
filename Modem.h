@@ -61,7 +61,7 @@ class Modem
     String Write(String message, int delayer) {
       clearSerial();
       clearBuffer();
-      
+
       ss.print(message);
       ss.write(0x1A);
       printSent(message);
@@ -97,7 +97,7 @@ class Modem
     String WriteLine(String message, int delayer) {
       clearSerial();
       clearBuffer();
-      
+
       ss.println(message);
       printSent(message);
       delay(delayer);
@@ -203,11 +203,11 @@ class Modem
       //return cgnssResp;
     }
 
-    char * getSMS(){
+    char * getSMS() {
       WriteLine2(F(""), DELAY_60);
     }
 
-    char * getBatteryStat(){
+    char * getBatteryStat() {
       return WriteLine2(at.getBatteryStat(), DELAY_250);
     }
 
@@ -258,7 +258,7 @@ class Modem
       delay(DELAY_250);
       ledManager.indicateConnecting();
 
-      if (WriteLine(at.startTCPConnection(address, (String) port), DELAY_3000).lastIndexOf(F("CONNECT OK")) > 0) {
+      if (WriteLine(at.startTCPConnection(address, (String) port), DELAY_3000).lastIndexOf(F("CONNECT OK")) > -1) {
         ledManager.indicateConnected();
         delay(DELAY_250);
         return true;
@@ -270,10 +270,15 @@ class Modem
     }
 
     boolean sendMessage(String msg) {
-      WriteLine(at.activateCIPSendMode(), DELAY_1000);
-      Write(msg, DELAY_250);
-      
-      delay(DELAY_250);
-      ledManager.indicateTCPSend();
+      boolean success = WriteLine(at.activateCIPSendMode(), DELAY_1000).lastIndexOf(F("CIPSENDERROR")) == -1;
+      if (success) {
+        Write(msg, DELAY_250);
+        ledManager.indicateTCPSendSuccess();
+      } else {
+        ledManager.indicateDisconnected();
+        ledManager.indicateTCPSendFailed();
+      }
+
+      return success;
     }
 };
