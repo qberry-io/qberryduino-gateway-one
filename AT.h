@@ -13,10 +13,14 @@
 
 //  E-mail: denizkanmaz@gmail.com
 
+//  Description: "AT.h" is a helper class that includes the necessary
+//  AT commands.
+
+
 class AT
 {
   private:
-    String mergeWithPrefix(String command) {
+    String ATCommand(String command) {
       return "AT+" + command;
     }
 
@@ -33,7 +37,7 @@ class AT
     // Configures the device for a single IP connection.
     // For more: http://m2msupport.net/m2msupport/atcipmux-start-up-multi-ip-connection/
     String setConnectionModeSingle() {
-      return mergeWithPrefix(F("CIPMUX=0"));   // 0: Single, 1: Multi
+      return ATCommand(F("CIPMUX=0"));   // 0: Single, 1: Multi
     }
 
 
@@ -42,18 +46,18 @@ class AT
     // mode 1: Error code only.
     // mode 2: Error message only.
     String setResultMode(byte mode) {
-      return mergeWithPrefix("CMEE=" + (String)mode);
+      return ATCommand("CMEE=" + (String)mode);
     }
 
     // Returns the IMEI (International Mobile station Equipment Identity) of the mobile terminal.
     // For more: http://m2msupport.net/m2msupport/atcgsn-request-product-serial-number-identification/
     String getImei() {
-      return mergeWithPrefix(F("CGSN"));
+      return ATCommand(F("CGSN"));
     }
 
     // Closes the TCP or UDP connection.
     String closeTCP() {
-      return mergeWithPrefix(F("CIPCLOSE"));
+      return ATCommand(F("CIPCLOSE"));
     }
 
     // Resets the modem back to default factory settings.
@@ -65,19 +69,19 @@ class AT
     // Closes GPRS PDP context.
     // For more: http://m2msupport.net/m2msupport/atcipshut-deactivate-gprs-pdp-context/
     String resetIPSession() {
-      return mergeWithPrefix(F("CIPSHUT"));
+      return ATCommand(F("CIPSHUT"));
     }
 
     // Turns on GNSS power in Simcom modules
     // For mode: http://m2msupport.net/m2msupport/at-cgnspwr-gnss-power-control/
     String enableGNSS() {
-      return mergeWithPrefix(F("CGNSPWR=1"));
+      return ATCommand(F("CGNSPWR=1"));
     }
 
     // Turns off GNSS power in Simcom modules
     // For mode: http://m2msupport.net/m2msupport/at-cgnspwr-gnss-power-control/
     String disableGNSS() {
-      return mergeWithPrefix(F("CGNSPWR=0"));
+      return ATCommand(F("CGNSPWR=0"));
     }
 
     // Defines the last NMEA sentence that parsed.
@@ -86,52 +90,52 @@ class AT
     // “GSV" refer to ”GPGSV” or "GLGSV" or "GNGSV"
     // “RMC” refer to ”GPRMC” or "GLRMC" or "GNRMC"
     String setCGNSSequence() {
-      return mergeWithPrefix(F("CGNSSEQ=\"RMC\""));
+      return ATCommand(F("CGNSSEQ=\"RMC\""));
     }
 
     // Set the apn, user name and password for the PDP context.
     // For more: http://m2msupport.net/m2msupport/atcstt-satrt-task-and-set-apn-username-and-password/
     String setupPDPContext(String apnName, String apnUsername, String apnPassword) {
-      // return mergeWithPrefix("CSTT=" + capsulateWithDoubleQuote(F("APN")) + "," + capsulateWithDoubleQuote(apnUsername) + "," + capsulateWithDoubleQuote(apnPassword));
-      return mergeWithPrefix("CSTT=" + capsulateWithDoubleQuote(apnName) + "," + capsulateWithDoubleQuote(apnUsername) + "," + capsulateWithDoubleQuote(apnPassword));
+      // return ATCommand("CSTT=" + capsulateWithDoubleQuote(F("APN")) + "," + capsulateWithDoubleQuote(apnUsername) + "," + capsulateWithDoubleQuote(apnPassword));
+      return ATCommand("CSTT=" + capsulateWithDoubleQuote(apnName) + "," + capsulateWithDoubleQuote(apnUsername) + "," + capsulateWithDoubleQuote(apnPassword));
     }
 
     // Brings the GPRS or CSD call depending on the configuration previously set by the AT+CSTT command.
     // For more: http://m2msupport.net/m2msupport/atciicr-bring-up-gprs-or-circuit-switch-connection/
     String bringGPRSCalls() {
-      return mergeWithPrefix(F("CIICR"));
+      return ATCommand(F("CIICR"));
     }
 
     // Returns the local IP address.
     // It is imperative the the PDP context must have been activated before to get the IP address.
     // For more: http://m2msupport.net/m2msupport/atcifsr-get-local-ip-address/
     String getLocalIP() {
-      return mergeWithPrefix(F("CIFSR"));
+      return ATCommand(F("CIFSR"));
     }
 
     // Performs a GPRS Attach.
     // The device should be attached to the GPRS network before a PDP context can be established.
     String attachGPRS() {
-      return mergeWithPrefix(F("CGATT=1"));
+      return ATCommand(F("CGATT=1"));
     }
 
     String startTCPConnection(String address, String port) {
-      return mergeWithPrefix("CIPSTART=" + capsulateWithDoubleQuote(F("TCP")) + "," + capsulateWithDoubleQuote(address) + "," + capsulateWithDoubleQuote(port));
+      return ATCommand("CIPSTART=" + capsulateWithDoubleQuote(F("TCP")) + "," + capsulateWithDoubleQuote(address) + "," + capsulateWithDoubleQuote(port));
     }
 
     // For more: http://m2msupport.net/m2msupport/atcipsend-send-data-through-tcp-or-udp-connection/
     String activateCIPSendMode() {
-      return mergeWithPrefix(F("CIPSEND"));
+      return ATCommand(F("CIPSEND"));
     }
 
     // Gets GNSS data.
     String getCGNSSData() {
-      return mergeWithPrefix(F("CGNSINF"));
+      return ATCommand(F("CGNSINF"));
     }
 
     // Gets battery status.
     // For more: http://m2msupport.net/m2msupport/atcbc-battery-charge/
     String getBatteryStat(){
-      return mergeWithPrefix(F("CBC"));
+      return ATCommand(F("CBC"));
     }
 };

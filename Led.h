@@ -13,12 +13,13 @@
 
 //  E-mail: denizkanmaz@gmail.com
 
+//  Description: "LED.h" is a helper class that includes functions
+//  for indication using LEDs.
 
-class Led
+class LED
 {
   private:
-    MainSerial mainSerialManager;
-
+    MainSerial mainSerial;
     byte ledPinsLength;
     byte * ledPins;
     int i;
@@ -37,10 +38,10 @@ class Led
     }
 
   public:
-    void init(byte * lPins, byte lPinsLength, MainSerial msManager) {
+    void init(byte * lPins, byte lPinsLength, MainSerial ms) {
       ledPins = lPins;
       ledPinsLength = lPinsLength;
-      mainSerialManager = msManager;
+      mainSerial = ms;
 
       for (i = 0; i < ledPinsLength; i++) {
 
@@ -50,8 +51,6 @@ class Led
     }
 
     void indicateStarting() {
-
-      // mainSerialManager.println("starting");
 
       for (i = 0; i < ledPinsLength; i++) {
         // mainSerialManager.println((String)ledPins[i]);

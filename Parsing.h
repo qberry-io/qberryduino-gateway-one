@@ -13,10 +13,13 @@
 
 //  E-mail: denizkanmaz@gmail.com
 
+//  Description: "Parsing.h" is a helper class that includes
+//  functions to parse responses from the Modem.
+
 const PROGMEM byte LINES_LENGTH = 8;
 const PROGMEM char SEPERATOR = ',';
 
-class CGNSS {
+class Parsing {
   private:
 
     String s[LINES_LENGTH];

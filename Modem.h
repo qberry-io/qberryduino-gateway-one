@@ -13,6 +13,9 @@
 
 //  E-mail: denizkanmaz@gmail.com
 
+//  Description: "Modem.h" is a class that includes functions to
+//  manage Fona/Sim808 module.
+
 #include "AT.h"
 #include <SoftwareSerial.h>
 
@@ -30,7 +33,7 @@ const PROGMEM String MODEM_TO_MC = "MC < Modem: ";
 class Modem
 {
   private:
-    Led ledManager;
+    LED ledManager;
     MainSerial mainSerial;
     AT at = AT();
     String ssBuffer;
@@ -45,20 +48,25 @@ class Modem
     SoftwareSerial ss = SoftwareSerial(-1, -1);
 
     void clearSerial() {
-      //Serial.println("$$$");
       while (ss.available() > 0) {
         ss.read();
-        // Serial.write(ss.read());
       }
-      //Serial.println("&&&");
     }
 
     void clearBuffer() {
       ssBuffer = "";
     }
 
+    void printReceived(String text) {
+      mainSerial.println(MODEM_TO_MC + text);
+    }
 
-    String Write(String message, int delayer) {
+    void printSent(String text) {
+      mainSerial.println(MC_TO_MODEM + text);
+    }
+
+
+    String write(String message, int delayer) {
       clearSerial();
       clearBuffer();
 
@@ -72,7 +80,6 @@ class Modem
       while (ss.available() != 0) {
 
         ichr = ss.read();
-        // printReceived((String)chr);
         if (ichr != '\r'
             && ichr != '\n'
             && ichr != '\0'
@@ -82,9 +89,7 @@ class Modem
             && ichr != '\t'
             && ichr != '\v') {
           ssBuffer = (ssBuffer + ichr);
-          // ssBuffer[i] = ichr;
           i++;
-          //Serial.print(ichr);
         }
 
       }
@@ -94,7 +99,7 @@ class Modem
     }
 
     // TODO: Let them use WriteLine2!
-    String WriteLine(String message, int delayer) {
+    String writeLine(String message, int delayer) {
       clearSerial();
       clearBuffer();
 
@@ -103,7 +108,6 @@ class Modem
       delay(delayer);
 
       i = 0;
-      //Serial.println("$$$");
       while (ss.available() != 0) {
 
         ichr = ss.read();
@@ -117,18 +121,15 @@ class Modem
             && ichr != '\t'
             && ichr != '\v') {
           ssBuffer = (ssBuffer + ichr);
-          // ssBuffer[i] = ichr;
           i++;
-          //Serial.print(ichr);
         }
 
       }
-      //Serial.println("&&&");
       printReceived(ssBuffer);
       return ssBuffer;
     }
 
-    char * WriteLine2(String message, int delayer) {
+    char * writeLine2(String message, int delayer) {
       clearSerial();
       ss.println(message);
       printSent(message);
@@ -155,14 +156,6 @@ class Modem
       return ssBuffer2;
     }
 
-    void printReceived(String text) {
-      mainSerial.println(MODEM_TO_MC + text);
-    }
-
-    void printSent(String text) {
-      mainSerial.println(MC_TO_MODEM + text);
-    }
-
   public:
     void init(byte rx,
               byte tx,
@@ -170,7 +163,7 @@ class Modem
               String apnN,
               char apnUsername[],
               char apnPass[],
-              Led lm,
+              LED lm,
               MainSerial ms) {
 
       apnName = apnN;
@@ -185,7 +178,7 @@ class Modem
       mainSerial = ms;
       delay(100);
 
-      WriteLine(at.begin(), 1000);
+      writeLine(at.begin(), 1000);
 
       delay(500);
     }
@@ -199,66 +192,62 @@ class Modem
     char * getCGNSSData() {
       //static char cgnssResp [256] = "";
       // WriteLine(at.getCGNSSData(), DELAY_60).toCharArray(cgnssResp, 256);
-      return WriteLine2(at.getCGNSSData(), DELAY_60);
+      return writeLine2(at.getCGNSSData(), DELAY_60);
       //return cgnssResp;
     }
 
-    char * getSMS() {
-      WriteLine2(F(""), DELAY_60);
-    }
-
     char * getBatteryStat() {
-      return WriteLine2(at.getBatteryStat(), DELAY_250);
+      return writeLine2(at.getBatteryStat(), DELAY_250);
     }
 
     // Makes a TCP connection to given address and port.
     boolean connectToTCP(char address[], int port) {
       // WriteLine("", DELAY_500);
       // ss.write(0x1A);
-      WriteLine(at.setResultMode(2), DELAY_250);
+      writeLine(at.setResultMode(2), DELAY_250);
       delay(DELAY_250);
       ledManager.indicateConnecting();
 
-      String(WriteLine(at.getImei(), DELAY_250)).substring(7, 22).toCharArray(imei, 16);
+      String(writeLine(at.getImei(), DELAY_250)).substring(7, 22).toCharArray(imei, 16);
 
       delay(DELAY_250);
       ledManager.indicateConnecting();
-      WriteLine(at.closeTCP(), DELAY_250);
+      writeLine(at.closeTCP(), DELAY_250);
       delay(DELAY_250);
       ledManager.indicateConnecting();
-      WriteLine(at.resetToFactoryDefault(), DELAY_2000);
+      writeLine(at.resetToFactoryDefault(), DELAY_2000);
       delay(DELAY_250);
       ledManager.indicateConnecting();
-      WriteLine(at.resetIPSession(), DELAY_250);
+      writeLine(at.resetIPSession(), DELAY_250);
       delay(DELAY_250);
       ledManager.indicateConnecting();
-      WriteLine(at.enableGNSS(), DELAY_250);
+      writeLine(at.enableGNSS(), DELAY_250);
       delay(DELAY_250);
       ledManager.indicateConnecting();
       //CGNSTST=0
       // WriteLine(at.setCGNSSequence("RMC"), 500);
-      WriteLine(at.setCGNSSequence(), DELAY_250);
+      writeLine(at.setCGNSSequence(), DELAY_250);
       delay(DELAY_250);
       ledManager.indicateConnecting();
-      WriteLine(at.setConnectionModeSingle(), DELAY_250);
+      writeLine(at.setConnectionModeSingle(), DELAY_250);
       delay(DELAY_7000);
       ledManager.indicateConnecting();
-      WriteLine(at.setupPDPContext(apnName, apnUser, apnPassword), DELAY_2000);
+      writeLine(at.setupPDPContext(apnName, apnUser, apnPassword), DELAY_2000);
       delay(DELAY_3000);
       ledManager.indicateConnecting();
 
-      WriteLine(at.attachGPRS(), DELAY_3000);
+      writeLine(at.attachGPRS(), DELAY_3000);
       delay(DELAY_3000);
       ledManager.indicateConnecting();
 
-      WriteLine(at.bringGPRSCalls(), DELAY_1000);
+      writeLine(at.bringGPRSCalls(), DELAY_1000);
       delay(DELAY_3000);
       ledManager.indicateConnecting();
-      WriteLine(at.getLocalIP(), DELAY_3000);
+      writeLine(at.getLocalIP(), DELAY_3000);
       delay(DELAY_250);
       ledManager.indicateConnecting();
 
-      if (WriteLine(at.startTCPConnection(address, (String) port), DELAY_3000).lastIndexOf(F("CONNECT OK")) > -1) {
+      if (writeLine(at.startTCPConnection(address, (String) port), DELAY_3000).lastIndexOf(F("CONNECT OK")) > -1) {
         ledManager.indicateConnected();
         delay(DELAY_250);
         return true;
@@ -270,9 +259,9 @@ class Modem
     }
 
     boolean sendMessage(String msg) {
-      boolean success = WriteLine(at.activateCIPSendMode(), DELAY_1000).lastIndexOf(F("CIPSENDERROR")) == -1;
+      boolean success = writeLine(at.activateCIPSendMode(), DELAY_1000).lastIndexOf(F("CIPSENDERROR")) == -1;
       if (success) {
-        Write(msg, DELAY_250);
+        write(msg, DELAY_250);
         ledManager.indicateTCPSendSuccess();
       } else {
         ledManager.indicateDisconnected();

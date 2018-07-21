@@ -14,16 +14,16 @@
 //  E-mail: denizkanmaz@gmail.com
 
 #include "MainSerial.h"
-#include "Led.h"
+#include "LED.h"
 #include "Modem.h"
 #include "Messaging.h"
-#include "CGNSS.h"
+#include "Parsing.h"
 
-Led _led;
+LED _led;
 MainSerial _mainSerial;
 Modem _modem;
 Messaging _messaging = Messaging();
-CGNSS _cgnss = CGNSS();
+Parsing _parsing = Parsing();
 
 // Definitions of Server
 char SERVER_ADDRES [] = "37.48.83.216";
@@ -43,7 +43,7 @@ const PROGMEM int SERIAL_BAUD_RATE = 9600;
 const PROGMEM byte DEVICE_IDENTITY_LENGTH = 19;
 char DEVICE_IDENTITY_PREFIX[] = "90";
 char DEVICE_IDENTITY[DEVICE_IDENTITY_LENGTH];
-char DEVICE_MODEL[] = "qbdone";
+char DEVICE_MODEL[] = "ONE";
 
 // Definitions of leds
 const PROGMEM byte LED_PINS_LENGTH = 4;
@@ -94,14 +94,14 @@ void loop() {
     lastCurrTime = millis();
 
     // Get CGNSS data, parse it, create curr message and send.
-    if (!_modem.sendMessage(_messaging.currCGNS(DEVICE_IDENTITY, PASSWORD, DEVICE_MODEL, _cgnss.parseNMEAData(_modem.getCGNSSData())))) {
+    if (!_modem.sendMessage(_messaging.currCGNS(DEVICE_IDENTITY, PASSWORD, DEVICE_MODEL, _parsing.parseNMEAData(_modem.getCGNSSData())))) {
       reset();
     }
 
     //  delay(1000);
 
     // Get Batt data, parse it, create curr message and send.
-    if (!_modem.sendMessage(_messaging.currBatt(DEVICE_IDENTITY, PASSWORD, DEVICE_MODEL, _cgnss.parseBatt(_modem.getBatteryStat())))) {
+    if (!_modem.sendMessage(_messaging.currBatt(DEVICE_IDENTITY, PASSWORD, DEVICE_MODEL, _parsing.parseBatt(_modem.getBatteryStat())))) {
       reset();
     }
 

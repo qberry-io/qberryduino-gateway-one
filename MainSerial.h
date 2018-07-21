@@ -13,14 +13,21 @@
 
 //  E-mail: denizkanmaz@gmail.com
 
+//  Description: "MainSerial.h" is a helper class that includes functions
+//  for printing out to Main Serial.
+
 class MainSerial
 {
   private:
+  boolean inited = false;
   public:
     void init(int baudRate) {
       Serial.begin(baudRate);
+      inited = true;
     }
     void println(String charsToPrint) {
+      if(!inited){ return; }
+
       Serial.println(charsToPrint);
     }
 };

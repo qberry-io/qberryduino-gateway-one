@@ -13,10 +13,14 @@
 
 //  E-mail: denizkanmaz@gmail.com
 
-char VERSION[] = "1.0.0";
+//  Description: "Messaging.h" is a helper class that includes functions
+//  to create appropriate messages for server using declared version in
+//  the local variable named PROTOCOL_VERSION.
+
+char PROTOCOL_VERSION[] = "1.0.0";
 const PROGMEM char MARKER = '$';
 const PROGMEM char SPLITTER = '|';
-char HELLO[] = "hola";
+char HOLA[] = "hola";
 char CURR[] = "curr";
 const PROGMEM int CGNSS_START_INDEX = 211;
 const PROGMEM int BATT_START_INDEX = 111;
@@ -27,7 +31,7 @@ const PROGMEM byte MESSAGE_TYPE_KEY = 11;
 const PROGMEM byte DEV_ID_KEY = 12;
 const PROGMEM byte PASS_KEY = 13;
 const PROGMEM byte DEV_MODEL_KEY = 14;
-const PROGMEM byte VERSION_KEY = 15;
+const PROGMEM byte PROTOCOL_VERSION_KEY = 15;
 
 class Messaging
 {
@@ -64,11 +68,11 @@ class Messaging
     String hello(char devId[], char pass[], char devModel[]) {
       return
         message(
-          keyval(MESSAGE_TYPE_KEY, HELLO)
+          keyval(MESSAGE_TYPE_KEY, HOLA)
           + keyval(DEV_ID_KEY, devId)
           + keyval(PASS_KEY, pass)
           + keyval(DEV_MODEL_KEY, devModel)
-          + keyval(VERSION_KEY, VERSION)
+          + keyval(PROTOCOL_VERSION_KEY, PROTOCOL_VERSION)
         );
     }
 
@@ -77,7 +81,7 @@ class Messaging
       t =   keyval(MESSAGE_TYPE_KEY, CURR)
             + keyval(DEV_ID_KEY, devId)
             + keyval(PASS_KEY, pass)
-            + keyval(VERSION_KEY, VERSION);
+            + keyval(PROTOCOL_VERSION_KEY, PROTOCOL_VERSION);
 
       lineI = CGNSS_START_INDEX;
       for (i = 0; i < CGNSS_LINES_LENGTH; i++) {
@@ -92,7 +96,7 @@ class Messaging
       t =   keyval(11, CURR)
             + keyval(12, devId)
             + keyval(13, pass)
-            + keyval(15, VERSION);
+            + keyval(15, PROTOCOL_VERSION);
 
       lineI = BATT_START_INDEX;
       for (i = 0; i < BATT_LINES_LENGTH; i++) {
