@@ -16,105 +16,24 @@
 //  Description: "Parsing.h" is a helper class that includes
 //  functions to parse responses from the Modem.
 
-const PROGMEM byte LINES_LENGTH = 8;
-const PROGMEM char SEPERATOR = ',';
-
 class Parsing {
   private:
+
+    static const PROGMEM byte LINES_LENGTH = 8;
+    static const PROGMEM char SEPERATOR = ',';
 
     String s[LINES_LENGTH];
     byte actualLineIndex = 0;
     byte lineIndex = 0;
     int rawCharIndex = 0;
 
-    boolean isInCGNSSIndexes(byte lineIndex) {
-      return lineIndex == 1
-             || lineIndex == 3
-             || lineIndex == 4
-             || lineIndex == 5
-             || lineIndex == 6
-             || lineIndex == 7
-             || lineIndex == 8
-             || lineIndex == 15;
-    }
-
-    boolean isInBattIndexes(byte lineIndex) {
-      return
-        lineIndex == 0
-        || lineIndex == 1
-        || lineIndex == 2;
-    }
-
-    void clear() {
-      for (int i = 0; i < LINES_LENGTH; i++) {
-        s[i] = "";
-      }
-    }
+    boolean isInCGNSSIndexes(byte lineIndex);
+    boolean isInBattIndexes(byte lineIndex);
 
   public:
 
-    String* parseBatt(char * rawBattData) {
-
-      clear();
-
-      actualLineIndex = 0;
-      lineIndex = 0;
-      rawCharIndex = 0;
-
-      for (rawCharIndex = 0;
-           rawCharIndex < String(rawBattData).length();
-           rawCharIndex++) {
-
-        if (rawBattData[rawCharIndex] == SEPERATOR) {
-
-          if (isInBattIndexes(lineIndex)) {
-            actualLineIndex++;
-          }
-
-          lineIndex++;
-          continue;
-        }
-
-        if (isInBattIndexes(lineIndex)) {
-          if (lineIndex == 0) {
-            if (rawCharIndex > 11) {
-              s[actualLineIndex] += String(rawBattData[rawCharIndex]);
-            }
-          } else {
-            s[actualLineIndex] += String(rawBattData[rawCharIndex]);
-          }
-        }
-      }
-      return s;
-    }
-
-    String* parseNMEAData(char* rawNMEAData) {
-
-      clear();
-
-      actualLineIndex = 0;
-      lineIndex = 0;
-      rawCharIndex = 0;
-
-      for (rawCharIndex = 0;
-           rawCharIndex < String(rawNMEAData).length();
-           rawCharIndex++) {
-
-        if (rawNMEAData[rawCharIndex] == SEPERATOR) {
-          if (isInCGNSSIndexes(lineIndex)) {
-            actualLineIndex++;
-          }
-
-          lineIndex++;
-          continue;
-        }
-
-        if (isInCGNSSIndexes(lineIndex)) {
-          s[actualLineIndex] += String(rawNMEAData[rawCharIndex]);
-        }
-      }
-
-      return s;
-    }
+    String* parseBatt(char * rawBattData);
+    String* parseNMEAData(char* rawNMEAData);
+    void clear();
 };
 

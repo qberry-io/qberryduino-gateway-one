@@ -149,7 +149,8 @@ void loop() {
                                      _parsing.parseNMEAData(
                                        _modem.getCGNSSData())
                                     ));
-
+    _parsing.clear();
+    _modem.clearBuffer();
     delay(1000);
 
     // Get the current Battery data,
@@ -162,6 +163,7 @@ void loop() {
                                      _parsing.parseBatt(
                                        _modem.getBatteryStat()
                                      )));
-
+    _parsing.clear();
+    _modem.clearBuffer();
   }
 }

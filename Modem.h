@@ -19,7 +19,7 @@
 #include "AT.h"
 #include <SoftwareSerial.h>
 
-const PROGMEM unsigned int SS_BUFFER_SIZE = 117;
+const PROGMEM unsigned int SS_BUFFER_SIZE = 115;
 const PROGMEM byte DELAY_60 = 60;
 const PROGMEM byte DELAY_250 = 250;
 const PROGMEM unsigned int DELAY_1000 = 1000;
@@ -49,10 +49,6 @@ class Modem
       while (ss.available() > 0) {
         ss.read();
       }
-    }
-
-    void clearBuffer() {
-      ssBuffer = "";
     }
 
     void printReceived(String text) {
@@ -168,6 +164,10 @@ class Modem
       writeLine(at.begin(), 1000);
 
       delay(500);
+    }
+
+    void clearBuffer() {
+      ssBuffer = "";
     }
 
     // Gets the imei of the mobile terminal.
