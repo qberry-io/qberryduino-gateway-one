@@ -16,14 +16,20 @@
 //  Description: "MainSerial.h" is a helper class that includes functions
 //  for printing out to Main Serial.
 
+// #include <stdint.h>
+
+#include "MainSerial.h"
 #include "Arduino.h"
 
-class MainSerial
-{
-  private:
-  bool inited = false;
-  public:
-    void init(int baudRate);
-    void println(String charsToPrint);
-};
+void MainSerial::init(int baudRate) {
+  Serial.begin(baudRate);
+  inited = true;
+}
+void MainSerial::println(String charsToPrint) {
+  if (!inited) {
+    return;
+  }
+
+  Serial.println(charsToPrint);
+}
 

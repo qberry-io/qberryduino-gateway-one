@@ -13,15 +13,13 @@
 
 //  E-mail: denizkanmaz@gmail.com
 
-//  Description: "LED.h" is a helper class that includes functions
+//  Description: "LED.cpp" is a helper class that includes functions
 //  for indication using LEDs.
 
  
-
-# include "LED.h"
+#include "LED.h"
 #include <stdint.h>
-#include "arduino.h"
-
+#include "Arduino.h"
 
 // Gets the Red indicator pin.
 uint8_t LED::getRedLedPin() {
