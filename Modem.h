@@ -203,6 +203,10 @@ class Modem
       //return cgnssResp;
     }
 
+    char * getSMS(){
+      WriteLine2(F(""), DELAY_60);
+    }
+
     char * getBatteryStat(){
       return WriteLine2(at.getBatteryStat(), DELAY_250);
     }

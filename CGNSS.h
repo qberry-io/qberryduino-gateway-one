@@ -14,144 +14,97 @@
 //  E-mail: denizkanmaz@gmail.com
 
 const PROGMEM byte LINES_LENGTH = 8;
-static String s[LINES_LENGTH];
+const PROGMEM char SEPERATOR = ',';
 
 class CGNSS {
   private:
-    int lineIndex = 0;
-    int rawCharIndex = 0;
-  public:
 
-    static void clear() {
+    String s[LINES_LENGTH];
+    byte actualLineIndex = 0;
+    byte lineIndex = 0;
+    int rawCharIndex = 0;
+
+    boolean isInCGNSSIndexes(byte lineIndex) {
+      return lineIndex == 1
+             || lineIndex == 3
+             || lineIndex == 4
+             || lineIndex == 5
+             || lineIndex == 6
+             || lineIndex == 7
+             || lineIndex == 8
+             || lineIndex == 15;
+    }
+
+    boolean isInBattIndexes(byte lineIndex) {
+      return
+        lineIndex == 0
+        || lineIndex == 1
+        || lineIndex == 2;
+    }
+
+    void clear() {
       for (int i = 0; i < LINES_LENGTH; i++) {
         s[i] = "";
       }
     }
 
+  public:
 
-    static String* parseBatt(char * rawBattData) {
-      //Serial.println("+++");
-      //Serial.println(rawBattData);
-      //Serial.println("+++");
+    String* parseBatt(char * rawBattData) {
 
       clear();
 
-      int actualLineIndex = 0;
-      int lineIndex = 0;
-      int rawCharIndex = 0;
+      actualLineIndex = 0;
+      lineIndex = 0;
+      rawCharIndex = 0;
 
       for (rawCharIndex = 0; rawCharIndex < String(rawBattData).length(); rawCharIndex++) {
 
-        if (String(rawBattData[rawCharIndex]) == ",") {
-          //Serial.println("comma");
-
-          if (lineIndex == 0
-              || lineIndex == 1
-              || lineIndex == 2
-              //|| lineIndex == 3
-             ) {
+        if (rawBattData[rawCharIndex] == SEPERATOR) {
+          
+          if (isInBattIndexes(lineIndex)) {
             actualLineIndex++;
           }
 
           lineIndex++;
-
           continue;
         }
 
-
-
-        if (   lineIndex == 0
-               || lineIndex == 1
-               || lineIndex == 2
-               //|| lineIndex == 3
-           ) {
+        if (isInBattIndexes(lineIndex)) {
           if (lineIndex == 0) {
             if (rawCharIndex > 11) {
               s[actualLineIndex] += String(rawBattData[rawCharIndex]);
-             ///////////// Serial.println(s[actualLineIndex]);
             }
           } else {
             s[actualLineIndex] += String(rawBattData[rawCharIndex]);
-            //////////////Serial.println(s[actualLineIndex]);
           }
-
         }
-
-
-
       }
-
       return s;
     }
 
-
-    static String* parseNMEAData2(char* rawNMEAData) {
+    String* parseNMEAData(char* rawNMEAData) {
 
       clear();
 
-      int actualLineIndex = 0;
-      int lineIndex = 0;
-      int rawCharIndex = 0;
-
+      actualLineIndex = 0;
+      lineIndex = 0;
+      rawCharIndex = 0;
 
       for (rawCharIndex = 0; rawCharIndex < String(rawNMEAData).length(); rawCharIndex++) {
 
-        if (String(rawNMEAData[rawCharIndex]) == ",") {
-          //Serial.println("comma");
-
-
-
-          if (lineIndex == 1
-              //|| lineIndex == 2
-              || lineIndex == 3
-              || lineIndex == 4
-              || lineIndex == 5
-              || lineIndex == 6
-              || lineIndex == 7
-              || lineIndex == 8
-              //   || lineIndex == 14
-              || lineIndex == 15
-              //|| lineIndex == 16
-             ) {
+        if (rawNMEAData[rawCharIndex] == SEPERATOR) {
+          if (isInCGNSSIndexes(lineIndex)) {
             actualLineIndex++;
           }
 
           lineIndex++;
-
           continue;
         }
 
-
-
-        if (lineIndex == 1
-            //|| lineIndex == 2
-            || lineIndex == 3
-            || lineIndex == 4
-            || lineIndex == 5
-            || lineIndex == 6
-            || lineIndex == 7
-            || lineIndex == 8
-            //|| lineIndex == 14
-            || lineIndex == 15
-            //|| lineIndex == 16
-           ) {
+        if (isInCGNSSIndexes(lineIndex)) {
           s[actualLineIndex] += String(rawNMEAData[rawCharIndex]);
-          ///////////////////Serial.println(s[actualLineIndex]);
         }
-
-        /*
-                if (lineIndex == 0) {
-                  // TODO: Try to find an efficient way.
-                  s[lineIndex] = String(rawNMEAData[rawCharIndex]);
-                  //Serial.println(s[lineIndex]);
-                } else {
-                  s[lineIndex] += String(rawNMEAData[rawCharIndex]);
-                  //Serial.println(s[lineIndex]);
-                }
-
-        */
-
-
       }
 
       return s;

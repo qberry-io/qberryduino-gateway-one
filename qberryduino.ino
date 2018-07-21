@@ -19,20 +19,11 @@
 #include "Messaging.h"
 #include "CGNSS.h"
 
-/*
-  serial.h
-  leds.h
-  messaging.h
-  messagingTDOne.h
-  tracking.h
-  modem.h
-*/
-
-
 Led _led;
 MainSerial _mainSerial;
 Modem _modem;
 Messaging _messaging = Messaging();
+CGNSS _cgnss = CGNSS();
 
 // Definitions of Server
 char SERVER_ADDRES [] = "37.48.83.216";
@@ -63,12 +54,6 @@ const PROGMEM byte MODEM_RX_PIN = 8;
 const PROGMEM byte MODEM_TX_PIN = 7;
 const PROGMEM int MODEM_BAUD_RATE = 9600;
 
-// Definitions of RF
-// const byte RF_RX_PIN = 9;
-// const byte RF_TX_PIN = 10;
-// const uint64_t rfPipe = 0xE8E8F0F0E1LL;
-
-//
 const PROGMEM int CURR_INTERVAL = 15000;
 
 // Current State
@@ -102,33 +87,18 @@ void setup() {
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  
   now = millis();
   if (now > (lastCurrTime + CURR_INTERVAL)) {
-
-
-    _messaging.hello(DEVICE_IDENTITY, PASSWORD, DEVICE_MODEL);
-    delay(500);
     lastCurrTime = millis();
 
-
-    //char* rawGNSSData = _modem.getCGNSSData();
-    // Serial.println(_modem.getCGNSSData());
-    Serial.println("---");
-
-    _modem.sendMessage(_messaging.curr(DEVICE_IDENTITY, PASSWORD, DEVICE_MODEL, CGNSS::parseNMEAData2(_modem.getCGNSSData())));
-
-    //Serial.println(_messaging.curr(DEVICE_IDENTITY, PASSWORD, DEVICE_MODEL, CGNSS::parseNMEAData2(_modem.getCGNSSData())));
+    // Get CGNSS data, parse it, create curr message and send.
+    _modem.sendMessage(_messaging.currCGNS(DEVICE_IDENTITY, PASSWORD, DEVICE_MODEL, _cgnss.parseNMEAData(_modem.getCGNSSData())));
 
     delay(1000);
 
-    _modem.sendMessage(_messaging.curr2(DEVICE_IDENTITY, PASSWORD, DEVICE_MODEL, CGNSS::parseBatt(_modem.getBatteryStat())));
-
-
-    // Get gps
-    // parse it
-    // create curr message and
-    // send it
+    // Get Batt data, parse it, create curr message and send.
+    _modem.sendMessage(_messaging.currBatt(DEVICE_IDENTITY, PASSWORD, DEVICE_MODEL, _cgnss.parseBatt(_modem.getBatteryStat())));
 
     // check for incoming sms
     // check for incoming tcp packets

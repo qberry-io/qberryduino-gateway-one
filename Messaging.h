@@ -14,20 +14,25 @@
 //  E-mail: denizkanmaz@gmail.com
 
 char VERSION[] = "1.0.0";
-const char MARKER = '$';
-const char SPLITTER = '|';
+const PROGMEM char MARKER = '$';
+const PROGMEM char SPLITTER = '|';
 char HELLO[] = "hola";
 char CURR[] = "curr";
-const int CGNSS_START_INDEX = 211;
-const int BATT_START_INDEX = 111;
+const PROGMEM int CGNSS_START_INDEX = 211;
+const PROGMEM int BATT_START_INDEX = 111;
+const PROGMEM byte CGNSS_LINES_LENGTH = 8;
+const PROGMEM byte BATT_LINES_LENGTH = 3;
 
-
-
+const PROGMEM byte MESSAGE_TYPE_KEY = 11;
+const PROGMEM byte DEV_ID_KEY = 12;
+const PROGMEM byte PASS_KEY = 13;
+const PROGMEM byte DEV_MODEL_KEY = 14;
+const PROGMEM byte VERSION_KEY = 15;
 
 class Messaging
 {
   private:
-    int cgnsI;
+    int lineI;
     int i;
     String t;
 
@@ -59,127 +64,41 @@ class Messaging
     String hello(char devId[], char pass[], char devModel[]) {
       return
         message(
-          keyval(11, HELLO)
-          + keyval(12, devId)
-          + keyval(13, pass)
-          + keyval(14, devModel)
-          + keyval(15, VERSION)
+          keyval(MESSAGE_TYPE_KEY, HELLO)
+          + keyval(DEV_ID_KEY, devId)
+          + keyval(PASS_KEY, pass)
+          + keyval(DEV_MODEL_KEY, devModel)
+          + keyval(VERSION_KEY, VERSION)
         );
     }
 
-    String curr(char devId[], char pass[], char devModel[], String cgnsData[]) {
-      /*
-        0: <GNSS run status>
-        1: <Fix status>
-        2: <UTC date & Time>
-        3: <Latitude>
-        4: <Longitude>
-        5: <MSL Altitude>
-        6: <Speed Over Ground>
-        7: <Course Over Ground>
-        8: <Fix Mode>
-        9: <Reserved1>
-        10: <HDOP>
-        11: <PDOP>
-        12: <VDOP>
-        13: <Reserved2>
-        14: <GNSS Satellites in View>
-        15: <GNSS Satellites Used>
-        16: <GLONASS Satellites Used>
-        17: <Reserved3>
-        18: <C/N0 max>
-        19: <HPA>
-        20: <VPA>
-      */
+    String currCGNS(char devId[], char pass[], char devModel[], String cgnsData[]) {
 
-      t =   keyval(11, CURR)
-            + keyval(12, devId)
-            + keyval(13, pass)
-            // + keyval(14, devModel)
-            + keyval(15, VERSION);
+      t =   keyval(MESSAGE_TYPE_KEY, CURR)
+            + keyval(DEV_ID_KEY, devId)
+            + keyval(PASS_KEY, pass)
+            + keyval(VERSION_KEY, VERSION);
 
-
-      cgnsI = CGNSS_START_INDEX;
-      for (i = 0; i < 8; i++) {
-
-        //  if (i == 1
-        //|| i == 2
-        //   || i == 3
-        //  || i == 4
-        //  || i == 5
-        //  || i == 6
-        // || i == 7
-        //|| i == 8
-        // || i == 14
-        // || i == 15
-        // || i == 16
-        //   ) {
-        t += keyval(cgnsI, cgnsData[i]);
-        // }
-
-        // Serial.println(keyval(cgnsI, cgnsData[i]));
-        cgnsI++;
+      lineI = CGNSS_START_INDEX;
+      for (i = 0; i < CGNSS_LINES_LENGTH; i++) {
+        t += keyval(lineI, cgnsData[i]);
+        lineI++;
       }
-      ////////////////////Serial.println(message(t));
       return message(t);
     }
 
-
-
-    String curr2(char devId[], char pass[], char devModel[], String battData[]) {
-      /*
-        0: <GNSS run status>
-        1: <Fix status>
-        2: <UTC date & Time>
-        3: <Latitude>
-        4: <Longitude>
-        5: <MSL Altitude>
-        6: <Speed Over Ground>
-        7: <Course Over Ground>
-        8: <Fix Mode>
-        9: <Reserved1>
-        10: <HDOP>
-        11: <PDOP>
-        12: <VDOP>
-        13: <Reserved2>
-        14: <GNSS Satellites in View>
-        15: <GNSS Satellites Used>
-        16: <GLONASS Satellites Used>
-        17: <Reserved3>
-        18: <C/N0 max>
-        19: <HPA>
-        20: <VPA>
-      */
+    String currBatt(char devId[], char pass[], char devModel[], String battData[]) {
 
       t =   keyval(11, CURR)
             + keyval(12, devId)
             + keyval(13, pass)
-            // + keyval(14, devModel)
             + keyval(15, VERSION);
 
-
-      cgnsI = BATT_START_INDEX;
-      for (i = 0; i < 3; i++) {
-
-        //  if (i == 1
-        //|| i == 2
-        //   || i == 3
-        //  || i == 4
-        //  || i == 5
-        //  || i == 6
-        // || i == 7
-        //|| i == 8
-        // || i == 14
-        // || i == 15
-        // || i == 16
-        //   ) {
-        t += keyval(cgnsI, battData[i]);
-        // }
-
-        // Serial.println(keyval(cgnsI, cgnsData[i]));
-        cgnsI++;
+      lineI = BATT_START_INDEX;
+      for (i = 0; i < BATT_LINES_LENGTH; i++) {
+        t += keyval(lineI, battData[i]);
+        lineI++;
       }
-      //////////////////////Serial.println(message(t));
       return message(t);
     }
 };
