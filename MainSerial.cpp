@@ -13,7 +13,7 @@
 
 //  E-mail: denizkanmaz@gmail.com
 
-//  Description: "MainSerial.h" is a helper class that includes functions
+//  Description: "MainSerial.cpp" is a helper class that includes functions
 //  for printing out to Main Serial.
 
 // #include <stdint.h>

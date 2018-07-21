@@ -13,129 +13,98 @@
 
 //  E-mail: denizkanmaz@gmail.com
 
-//  Description: "AT.h" is a helper class that includes the necessary
-//  AT commands.
+//  Description: "AT.h" is a helper class that includes the
+//  necessary AT commands.
 
 
 class AT
 {
   private:
-    String ATCommand(String command) {
-      return "AT+" + command;
-    }
 
-    String capsulateWithDoubleQuote(String val) {
-      return "\"" + val + "\"";
-    }
+    // Returns given command string with "AT+" prefix.
+    String ATCommand(String command);
+
+    // Returns given command string in double quotes.
+    String capsulateWithDoubleQuote(String val);
   public:
-    String begin() {
-      return F("AT");
-    }
 
-
+    // Implies that the communication between the device and the
+    // application has been verified.
+    // For more: http://m2msupport.net/m2msupport/at-command/
+    String begin();
 
     // Configures the device for a single IP connection.
     // For more: http://m2msupport.net/m2msupport/atcipmux-start-up-multi-ip-connection/
-    String setConnectionModeSingle() {
-      return ATCommand(F("CIPMUX=0"));   // 0: Single, 1: Multi
-    }
+    String setConnectionModeSingle();
 
 
     // Sets result mode of errors.
     // mode 0: Nothing.
     // mode 1: Error code only.
     // mode 2: Error message only.
-    String setResultMode(byte mode) {
-      return ATCommand("CMEE=" + (String)mode);
-    }
+    String setResultMode(byte mode);
 
-    // Returns the IMEI (International Mobile station Equipment Identity) of the mobile terminal.
+    // Returns the IMEI of the mobile terminal.
     // For more: http://m2msupport.net/m2msupport/atcgsn-request-product-serial-number-identification/
-    String getImei() {
-      return ATCommand(F("CGSN"));
-    }
+    String getImei();
 
     // Closes the TCP or UDP connection.
-    String closeTCP() {
-      return ATCommand(F("CIPCLOSE"));
-    }
+    String closeTCP();
 
     // Resets the modem back to default factory settings.
-    // Notice: This command should be followed by at least two seconds before the next command entered.
-    String resetToFactoryDefault() {
-      return F("ATZ");
-    }
+    // Notice: This command should be followed by at least two
+    // seconds before the next command entered.
+    String resetToFactoryDefault();
 
     // Closes GPRS PDP context.
     // For more: http://m2msupport.net/m2msupport/atcipshut-deactivate-gprs-pdp-context/
-    String resetIPSession() {
-      return ATCommand(F("CIPSHUT"));
-    }
+    String resetIPSession();
 
     // Turns on GNSS power in Simcom modules
     // For mode: http://m2msupport.net/m2msupport/at-cgnspwr-gnss-power-control/
-    String enableGNSS() {
-      return ATCommand(F("CGNSPWR=1"));
-    }
+    String enableGNSS();
 
     // Turns off GNSS power in Simcom modules
     // For mode: http://m2msupport.net/m2msupport/at-cgnspwr-gnss-power-control/
-    String disableGNSS() {
-      return ATCommand(F("CGNSPWR=0"));
-    }
+    String disableGNSS();
 
     // Defines the last NMEA sentence that parsed.
     // “GGA” refer to ”GPGGA” or "GLGGA" or "GNGGA"
     // “GSA” refer to ”GPGSA” or "GLGSA" or "GNGSA"
     // “GSV" refer to ”GPGSV” or "GLGSV" or "GNGSV"
     // “RMC” refer to ”GPRMC” or "GLRMC" or "GNRMC"
-    String setCGNSSequence() {
-      return ATCommand(F("CGNSSEQ=\"RMC\""));
-    }
+    String setCGNSSequence();
 
     // Set the apn, user name and password for the PDP context.
     // For more: http://m2msupport.net/m2msupport/atcstt-satrt-task-and-set-apn-username-and-password/
-    String setupPDPContext(String apnName, String apnUsername, String apnPassword) {
-      // return ATCommand("CSTT=" + capsulateWithDoubleQuote(F("APN")) + "," + capsulateWithDoubleQuote(apnUsername) + "," + capsulateWithDoubleQuote(apnPassword));
-      return ATCommand("CSTT=" + capsulateWithDoubleQuote(apnName) + "," + capsulateWithDoubleQuote(apnUsername) + "," + capsulateWithDoubleQuote(apnPassword));
-    }
+    String setupPDPContext(String apnName, String apnUsername, String apnPassword);
 
-    // Brings the GPRS or CSD call depending on the configuration previously set by the AT+CSTT command.
+    // Brings the GPRS or CSD call depending on the configuration
+    // previously set by the AT+CSTT command.
     // For more: http://m2msupport.net/m2msupport/atciicr-bring-up-gprs-or-circuit-switch-connection/
-    String bringGPRSCalls() {
-      return ATCommand(F("CIICR"));
-    }
+    String bringGPRSCalls();
 
     // Returns the local IP address.
-    // It is imperative the the PDP context must have been activated before to get the IP address.
+    // It is imperative the the PDP context must have been
+    // activated before to get the IP address.
     // For more: http://m2msupport.net/m2msupport/atcifsr-get-local-ip-address/
-    String getLocalIP() {
-      return ATCommand(F("CIFSR"));
-    }
+    String getLocalIP();
 
     // Performs a GPRS Attach.
-    // The device should be attached to the GPRS network before a PDP context can be established.
-    String attachGPRS() {
-      return ATCommand(F("CGATT=1"));
-    }
+    // For more: https://m2msupport.net/m2msupport/atcgatt-ps-attach-or-detach/
+    String attachGPRS();
 
-    String startTCPConnection(String address, String port) {
-      return ATCommand("CIPSTART=" + capsulateWithDoubleQuote(F("TCP")) + "," + capsulateWithDoubleQuote(address) + "," + capsulateWithDoubleQuote(port));
-    }
+    // Starts a TCP connection.
+    // For more: https://m2msupport.net/m2msupport/atcipstart-start-up-tcp-or-udp-connection/
+    String startTCPConnection(String address, String port);
 
     // For more: http://m2msupport.net/m2msupport/atcipsend-send-data-through-tcp-or-udp-connection/
-    String activateCIPSendMode() {
-      return ATCommand(F("CIPSEND"));
-    }
+    String activateCIPSendMode();
 
     // Gets GNSS data.
-    String getCGNSSData() {
-      return ATCommand(F("CGNSINF"));
-    }
+    String getCGNSSData();
 
     // Gets battery status.
     // For more: http://m2msupport.net/m2msupport/atcbc-battery-charge/
-    String getBatteryStat(){
-      return ATCommand(F("CBC"));
-    }
+    String getBatteryStat();
 };
