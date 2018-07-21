@@ -258,7 +258,7 @@ class Modem
       }
     }
 
-    boolean sendMessage(String msg) {
+    boolean sendToServer(String msg) {
       boolean success = writeLine(at.activateCIPSendMode(), DELAY_1000).lastIndexOf(F("CIPSENDERROR")) == -1;
       if (success) {
         write(msg, DELAY_250);

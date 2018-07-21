@@ -61,10 +61,12 @@ class Parsing {
       lineIndex = 0;
       rawCharIndex = 0;
 
-      for (rawCharIndex = 0; rawCharIndex < String(rawBattData).length(); rawCharIndex++) {
+      for (rawCharIndex = 0;
+           rawCharIndex < String(rawBattData).length();
+           rawCharIndex++) {
 
         if (rawBattData[rawCharIndex] == SEPERATOR) {
-          
+
           if (isInBattIndexes(lineIndex)) {
             actualLineIndex++;
           }
@@ -94,7 +96,9 @@ class Parsing {
       lineIndex = 0;
       rawCharIndex = 0;
 
-      for (rawCharIndex = 0; rawCharIndex < String(rawNMEAData).length(); rawCharIndex++) {
+      for (rawCharIndex = 0;
+           rawCharIndex < String(rawNMEAData).length();
+           rawCharIndex++) {
 
         if (rawNMEAData[rawCharIndex] == SEPERATOR) {
           if (isInCGNSSIndexes(lineIndex)) {

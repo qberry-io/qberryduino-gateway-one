@@ -19,6 +19,7 @@
 #include "Messaging.h"
 #include "Parsing.h"
 
+// Definitions of the necessary utilities.
 LED _led;
 MainSerial _mainSerial;
 Modem _modem;
@@ -54,58 +55,115 @@ const PROGMEM byte MODEM_RX_PIN = 8;
 const PROGMEM byte MODEM_TX_PIN = 7;
 const PROGMEM int MODEM_BAUD_RATE = 9600;
 
+// Definitions of Intervals and Delays
 const PROGMEM int CURR_INTERVAL = 15000;
+const PROGMEM int STARTUP_DELAY = 5000;
 
 // Current State
 int i; // Used in loops only
 unsigned long now = 0;
 unsigned long lastCurrTime = 0;
 
+// Resets the device.
 void(* reset) (void) = 0;
 
-void initSerial() {
-  Serial.begin(SERIAL_BAUD_RATE);
+// Sends the given String message to the server.
+void sendToServer(String msg) {
+
+  // Send the message to the server.
+  if (!_modem.sendToServer(msg)) {
+
+    // Reset the device if the sending operation has failed.
+    // (This happens when the established connection has
+    // corrupted.)
+    reset();
+  }
 }
 
 void setup() {
+
+  // Initialize the main serial if debug mode enabled.
   if (DEBUG_MODE) {
     _mainSerial.init(SERIAL_BAUD_RATE);
-    //_mainSerial.println(F("*** Debug mode enabled ***"));
+    _mainSerial.println(F("*** Debug mode enabled ***"));
   }
-  _led.init(LED_PINS, LED_PINS_LENGTH, _mainSerial);
-  _led.indicateStarting();
-  _led.indicatePoweredOn();
-  _modem.init(MODEM_RX_PIN, MODEM_TX_PIN, MODEM_BAUD_RATE, APN_NAME, APN_USER, APN_PASS, _led, _mainSerial);
 
-  if (!_modem.connectToTCP(SERVER_ADDRES, TCP_PORT)) {
+  // Initialize LED indicators.
+  _led.init(LED_PINS,
+            LED_PINS_LENGTH,
+            _mainSerial);
+
+  // Indicate for "Starting Up!".
+  _led.indicateStarting();
+
+  // Indicate for "Powered On".
+  _led.indicatePoweredOn();
+
+  // Give the modem some time.
+  delay(STARTUP_DELAY);
+
+  // Initilize the modem.
+  _modem.init(MODEM_RX_PIN,
+              MODEM_TX_PIN,
+              MODEM_BAUD_RATE,
+              APN_NAME, APN_USER,
+              APN_PASS,
+              _led,
+              _mainSerial);
+
+  // Connect to TCP server..
+  if (!_modem.connectToTCP(SERVER_ADDRES,
+                           TCP_PORT)) {
+    // reset the device if the establishing connection has
+    // failed.
     reset();
     return;
   }
 
-  (String(DEVICE_IDENTITY_PREFIX) + String(_modem.getImei())).toCharArray(DEVICE_IDENTITY, DEVICE_IDENTITY_LENGTH);
-  _modem.sendMessage(_messaging.hello(DEVICE_IDENTITY, PASSWORD, DEVICE_MODEL));
+  // Set device identity using DEVICE_IDENTITY_PREFIX and
+  // IMEI of the Modem.
+  (String(DEVICE_IDENTITY_PREFIX)
+   + String(_modem.getImei())).toCharArray(
+     DEVICE_IDENTITY,
+     DEVICE_IDENTITY_LENGTH);
 
+  // Send a "HOLA" message to the server.
+  sendToServer(_messaging.hello(DEVICE_IDENTITY,
+                                PASSWORD,
+                                DEVICE_MODEL));
 }
 
 void loop() {
 
   now = millis();
+
+  // If it's time to send a "CURR" message...
   if (now > (lastCurrTime + CURR_INTERVAL)) {
     lastCurrTime = millis();
 
-    // Get CGNSS data, parse it, create curr message and send.
-    if (!_modem.sendMessage(_messaging.currCGNS(DEVICE_IDENTITY, PASSWORD, DEVICE_MODEL, _parsing.parseNMEAData(_modem.getCGNSSData())))) {
-      reset();
-    }
+    // Get the current CGNSS data,
+    // parse it,
+    // create "CURR" message for "CGNS"
+    // send it to the server.
+    sendToServer(_messaging.currCGNS(DEVICE_IDENTITY,
+                                     PASSWORD,
+                                     DEVICE_MODEL,
+                                     _parsing.parseNMEAData(
+                                       _modem.getCGNSSData())
+                                    ));
 
-    //  delay(1000);
+    delay(1000);
 
-    // Get Batt data, parse it, create curr message and send.
-    if (!_modem.sendMessage(_messaging.currBatt(DEVICE_IDENTITY, PASSWORD, DEVICE_MODEL, _parsing.parseBatt(_modem.getBatteryStat())))) {
-      reset();
-    }
+    // Get the current Battery data,
+    // parse it,
+    // create "CURR" message for "Battery"
+    // send it to the server.
+    sendToServer(_messaging.currBatt(DEVICE_IDENTITY,
+                                     PASSWORD,
+                                     DEVICE_MODEL,
+                                     _parsing.parseBatt(
+                                       _modem.getBatteryStat()
+                                     )));
 
-    // check for incoming sms
-    // check for incoming tcp packets
   }
 }

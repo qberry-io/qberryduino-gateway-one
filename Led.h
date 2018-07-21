@@ -16,6 +16,9 @@
 //  Description: "LED.h" is a helper class that includes functions
 //  for indication using LEDs.
 
+const int PROGMEM SHORT = 100;
+const int PROGMEM LONG = 500;
+
 class LED
 {
   private:
@@ -24,98 +27,111 @@ class LED
     byte * ledPins;
     int i;
 
-    // Helpers
+    // Gets the Red indicator pin.
     byte getRedLedPin() {
       return ledPins[0];
     }
 
+    // Gets the Yellow indicator pin.
     byte getYellowLedPin() {
       return ledPins[1];
     }
 
+    // Gets the Blue indicator pin.
     byte getBlueLedPin() {
       return ledPins[3];
     }
 
+    // Writes LOW to given pin number.
+    void writeLow(byte ledPin) {
+      digitalWrite(ledPin, LOW);
+    }
+
+    // Writes HIGH to given pin number.
+    void writeHigh(byte ledPin) {
+      digitalWrite(ledPin, HIGH);
+    }
+
   public:
+  
+    // Initializes the helper.
     void init(byte * lPins, byte lPinsLength, MainSerial ms) {
       ledPins = lPins;
       ledPinsLength = lPinsLength;
       mainSerial = ms;
 
       for (i = 0; i < ledPinsLength; i++) {
-
         pinMode(ledPins[i], OUTPUT);
-        digitalWrite(ledPins[i], LOW);
+        writeLow(ledPins[i]);
       }
     }
 
+    // Blinks all the indicators with an order from up to down.
     void indicateStarting() {
-
       for (i = 0; i < ledPinsLength; i++) {
-        // mainSerialManager.println((String)ledPins[i]);
-        digitalWrite(ledPins[i], HIGH);
+        writeHigh(ledPins[i]);
         delay(250);
-        digitalWrite(ledPins[i], LOW);
-        // mainSerialManager.println((String)ledPins[i]);
+        writeLow(ledPins[i]);
       }
     }
 
-    // Blinks Yellow indicators only one time.
+    // Blinks the Yellow indicator only one time with a
+    // SHORT interval.
+    // .
     void indicateConnecting() {
-      digitalWrite(getYellowLedPin(), HIGH);
-      delay(250);
-      digitalWrite(getYellowLedPin(), LOW);
-      delay(250);
+      writeHigh(getYellowLedPin());
+      delay(SHORT);
+      writeLow(getYellowLedPin());
     }
 
-    // Blinks the blue indicator only one time.
+    // Blinks the Blue indicator only one time with a
+    // SHORT interval.
+    // .
     void indicateTCPSendSuccess() {
-      digitalWrite(getBlueLedPin(), HIGH);
-      delay(500);
-      digitalWrite(getBlueLedPin(), LOW);
-      delay(500);
+      writeHigh(getBlueLedPin());
+      delay(SHORT);
+      writeLow(getBlueLedPin());
     }
 
-    
+    // Blinks the Red and the Blue indicator four times with a
+    // LONG interval.
+    // _ _ _ _
     void indicateTCPSendFailed() {
-      digitalWrite(getBlueLedPin(), HIGH);
-      delay(250);
-      digitalWrite(getBlueLedPin(), LOW);
-      delay(250);
-      digitalWrite(getBlueLedPin(), HIGH);
-      delay(250);
-      digitalWrite(getBlueLedPin(), LOW);
-      delay(250);
+      for (i = 0; i < 4; i++) {
+        digitalWrite(getBlueLedPin(), HIGH);
+        delay(LONG);
+        digitalWrite(getBlueLedPin(), LOW);
+        delay(LONG);
+      }
+    }
+
+    // Blinks the Red and the Yellow indicatators together
+    // four times with a LONG interval.
+    // _ _ _ _
+    void indicateConnectionError() {
+      for (i = 0; i < 4; i++) {
+        writeHigh(getRedLedPin());
+        writeHigh(getYellowLedPin());
+        delay(LONG);
+        writeLow(getRedLedPin());
+        writeLow(getYellowLedPin());
+        delay(LONG);
+      }
     }
 
     // Powers on Red indicators indefinitely.
     void indicatePoweredOn() {
-      digitalWrite(getRedLedPin(), HIGH);
+      writeHigh(getRedLedPin());
     }
 
-    // Powers on Yellow indicators indefinitely.
+    // Powers on the Yellow indicator indefinitely.
     void indicateConnected() {
-      digitalWrite(getYellowLedPin(), HIGH);
+      writeHigh(getYellowLedPin());
     }
 
-    // Powers off the yellow indicators indefinitely.
+    // Powers off the Yellow indicators indefinitely.
     void indicateDisconnected() {
-      digitalWrite(getYellowLedPin(), LOW);
-    }
-
-    // Blinks Red and Yellow indicatators four times.
-    void indicateConnectionError() {
-
-      for (i = 0; i < 4; i++) {
-        digitalWrite(getRedLedPin(), HIGH);
-        digitalWrite(getYellowLedPin(), HIGH);
-        delay(1000);
-        digitalWrite(getRedLedPin(), LOW);
-        digitalWrite(getYellowLedPin(), LOW);
-        delay(250);
-      }
-
+      writeLow(getYellowLedPin());
     }
 };
 
