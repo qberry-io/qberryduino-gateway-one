@@ -14,7 +14,8 @@
 //  E-mail: denizkanmaz@gmail.com
 
 //  Description: "Qberyduino One" is an open source IOT Gateway
-//  developed for bringing telemetry-kind data to server over GPRS.
+//  developed for bringing telemetry-kind data to TCP Socket
+//  server over GPRS.
 
 //  Model: Qberyduino One
 //  Version: 1.0.0
@@ -32,14 +33,21 @@ Modem _modem;
 Messaging _messaging = Messaging();
 Parsing _parsing = Parsing();
 
-// Definitions of the server
+// Definitions of the target TCP Socket server.
 char SERVER_ADDRES [] = "37.48.83.216";
 const PROGMEM int TCP_PORT = 23101;
-char PASSWORD[] = "123456";
 
-// Definitions of APN
-// NOTICE: To get your APN information, please refer to your Telecom
-// company.
+// This is not a password for accessing the
+// TCP Socket Server.
+// It lets you filter illegal posts. You can block
+// them in your TCP Socket server, if you want.
+// If you will use it on a common platform like qberry.io,
+// we strongly recommend you to change this passcode.
+char PASSWORD[7] = "B23a56";
+
+// Definitions of APN.
+// NOTICE: To get your APN information, please refer to your
+// Telecom company.
 const PROGMEM String APN_NAME = "internet";
 char APN_USER [] = "";
 char APN_PASS [] = "";
@@ -146,11 +154,43 @@ void setup() {
 
   // Send a "HOLA" message to the server.
   sendToServer(_messaging.hola(DEVICE_IDENTITY,
-                                PASSWORD,
-                                DEVICE_MODEL));
+                               PASSWORD,
+                               DEVICE_MODEL));
 
   _parsing.clear();
   _modem.clearBuffer();
+}
+
+// 1-) Gets the current CGNSS data,
+// 2-) Parses it,
+// 3-) Creates "CURR" message for "CGNS"
+// 4-) Sends it to the server.
+void processToSendCurrentCGNSS() {
+  sendToServer(_messaging.currCGNS(DEVICE_IDENTITY,
+                                   PASSWORD,
+                                   DEVICE_MODEL,
+                                   _parsing.parseNMEAData(
+                                     _modem.getCGNSSData())
+                                  ));
+  _parsing.clear();
+  _modem.clearBuffer();
+  delay(1000);
+}
+
+// 1-) Gets the current Battery data,
+// 2-) Parses it,
+// 3-) Creates "CURR" message for "Battery"
+// 4-) Sends it to the server.
+void processToSendCurrentBatteryStat() {
+  sendToServer(_messaging.currBatt(DEVICE_IDENTITY,
+                                   PASSWORD,
+                                   DEVICE_MODEL,
+                                   _parsing.parseBatt(
+                                     _modem.getBatteryStat()
+                                   )));
+  _parsing.clear();
+  _modem.clearBuffer();
+  delay(1000);
 }
 
 void loop() {
@@ -161,29 +201,13 @@ void loop() {
   if (now > (lastCurrTime + CURR_INTERVAL)) {
     lastCurrTime = millis();
 
-    // Get the current CGNSS data,
-    // parse it,
-    // create "CURR" message for "CGNS"
-    // send it to the server.
-    sendToServer(_messaging.currCGNS(DEVICE_IDENTITY,
-                                     PASSWORD,
-                                     DEVICE_MODEL,
-                                     _parsing.parseNMEAData(
-                                       _modem.getCGNSSData())
-                                    ));
-    delay(1000);
+    // Process to send current CGNSS data to the server.
+    processToSendCurrentCGNSS();
 
-    // Get the current Battery data,
-    // parse it,
-    // create "CURR" message for "Battery"
-    // send it to the server.
-    sendToServer(_messaging.currBatt(DEVICE_IDENTITY,
-                                     PASSWORD,
-                                     DEVICE_MODEL,
-                                     _parsing.parseBatt(
-                                       _modem.getBatteryStat()
-                                     )));
-    _parsing.clear();
-    _modem.clearBuffer();
+    // Process to send current Battery status to the server.
+    processToSendCurrentBatteryStat();
+
+    // Process to send whatever you want here :)
+    // processMyLovelyData();
   }
 }

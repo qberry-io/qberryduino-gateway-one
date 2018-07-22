@@ -1,146 +1,131 @@
-# Devices
 
-- 1\* Arduino Mini Pro Atmega324 5.5V
-- 1\* Adafruit Sim808
+# Qberyduino One v.1
+
+"Qberyduino One" is an open source IOT Gateway developed for bringing telemetry-kind data to TCP Socket server over GPRS. 
+
+It can be used as a gateway (Home Automation projects for example) as well as stand-alone Vehicle / Asset Tracker.
+
+If wanted to use as a basic Vehicle / Asset Tracker, it's ready to use. No development needed.
+
+## Getting Started
+
+These instructions will get you a copy of the project up and running on your development environment.
+
+### Prerequisites
+The hardwares needed to use this solution.
+* 1 * Arduino Mini Pro 8 MHz, 3.3v with Atmega328P (or higher version of Arduino)
+* 1 * [Adafruit Fona 808 Version 2 Shield](https://www.adafruit.com/product/2636)
+* 1 * USB to TTL Adaptor (Compatible with 3,3v)
+* 3 * LEDs
+	* Red
+	* Yellow
+	* Blue
+* 3 * 250 ohm resistors
+* 1* GPS Antenna (Compatible with Fona 808)
+* 1* GSM Antenna (Compatible with Fona 808)
+* 1* Battery (Compatible with Fona 808)
+* 1* active GPRS enabled Simcard
+
+## Installation
+### Hardware Installation
+
+Here is a list of hardware and their connections step by step with preferred cable colors.
+*	Red LED
+	* (+) → Pin 5 (Red)  _(With a 250 ohm resistor)_
+	* (-) → GND (Black)
+*	Yellow LED
+	*	(+) → Pin 4 (Yellow)  _(With a 250 ohm resistor)_
+	*	(-) → GND (Black)
+*	Blue LED
+	*	(+) → Pin 2 (Blue)  _(With a 250 ohm resistor)_
+	*	(-) → GND (Black)
+*	Fona 808
+	*	5v -> Pin 5v (Red)
+	*	GND -> GND (Black)
+	*	RX -> Pin 7 (Orange)
+	*	TX -> Pin 8 (Brown)
+*	USB to TTL adapter > Arduino
+	*	
+
+### Notice for the USB to TTL Adapter and its voltage value
+Please be sure that the adapter provides the same voltage with the Arduino that you will use.
+For example: If you will use an "Arduino Mini Pro 8 MHz, 3.3v with Atmega328P". you need to be sure it provides 3.3v output.
+
+### Some configuration on code
+There are two blocks of definitions needed to be configured in "qberryduino.ino". These are the informations of the target TCP Socket server and APN configurations of the current SIM line.
+```
+// Definitions of the target TCP Socket server.
+char SERVER_ADDRES [] = "37.48.83.216";
+const PROGMEM int TCP_PORT = 23101;
+
+// This is not a password for accessing the
+// TCP Socket Server.
+// It lets you filter illegal posts. You can block
+// them in your TCP Socket server, if you want.
+// If you will use it on a common platform like qberry.io,
+// we strongly recommend you to change this passcode.
+char PASSWORD[7] = "B23a56";
+```
+```
+// Definitions of APN.
+// NOTICE: To get your APN information, please refer to your Telecom
+// company.
+const PROGMEM String APN_NAME = "internet";
+char APN_USER [] = "";
+char APN_PASS [] = "";
+```
+### An Important Notice for Compiling and Uploading the Sketch
+Please be sure that you're compiling for the right microcontroller.
+For example: If you will use an "Arduino Mini Pro 8 MHz, 3.3v with Atmega328P" you need to be sure;
+* "ATmega328P (3.3v, 8MHz)" is selected on "Arduino IDE > Tools > Processor"
+* "Arduino Pro or Pro Mini" is selected on "Arduino IDE > Tools > Board"
+* The right port is selected on "Arduino IDE > Tools > Port"
+
+
+
+## Running for the first time!
+
+All sets! And your TCP Socket server is ready to receive messages.
+After uploading the code to your Arduino, please monitor it using Arduino IDE's built in Serial Monitor tool (Arduino IDE > Tools > Serial Monitor). The result looks like this:
+```
+Give an example
+```
+
+
+### Problems
+Problem: It restarts recursively, when it comes to TCP Connection step.
+Device restarts if the establishing a connection has failed. Please be sure;
+* The APN information is correct,
+* The target TCP Socket Server information is correct,
+* The target TCP Socket Server is active and reachable over the firewall, IP table etc.
+
+Problem: It restarts recursively, when it comes to Send step.
+Device restarts if the established connection has droped and sending the message has failed. Please be sure,
+* The target TCP Socket Server doesn't drop the connection.
+* If you use a common platform like qberry.io, please be sure that the device is already defined to your account, licence is not expired and the password is correct. 
 
-# Components
 
-- 1\* Push button with 4 legs
-- 4\* Led
-  - Red: Power / Standbye
-  - Yellow:  Connection status
-  - Green: Package received
-  - Blue: Package sent
-- 1\* GPS Antenna
-- 1\* GSM Antenna
-- 1\* Battery
+## Known Issues and Missing Important Functions
+After the development, we saw that there are some technical issues as well as some missing functions. We aimed to fix these problems with the incoming versions.
 
-# Hardware Installation
+* Memory leaks,
+* Impossible to change the configurations remotely,
 
-**Power Connection**
+## Versioning
 
-Sensors are can be used with 9V 500ma adaptor or 9v battery. If adaptor and battery connected to device in the same time, adaptor will be used.
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
 
-Note: Device doesn&#39;t charge the battery.
+## Authors
 
-**Push button** _Reset_
+* **[Deniz Kanmaz](https://github.com/denizkanmaz)** - *Initial work* - [qberry.io](https://qberry.io)
 
-(+) → 5 (Red) _(With 10k ohm resistor)_
+## License
 
-(-) → GND (Black)
+This project is licensed under the GNU General Public License v3 - see the [LICENSE.md](LICENSE.md) file for details.
+NOTICE: This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-**Led (Red)** _Power On / Stand By_
+## Acknowledgments
 
-(+) → 5 (Red) _(With 250 ohm resistor)_
-
-(-) → GND (Black)
-
-**Led (Yellow)** _Connected to the server_
-
-(+) → 4 (Yellow) _(With 250 ohm resistor)_
-
-(-) → GND (Black)
-
-**Led (Green)** _Message Received_
-
-(+) → 3 (Green) _(With 250 ohm resistor)_
-
-(-) → GND (Black)
-
-**Led (Blue)** _Message Sent_
-
-(+) → 2 (Blue) _(With 250 ohm resistor)_
-
-(-) → GND (Black)
-
-**NRF24L01 RF Transceiver**
-
-GND -&gt; GND (Black)
-
-VCC -&gt; 3.3V (Red)
-
-CE -&gt; 9 (Green)
-
-CSN -&gt; 10 (Yellow)
-
-SCK -&gt; 12 (Purple)
-
-MOSI -&gt; 11 (Orange)
-
-MISO -&gt; 12 (White)
-
-IRQ -&gt; Empty
-
-**Fona Sim808**
-
-5v -&gt; 5v (Red)
-
-GND -&gt; GND (Black)
-
-RX -&gt; 7 (Orange)
-
-TX -&gt; 8 (Brown)
-
-# Messaging
-
-**Special Characters**
-
-**&quot;$&quot;** : Beginning or end of the message. (From tBerryduino to Server)
-
-**&quot;|&quot;** : Splitter
-
-Count of the pipe characters must be odd.
-
-**Example:**
-
-$|1|hello|3|5162829321|5|pa$$w0rd|7|tbdOne|9|1.0.1|$
-
-**Keys &amp; Values**
-
-Every value described with a key. This key always comes just before the value.
-
-Example:
-
-Key, Value
-
-$|1|hello|3|5162829321|5|pa$$w0rd|7|tbdOne|9|1.0.1|$
-
-**Keys**
-
-Odd numbered keys: From Tberyduino to server.
-
-Even numbered keys: From anywhere to Tberyduino.
-
-**Key Table**
-
-101: Type of message _(hello, curr, bye)_
-
-102: Type of message
-
-103: Device identity
-
-105: Password
-
-106: Password
-
-107: Device model
-
-109: Firmware version
-
-110: Glonass Run Status
-
-1002: GPS Fix Status
-
-1004: Latitude
-
-1006: Longtitude
-
-1008: Altitude
-
-1010: Speed in KM
-
-1012: Course Over Ground
-
-1014: Heat
-
-1016: Humidity
+* Hat tip to anyone whose code was used
+* Inspiration
+* etc
