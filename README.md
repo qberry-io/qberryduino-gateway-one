@@ -1,7 +1,7 @@
 
-# Qberyduino One v.1
+# Qberryduino One v.1
 
-"Qberyduino One" is an open source IOT Gateway developed for bringing telemetry-kind data to TCP Socket server over GPRS. 
+"Qberryduino One" is an open source IOT Gateway developed for bringing telemetry-kind data to TCP Socket server over GPRS. 
 
 It can be used as a gateway (Home Automation projects for example) as well as stand-alone Vehicle / Asset Tracker.
 
@@ -63,7 +63,7 @@ const PROGMEM int TCP_PORT = 23101;
 // It lets you filter illegal posts. You can block
 // them in your TCP Socket server, if you want.
 // If you will use it on a common platform like qberry.io,
-// we strongly recommend you to change this passcode.
+// it's strongly recommended you to change this passcode.
 char PASSWORD[7] = "B23a56";
 ```
 ```
@@ -106,10 +106,11 @@ Device restarts if the established connection has droped and sending the message
 
 
 ## Known Issues and Missing Important Functions
-After the development, we saw that there are some technical issues as well as some missing functions. We aimed to fix these problems with the incoming versions.
+After the development, there are some technical issues as well as some missing functions showed themselves. They will be solved with the incoming versions.
 
 * Memory leaks,
 * Impossible to change the configurations remotely,
+* A couple of dirty blocks of code.
 
 ## Versioning
 
@@ -122,6 +123,7 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 ## License
 
 This project is licensed under the GNU General Public License v3 - see the [LICENSE.md](LICENSE.md) file for details.
+
 NOTICE: This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 ## Acknowledgments

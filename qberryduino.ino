@@ -42,7 +42,7 @@ const PROGMEM int TCP_PORT = 23101;
 // It lets you filter illegal posts. You can block
 // them in your TCP Socket server, if you want.
 // If you will use it on a common platform like qberry.io,
-// we strongly recommend you to change this passcode.
+// it's strongly recommended you to change this passcode.
 char PASSWORD[7] = "B23a56";
 
 // Definitions of APN.
