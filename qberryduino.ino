@@ -16,20 +16,23 @@
 //  Description: "Qberyduino One" is an open source IOT Gateway
 //  developed for bringing telemetry-kind data to server over GPRS.
 
+//  Model: Qberyduino One
+//  Version: 1.0.0
+
 #include "MainSerial.h"
 #include "LED.h"
 #include "Modem.h"
 #include "Messaging.h"
 #include "Parsing.h"
 
-// Definitions of the necessary utilities.
+// Definitions of necessary utilities.
 LED _led;
 MainSerial _mainSerial;
 Modem _modem;
 Messaging _messaging = Messaging();
 Parsing _parsing = Parsing();
 
-// Definitions of Server
+// Definitions of the server
 char SERVER_ADDRES [] = "37.48.83.216";
 const PROGMEM int TCP_PORT = 23101;
 char PASSWORD[] = "123456";
@@ -41,7 +44,7 @@ const PROGMEM String APN_NAME = "internet";
 char APN_USER [] = "";
 char APN_PASS [] = "";
 
-// Definitions of development / maintenance stuff
+// Definitions of development / maintenance stuffs
 const PROGMEM boolean DEBUG_MODE = true;
 const PROGMEM int SERIAL_BAUD_RATE = 9600;
 
