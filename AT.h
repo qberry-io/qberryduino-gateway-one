@@ -101,6 +101,8 @@ class AT
     // For more: http://m2msupport.net/m2msupport/atcipsend-send-data-through-tcp-or-udp-connection/
     String activateCIPSendMode();
 
+    String disableEcho();
+
     // Gets GNSS data.
     String getCGNSSData();
 

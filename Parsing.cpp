@@ -55,7 +55,9 @@ String* Parsing::parseBatt(char * rawBattData) {
        rawCharIndex < String(rawBattData).length();
        rawCharIndex++) {
 
-    if (rawBattData[rawCharIndex] == SEPERATOR) {
+    if (rawBattData[rawCharIndex] == SEPERATOR
+        || (rawBattData[rawCharIndex] == 'O'
+            && rawBattData[rawCharIndex + 1] == 'K')) {
 
       if (isInBattIndexes(lineIndex)) {
         actualLineIndex++;

@@ -129,6 +129,11 @@ String AT::activateCIPSendMode() {
   return ATCommand(F("CIPSEND"));
 }
 
+ 
+String AT::disableEcho() {
+  return F("ATE0");
+}
+
 // Gets GNSS data.
 String AT::getCGNSSData() {
   return ATCommand(F("CGNSINF"));

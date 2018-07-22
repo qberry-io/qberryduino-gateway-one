@@ -100,7 +100,7 @@ char * Modem::writeLine2(String message, int delayer) {
   delay(delayer);
 
   static char ssBuffer2 [SS_BUFFER_SIZE];
- 
+
   i = 0;
   while (ss.available() != 0) {
     ichr = ss.read();
@@ -133,7 +133,10 @@ void Modem::init(byte rx,
   mainSerial = ms;
   delay(100);
 
-  writeLine(at.begin(), 1000);
+  writeLine(at.begin(), DELAY_1000);
+  writeLine(at.resetToFactoryDefault(), DELAY_2000);
+  writeLine(at.begin(), DELAY_1000);
+  writeLine(at.disableEcho(), DELAY_1000);
 
   delay(500);
 }
@@ -167,14 +170,11 @@ boolean Modem::connectToTCP(char address[], int port) {
   delay(DELAY_250);
   //ledManager.indicateConnecting();
 
-  String(writeLine(at.getImei(), DELAY_250)).substring(7, 22).toCharArray(imei, 16);
+  String(writeLine(at.getImei(), DELAY_250)).substring(0, 16).toCharArray(imei, 16);
 
   delay(DELAY_250);
   //ledManager.indicateConnecting();
   writeLine(at.closeTCP(), DELAY_250);
-  delay(DELAY_250);
-  //ledManager.indicateConnecting();
-  writeLine(at.resetToFactoryDefault(), DELAY_2000);
   delay(DELAY_250);
   //ledManager.indicateConnecting();
   writeLine(at.resetIPSession(), DELAY_250);

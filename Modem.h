@@ -28,7 +28,7 @@ class Modem
 {
   private:
 
-    static const unsigned int SS_BUFFER_SIZE = 115;
+    static const unsigned int SS_BUFFER_SIZE = 108;
     const uint8_t DELAY_60 = 60;
     const  uint8_t DELAY_250 = 250;
     const  unsigned int DELAY_1000 = 1000;
