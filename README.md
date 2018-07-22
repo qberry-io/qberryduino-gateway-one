@@ -27,7 +27,7 @@ The hardwares needed to use this solution.
 * 1* active GPRS enabled Simcard
 
 ## Installation
-### Hardware Installation
+### Hardware installation
 
 Here is a list of hardware and their connections step by step with preferred cable colors.
 *	Red LED
@@ -74,7 +74,7 @@ const PROGMEM String APN_NAME = "internet";
 char APN_USER [] = "";
 char APN_PASS [] = "";
 ```
-### An Important Notice for Compiling and Uploading the Sketch
+### An important notice for Compiling and Uploading the Sketch
 Please be sure that you're compiling for the right microcontroller.
 For example: If you will use an "Arduino Mini Pro 8 MHz, 3.3v with Atmega328P" you need to be sure;
 * "ATmega328P (3.3v, 8MHz)" is selected on "Arduino IDE > Tools > Processor"
@@ -105,16 +105,17 @@ Device restarts if the established connection has droped and sending the message
 * If you use a common platform like qberry.io, please be sure that the device is already defined to your account, licence is not expired and the password is correct. 
 
 
-## Known Issues and Missing Important Functions
+## Known issues and missing important functions
 After the development, there are some technical issues as well as some missing functions showed themselves. They will be solved with the incoming versions.
 
 * Memory leaks,
 * Impossible to change the configurations remotely,
 * A couple of dirty blocks of code.
+* Missing comments / documentation on code.
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+Used [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/denizkanmaz/qberryduino-gateway-one/tags). 
 
 ## Authors
 
@@ -125,9 +126,3 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 This project is licensed under the GNU General Public License v3 - see the [LICENSE.md](LICENSE.md) file for details.
 
 NOTICE: This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-
-## Acknowledgments
-
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
