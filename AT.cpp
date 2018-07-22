@@ -16,7 +16,6 @@
 //  Description: "AT.cpp" is a helper class that includes the
 //  necessary AT commands.
 
-
 #include "Arduino.h"
 #include "AT.h"
 
@@ -129,7 +128,7 @@ String AT::activateCIPSendMode() {
   return ATCommand(F("CIPSEND"));
 }
 
- 
+// Disables echo.
 String AT::disableEcho() {
   return F("ATE0");
 }

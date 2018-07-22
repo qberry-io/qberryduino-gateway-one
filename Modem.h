@@ -16,9 +16,6 @@
 //  Description: "Modem.h" is a class that includes functions to
 //  manage Fona/Sim808 module.
 
-
-
-
 #include <stdint.h>
 #include "MainSerial.h"
 #include "AT.h"
@@ -46,25 +43,38 @@ class Modem
     char ichr;
     char imei[16];
 
-    // TODO: Try to find another way.
+    // TODO: Try to find another way for
+    // initialization of ss.
     SoftwareSerial ss = SoftwareSerial(-1, -1);
 
+    // Clears the serial buffer.
     void clearSerial();
 
+    // Prints given string to the MainSerial (For dubugging).
     void printReceived(String text);
 
+    // Prints given string to the MainSerial (For dubugging).
     void printSent(String text);
 
+    // Returns whether the given character is a special character.
     bool isSpecialChar(char chr);
 
+    // Writes given message to the Modem over the Serial.
     String write(String message, int delayer);
 
+    // Writes given message to the Modem and leave a break
+    // over the Serial.
     // TODO: Let them use WriteLine2!
     String writeLine(String message, int delayer);
 
+    // Writes given message to the Modem and leave a break
+    // over the Serial.
     char * writeLine2(String message, int delayer);
 
   public:
+
+    // Initializes the object and gets the Modem ready for commands
+    // over the Serial.
     void init(byte rx,
               byte tx,
               int baudRate,
@@ -73,18 +83,24 @@ class Modem
               char apnPass[],
               MainSerial ms);
 
+    // Clears the buffered data on MC's memory
     void clearBuffer();
 
     // Gets the imei of the mobile terminal.
     char* getImei();
 
-    // Gets CGNSS data from the module..
+    // Gets the current CGNSS data from the module.
     char * getCGNSSData();
 
+    // Gets the current battery data from the module.
     char * getBatteryStat();
 
     // Makes a TCP connection to given address and port.
     bool connectToTCP(char address[], int port);
 
+    // Sends given message to the server.
+    // NOTICE: The message must be formatted using "Messaging" utility.
+    // And the version of the "Parser" utility that running on the server
+    // must be supported the current version of protocol.
     bool sendToServer(String msg);
 };

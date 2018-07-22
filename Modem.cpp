@@ -19,20 +19,24 @@
 #include "Modem.h"
 #include "Arduino.h"
 
+// Clears the serial buffer.
 void Modem::clearSerial() {
   while (ss.available() > 0) {
     ss.read();
   }
 }
 
+// Prints given string to the MainSerial (For dubugging).
 void Modem::printReceived(String text) {
   mainSerial.println(text);
 }
 
+// Prints given string to the MainSerial (For dubugging)
 void Modem::printSent(String text) {
   mainSerial.println(text);
 }
 
+// Returns whether the given character is a special character.
 boolean Modem::isSpecialChar(char chr) {
   return ichr == '\r'
          || ichr == '\n'
@@ -44,6 +48,7 @@ boolean Modem::isSpecialChar(char chr) {
          || ichr == '\v';
 }
 
+// Writes given message to the Modem over the Serial.
 String Modem::write(String message, int delayer) {
   clearSerial();
   clearBuffer();
@@ -54,7 +59,6 @@ String Modem::write(String message, int delayer) {
   delay(delayer);
 
   i = 0;
-  //Serial.println("$$$");
   while (ss.available() != 0) {
 
     ichr = ss.read();
@@ -64,11 +68,12 @@ String Modem::write(String message, int delayer) {
     }
 
   }
-  //Serial.println("&&&");
   printReceived(ssBuffer);
   return ssBuffer;
 }
 
+// Writes given message to the Modem and leave a break
+// over the Serial.
 // TODO: Let them use WriteLine2!
 String Modem::writeLine(String message, int delayer) {
   clearSerial();
@@ -93,6 +98,8 @@ String Modem::writeLine(String message, int delayer) {
   return ssBuffer;
 }
 
+// Writes given message to the Modem and leave a break
+// over the Serial.
 char * Modem::writeLine2(String message, int delayer) {
   clearSerial();
   ss.println(message);
@@ -113,7 +120,8 @@ char * Modem::writeLine2(String message, int delayer) {
   return ssBuffer2;
 }
 
-
+// Initializes the object and gets the Modem ready for commands
+// over the Serial.
 void Modem::init(byte rx,
                  byte tx,
                  int baudRate,
@@ -141,6 +149,7 @@ void Modem::init(byte rx,
   delay(500);
 }
 
+// Clears the buffered data on MC's memory.
 void Modem::clearBuffer() {
   ssBuffer = "";
 }
@@ -150,75 +159,66 @@ char* Modem::getImei() {
   return imei;
 }
 
-// Gets CGNSS data from the module..
+// Gets the current CGNSS data from the module.
 char * Modem::getCGNSSData() {
-  //static char cgnssResp [256] = "";
-  // WriteLine(at.getCGNSSData(), DELAY_60).toCharArray(cgnssResp, 256);
   return writeLine2(at.getCGNSSData(), DELAY_60);
-  //return cgnssResp;
 }
 
+// Gets the current battery data from the module.
 char * Modem::getBatteryStat() {
   return writeLine2(at.getBatteryStat(), DELAY_250);
 }
 
 // Makes a TCP connection to given address and port.
 boolean Modem::connectToTCP(char address[], int port) {
-  // WriteLine("", DELAY_500);
-  // ss.write(0x1A);
   writeLine(at.setResultMode(2), DELAY_250);
   delay(DELAY_250);
-  //ledManager.indicateConnecting();
 
-  String(writeLine(at.getImei(), DELAY_250)).substring(0, 16).toCharArray(imei, 16);
+  String(writeLine(
+           at.getImei(),
+           DELAY_250)).substring(0, 16)
+  .toCharArray(imei, 16);
 
   delay(DELAY_250);
-  //ledManager.indicateConnecting();
   writeLine(at.closeTCP(), DELAY_250);
   delay(DELAY_250);
-  //ledManager.indicateConnecting();
   writeLine(at.resetIPSession(), DELAY_250);
   delay(DELAY_250);
-  //ledManager.indicateConnecting();
   writeLine(at.enableGNSS(), DELAY_250);
   delay(DELAY_250);
-  //ledManager.indicateConnecting();
-  //CGNSTST=0
-  // WriteLine(at.setCGNSSequence("RMC"), 500);
   writeLine(at.setCGNSSequence(), DELAY_250);
   delay(DELAY_250);
-  //ledManager.indicateConnecting();
   writeLine(at.setConnectionModeSingle(), DELAY_250);
   delay(DELAY_7000);
-  //ledManager.indicateConnecting();
-  writeLine(at.setupPDPContext(apnName, apnUser, apnPassword), DELAY_2000);
+  writeLine(at.setupPDPContext(apnName,
+                               apnUser,
+                               apnPassword), DELAY_2000);
   delay(DELAY_3000);
-  //ledManager.indicateConnecting();
-
   writeLine(at.attachGPRS(), DELAY_3000);
   delay(DELAY_3000);
-  //ledManager.indicateConnecting();
-
   writeLine(at.bringGPRSCalls(), DELAY_1000);
   delay(DELAY_3000);
-  //ledManager.indicateConnecting();
   writeLine(at.getLocalIP(), DELAY_3000);
   delay(DELAY_250);
-  //ledManager.indicateConnecting();
 
-  if (writeLine(at.startTCPConnection(address, (String) port), DELAY_3000).lastIndexOf(F("CONNECT OK")) > -1) {
-    //ledManager.indicateConnected();
+  if (writeLine(at.startTCPConnection(address, (String) port),
+                DELAY_3000).lastIndexOf(F("CONNECT OK")) > -1) {
     delay(DELAY_250);
     return true;
   } else {
-    //ledManager.indicateConnectionError();
     delay(DELAY_250);
     return false;
   }
 }
 
+// Sends given message to the server.
+// NOTICE: The message must be formatted using "Messaging" utility.
+// And the version of the "Parser" utility that running on the server
+// must be supported the current version of protocol.
 boolean Modem::sendToServer(String msg) {
-  boolean success = writeLine(at.activateCIPSendMode(), DELAY_1000).lastIndexOf(F("CIPSENDERROR")) == -1;
+  boolean success = writeLine(at.activateCIPSendMode(),
+                              DELAY_1000)
+                    .lastIndexOf(F("CIPSENDERROR")) == -1;
   if (success) {
     write(msg, DELAY_250);
   }

@@ -142,7 +142,7 @@ void setup() {
      DEVICE_IDENTITY_LENGTH);
 
   // Send a "HOLA" message to the server.
-  sendToServer(_messaging.hello(DEVICE_IDENTITY,
+  sendToServer(_messaging.hola(DEVICE_IDENTITY,
                                 PASSWORD,
                                 DEVICE_MODEL));
 

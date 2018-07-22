@@ -19,6 +19,7 @@
 #include "Arduino.h"
 #include "Parsing.h"
 
+// Returns whether the given index includes data we interest.
 boolean Parsing::isInCGNSSIndexes(byte lineIndex) {
   return lineIndex == 1
          || lineIndex == 3
@@ -30,6 +31,7 @@ boolean Parsing::isInCGNSSIndexes(byte lineIndex) {
          || lineIndex == 15;
 }
 
+// Returns whether the given index includes data we interest.
 boolean Parsing::isInBattIndexes(byte lineIndex) {
   return
     lineIndex == 0
@@ -37,12 +39,14 @@ boolean Parsing::isInBattIndexes(byte lineIndex) {
     || lineIndex == 2;
 }
 
+// Clears the temprorary values.
 void Parsing::clear() {
   for (int i = 0; i < LINES_LENGTH; i++) {
     s[i] = "";
   }
 }
 
+// Parses given Raw CBC response taken from the module.
 String* Parsing::parseBatt(char * rawBattData) {
 
   clear();
@@ -80,6 +84,8 @@ String* Parsing::parseBatt(char * rawBattData) {
   return s;
 }
 
+// Parses given Raw CGNSINF response taken from the module.
+// NOTICE: The raw message must be in "RMC" sequence.
 String* Parsing::parseNMEAData(char* rawNMEAData) {
 
   clear();

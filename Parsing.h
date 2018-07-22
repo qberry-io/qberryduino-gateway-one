@@ -27,13 +27,22 @@ class Parsing {
     byte lineIndex = 0;
     int rawCharIndex = 0;
 
+    // Returns whether the given index includes data we interest.
     boolean isInCGNSSIndexes(byte lineIndex);
+
+    // Returns whether the given index includes data we interest.
     boolean isInBattIndexes(byte lineIndex);
 
   public:
 
+    // Parses given Raw CBC response taken from the module.
     String* parseBatt(char * rawBattData);
+
+    // Parses given Raw CGNSINF response taken from the module.
+    // NOTICE: The raw message must be in "RMC" sequence.
     String* parseNMEAData(char* rawNMEAData);
+
+    // Clears the temprorary values.
     void clear();
 };
 

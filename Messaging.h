@@ -13,11 +13,9 @@
 
 //  E-mail: denizkanmaz@gmail.com
 
-//  Description: "Messaging.h" is a helper class that includes functions
-//  to create appropriate messages for server using declared version in
-//  the local variable named PROTOCOL_VERSION.
-
-
+//  Description: "Messaging.cpp" is a helper class that includes
+//  functions to create appropriate messages for server using
+//  declared version in the local variable named PROTOCOL_VERSION.
 
 class Messaging
 {
@@ -27,14 +25,12 @@ class Messaging
     String t;
 
     char PROTOCOL_VERSION[6] = "1.0.0";
+
     const char MARKER = '$';
     const char SPLITTER = '|';
+
     char HOLA[5] = "hola";
     char CURR[5] = "curr";
-    const int CGNSS_START_INDEX = 211;
-    const int BATT_START_INDEX = 111;
-    const byte CGNSS_LINES_LENGTH = 8;
-    const byte BATT_LINES_LENGTH = 3;
 
     const byte MESSAGE_TYPE_KEY = 11;
     const byte DEV_ID_KEY = 12;
@@ -42,17 +38,41 @@ class Messaging
     const byte DEV_MODEL_KEY = 14;
     const byte PROTOCOL_VERSION_KEY = 15;
 
+    const int CGNSS_START_INDEX = 211;
+    const int BATT_START_INDEX = 111;
+    const byte CGNSS_LINES_LENGTH = 8;
+    const byte BATT_LINES_LENGTH = 3;
+
+    // Creates message based on given message.
+    // (This is the last step of preparing a message to send to
+    // the server.)
     String message(String msg);
 
+    // Creates partition for given value.
     String keyval(int key, char val[]);
 
+    // Creates partition for given value.
     String keyval(int key, String val);
 
   public:
-    String hello(char devId[], char pass[], char devModel[]);
 
-    String currCGNS(char devId[], char pass[], char devModel[], String cgnsData[]);
+    // Creates ready to send "HOLA" message with given parameters.
+    String hola(char devId[],
+                char pass[],
+                char devModel[]);
 
-    String currBatt(char devId[], char pass[], char devModel[], String battData[]);
+    // Creates ready to send "CURR" message for CGNS with given
+    // parameters.
+    String currCGNS(char devId[],
+                    char pass[],
+                    char devModel[],
+                    String cgnsData[]);
+
+    // Creates ready to send "CURR" message for Battery with given
+    // parameters.
+    String currBatt(char devId[],
+                    char pass[],
+                    char devModel[],
+                    String battData[]);
 };
 

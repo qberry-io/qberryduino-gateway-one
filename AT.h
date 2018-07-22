@@ -98,9 +98,11 @@ class AT
     // For more: https://m2msupport.net/m2msupport/atcipstart-start-up-tcp-or-udp-connection/
     String startTCPConnection(String address, String port);
 
+    // Sends data over the TCP or UDP.
     // For more: http://m2msupport.net/m2msupport/atcipsend-send-data-through-tcp-or-udp-connection/
     String activateCIPSendMode();
 
+    // Disables echo.
     String disableEcho();
 
     // Gets GNSS data.

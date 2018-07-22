@@ -13,14 +13,16 @@
 
 //  E-mail: denizkanmaz@gmail.com
 
-//  Description: "Messaging.cpp" is a helper class that includes functions
-//  to create appropriate messages for server using declared version in
-//  the local variable named PROTOCOL_VERSION.
+//  Description: "Messaging.cpp" is a helper class that includes
+//  functions to create appropriate messages for server using
+//  declared version in the local variable named PROTOCOL_VERSION.
 
 #include "Arduino.h"
 #include "Messaging.h"
 
-
+// Creates message based on given message.
+// (This is the last step of preparing a message to send to
+// the server.)
 String Messaging::message(String msg) {
   return
     String(MARKER)
@@ -29,6 +31,7 @@ String Messaging::message(String msg) {
     + String(MARKER);
 }
 
+// Creates partition for given value.
 String Messaging::keyval(int key, char val[]) {
   return
     String(SPLITTER)
@@ -37,6 +40,7 @@ String Messaging::keyval(int key, char val[]) {
     + String(val);
 }
 
+// Creates partition for given value.
 String Messaging::keyval(int key, String val) {
   return
     String(SPLITTER)
@@ -45,7 +49,10 @@ String Messaging::keyval(int key, String val) {
     + val;
 }
 
-String Messaging::hello(char devId[], char pass[], char devModel[]) {
+// Creates ready to send "HOLA" message with given parameters.
+String Messaging::hola(char devId[],
+                       char pass[],
+                       char devModel[]) {
   return
     message(
       keyval(MESSAGE_TYPE_KEY, HOLA)
@@ -56,7 +63,12 @@ String Messaging::hello(char devId[], char pass[], char devModel[]) {
     );
 }
 
-String Messaging::currCGNS(char devId[], char pass[], char devModel[], String cgnsData[]) {
+// Creates ready to send "CURR" message for CGNS with given
+// parameters.
+String Messaging::currCGNS(char devId[],
+                           char pass[],
+                           char devModel[],
+                           String cgnsData[]) {
 
   t =   keyval(MESSAGE_TYPE_KEY, CURR)
         + keyval(DEV_ID_KEY, devId)
@@ -71,12 +83,17 @@ String Messaging::currCGNS(char devId[], char pass[], char devModel[], String cg
   return message(t);
 }
 
-String Messaging::currBatt(char devId[], char pass[], char devModel[], String battData[]) {
+// Creates ready to send "CURR" message for Battery with given
+// parameters.
+String Messaging::currBatt(char devId[],
+                           char pass[],
+                           char devModel[],
+                           String battData[]) {
 
-  t =   keyval(11, CURR)
-        + keyval(12, devId)
-        + keyval(13, pass)
-        + keyval(15, PROTOCOL_VERSION);
+  t =   keyval(MESSAGE_TYPE_KEY, CURR)
+        + keyval(DEV_ID_KEY, devId)
+        + keyval(PASS_KEY, pass)
+        + keyval(PROTOCOL_VERSION_KEY, PROTOCOL_VERSION);
 
   lineI = BATT_START_INDEX;
   for (i = 0; i < BATT_LINES_LENGTH; i++) {
