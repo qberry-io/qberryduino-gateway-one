@@ -13,6 +13,9 @@
 
 //  E-mail: denizkanmaz@gmail.com
 
+//  Description: "Qberyduino One" is an open source IOT Gateway
+//  developed for bringing telemetry-kind data to server over GPRS.
+
 #include "MainSerial.h"
 #include "LED.h"
 #include "Modem.h"
@@ -32,6 +35,8 @@ const PROGMEM int TCP_PORT = 23101;
 char PASSWORD[] = "123456";
 
 // Definitions of APN
+// NOTICE: To get your APN information, please refer to your Telecom
+// company.
 const PROGMEM String APN_NAME = "internet";
 char APN_USER [] = "";
 char APN_PASS [] = "";
@@ -71,8 +76,13 @@ void(* reset) (void) = 0;
 void sendToServer(String msg) {
 
   // Send the message to the server.
-  if (!_modem.sendToServer(msg)) {
+  if (_modem.sendToServer(msg)) {
+    _led.indicateTCPSendSuccess();
 
+  } else {
+
+    _led.indicateDisconnected();
+    _led.indicateTCPSendFailed();
     // Reset the device if the sending operation has failed.
     // (This happens when the established connection has
     // corrupted.)
@@ -106,17 +116,23 @@ void setup() {
               MODEM_BAUD_RATE,
               APN_NAME, APN_USER,
               APN_PASS,
-              _led,
               _mainSerial);
 
   // Connect to TCP server..
   if (!_modem.connectToTCP(SERVER_ADDRES,
                            TCP_PORT)) {
+
+    // Indicate establishing connection has failed.
+    _led.indicateConnectionError();
+
     // reset the device if the establishing connection has
     // failed.
     reset();
     return;
   }
+
+  // Indicate successfuly connected.
+  _led.indicateConnected();
 
   // Set device identity using DEVICE_IDENTITY_PREFIX and
   // IMEI of the Modem.
@@ -129,6 +145,9 @@ void setup() {
   sendToServer(_messaging.hello(DEVICE_IDENTITY,
                                 PASSWORD,
                                 DEVICE_MODEL));
+
+  _parsing.clear();
+  _modem.clearBuffer();
 }
 
 void loop() {
@@ -149,8 +168,6 @@ void loop() {
                                      _parsing.parseNMEAData(
                                        _modem.getCGNSSData())
                                     ));
-    _parsing.clear();
-    _modem.clearBuffer();
     delay(1000);
 
     // Get the current Battery data,

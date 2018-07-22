@@ -13,7 +13,7 @@
 
 //  E-mail: denizkanmaz@gmail.com
 
-//  Description: "Parsing.h" is a helper class that includes
+//  Description: "Parsing.cpp" is a helper class that includes
 //  functions to parse responses from the Modem.
 
 #include "Arduino.h"

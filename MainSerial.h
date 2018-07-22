@@ -18,6 +18,9 @@
 
 #include "Arduino.h"
 
+#ifndef MainSerial_h
+#define MainSerial_h
+
 class MainSerial
 {
   private:
@@ -26,4 +29,4 @@ class MainSerial
     void init(int baudRate);
     void println(String charsToPrint);
 };
-
+#endif

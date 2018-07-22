@@ -16,22 +16,26 @@
 //  Description: "Modem.h" is a class that includes functions to
 //  manage Fona/Sim808 module.
 
+
+
+
+#include <stdint.h>
+#include "MainSerial.h"
 #include "AT.h"
 #include <SoftwareSerial.h>
-
-const PROGMEM unsigned int SS_BUFFER_SIZE = 115;
-const PROGMEM byte DELAY_60 = 60;
-const PROGMEM byte DELAY_250 = 250;
-const PROGMEM unsigned int DELAY_1000 = 1000;
-const PROGMEM unsigned int DELAY_2000 = 2000;
-const PROGMEM unsigned int DELAY_3000 = 3000;
-const PROGMEM unsigned int DELAY_7000 = 7000;
-
 
 class Modem
 {
   private:
-    LED ledManager;
+
+    static const unsigned int SS_BUFFER_SIZE = 115;
+    const uint8_t DELAY_60 = 60;
+    const  uint8_t DELAY_250 = 250;
+    const  unsigned int DELAY_1000 = 1000;
+    const  unsigned int DELAY_2000 = 2000;
+    const  unsigned int DELAY_3000 = 3000;
+    const  unsigned int DELAY_7000 = 7000;
+
     MainSerial mainSerial;
     AT at = AT();
     String ssBuffer;
@@ -45,99 +49,20 @@ class Modem
     // TODO: Try to find another way.
     SoftwareSerial ss = SoftwareSerial(-1, -1);
 
-    void clearSerial() {
-      while (ss.available() > 0) {
-        ss.read();
-      }
-    }
+    void clearSerial();
 
-    void printReceived(String text) {
-      mainSerial.println(text);
-    }
+    void printReceived(String text);
 
-    void printSent(String text) {
-      mainSerial.println(text);
-    }
+    void printSent(String text);
 
-    boolean isSpecialChar(char chr) {
-      return ichr == '\r'
-             || ichr == '\n'
-             || ichr == '\0'
-             || ichr == '\b'
-             || ichr == '\a'
-             || ichr == '\f'
-             || ichr == '\t'
-             || ichr == '\v';
-    }
+    bool isSpecialChar(char chr);
 
-    String write(String message, int delayer) {
-      clearSerial();
-      clearBuffer();
-
-      ss.print(message);
-      ss.write(0x1A);
-      printSent(message);
-      delay(delayer);
-
-      i = 0;
-      //Serial.println("$$$");
-      while (ss.available() != 0) {
-
-        ichr = ss.read();
-        if (!isSpecialChar(ichr)) {
-          ssBuffer = (ssBuffer + ichr);
-          i++;
-        }
-
-      }
-      //Serial.println("&&&");
-      printReceived(ssBuffer);
-      return ssBuffer;
-    }
+    String write(String message, int delayer);
 
     // TODO: Let them use WriteLine2!
-    String writeLine(String message, int delayer) {
-      clearSerial();
-      clearBuffer();
+    String writeLine(String message, int delayer);
 
-      ss.println(message);
-      printSent(message);
-      delay(delayer);
-
-      i = 0;
-      while (ss.available() != 0) {
-
-        ichr = ss.read();
-        // printReceived((String)chr);
-        if (!isSpecialChar(ichr)) {
-          ssBuffer = (ssBuffer + ichr);
-          i++;
-        }
-
-      }
-      printReceived(ssBuffer);
-      return ssBuffer;
-    }
-
-    char * writeLine2(String message, int delayer) {
-      clearSerial();
-      ss.println(message);
-      printSent(message);
-      delay(delayer);
-
-      static char ssBuffer2 [SS_BUFFER_SIZE];
-      // int i = 0;
-      i = 0;
-      while (ss.available() != 0) {
-        ichr = ss.read();
-        if (!isSpecialChar(ichr)) {
-          ssBuffer2[i] = ichr;
-          i++;
-        }
-      }
-      printReceived(ssBuffer2);
-      return ssBuffer2;
-    }
+    char * writeLine2(String message, int delayer);
 
   public:
     void init(byte rx,
@@ -146,115 +71,20 @@ class Modem
               String apnN,
               char apnUsername[],
               char apnPass[],
-              LED lm,
-              MainSerial ms) {
+              MainSerial ms);
 
-      apnName = apnN;
-      apnUser = apnUsername;
-      apnPassword = apnPass;
-
-      // ssBuffer.reserve(SS_BUFFER_SIZE);
-
-      ss = SoftwareSerial(rx, tx);
-      ss.begin(baudRate);
-      ledManager = lm;
-      mainSerial = ms;
-      delay(100);
-
-      writeLine(at.begin(), 1000);
-
-      delay(500);
-    }
-
-    void clearBuffer() {
-      ssBuffer = "";
-    }
+    void clearBuffer();
 
     // Gets the imei of the mobile terminal.
-    char* getImei() {
-      return imei;
-    }
+    char* getImei();
 
     // Gets CGNSS data from the module..
-    char * getCGNSSData() {
-      //static char cgnssResp [256] = "";
-      // WriteLine(at.getCGNSSData(), DELAY_60).toCharArray(cgnssResp, 256);
-      return writeLine2(at.getCGNSSData(), DELAY_60);
-      //return cgnssResp;
-    }
+    char * getCGNSSData();
 
-    char * getBatteryStat() {
-      return writeLine2(at.getBatteryStat(), DELAY_250);
-    }
+    char * getBatteryStat();
 
     // Makes a TCP connection to given address and port.
-    boolean connectToTCP(char address[], int port) {
-      // WriteLine("", DELAY_500);
-      // ss.write(0x1A);
-      writeLine(at.setResultMode(2), DELAY_250);
-      delay(DELAY_250);
-      ledManager.indicateConnecting();
+    bool connectToTCP(char address[], int port);
 
-      String(writeLine(at.getImei(), DELAY_250)).substring(7, 22).toCharArray(imei, 16);
-
-      delay(DELAY_250);
-      ledManager.indicateConnecting();
-      writeLine(at.closeTCP(), DELAY_250);
-      delay(DELAY_250);
-      ledManager.indicateConnecting();
-      writeLine(at.resetToFactoryDefault(), DELAY_2000);
-      delay(DELAY_250);
-      ledManager.indicateConnecting();
-      writeLine(at.resetIPSession(), DELAY_250);
-      delay(DELAY_250);
-      ledManager.indicateConnecting();
-      writeLine(at.enableGNSS(), DELAY_250);
-      delay(DELAY_250);
-      ledManager.indicateConnecting();
-      //CGNSTST=0
-      // WriteLine(at.setCGNSSequence("RMC"), 500);
-      writeLine(at.setCGNSSequence(), DELAY_250);
-      delay(DELAY_250);
-      ledManager.indicateConnecting();
-      writeLine(at.setConnectionModeSingle(), DELAY_250);
-      delay(DELAY_7000);
-      ledManager.indicateConnecting();
-      writeLine(at.setupPDPContext(apnName, apnUser, apnPassword), DELAY_2000);
-      delay(DELAY_3000);
-      ledManager.indicateConnecting();
-
-      writeLine(at.attachGPRS(), DELAY_3000);
-      delay(DELAY_3000);
-      ledManager.indicateConnecting();
-
-      writeLine(at.bringGPRSCalls(), DELAY_1000);
-      delay(DELAY_3000);
-      ledManager.indicateConnecting();
-      writeLine(at.getLocalIP(), DELAY_3000);
-      delay(DELAY_250);
-      ledManager.indicateConnecting();
-
-      if (writeLine(at.startTCPConnection(address, (String) port), DELAY_3000).lastIndexOf(F("CONNECT OK")) > -1) {
-        ledManager.indicateConnected();
-        delay(DELAY_250);
-        return true;
-      } else {
-        ledManager.indicateConnectionError();
-        delay(DELAY_250);
-        return false;
-      }
-    }
-
-    boolean sendToServer(String msg) {
-      boolean success = writeLine(at.activateCIPSendMode(), DELAY_1000).lastIndexOf(F("CIPSENDERROR")) == -1;
-      if (success) {
-        write(msg, DELAY_250);
-        ledManager.indicateTCPSendSuccess();
-      } else {
-        ledManager.indicateDisconnected();
-        ledManager.indicateTCPSendFailed();
-      }
-
-      return success;
-    }
+    bool sendToServer(String msg);
 };

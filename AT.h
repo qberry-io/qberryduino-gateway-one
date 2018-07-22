@@ -16,7 +16,7 @@
 //  Description: "AT.h" is a helper class that includes the
 //  necessary AT commands.
 
-
+#include "Arduino.h"
 class AT
 {
   private:
