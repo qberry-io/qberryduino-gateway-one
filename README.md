@@ -7,11 +7,7 @@ It can be used as a gateway (Home Automation projects for example) as well as st
 
 If wanted to use as a basic Vehicle / Asset Tracker, it's ready to use. No development needed.
 
-## Getting Started
-
-These instructions will get you a copy of the project up and running on your development environment.
-
-### Prerequisites
+## Prerequisites
 The hardwares needed to use this solution.
 * 1 * Arduino Mini Pro 8 MHz, 3.3v with Atmega328P (or higher version of Arduino)
 * 1 * [Adafruit Fona 808 Version 2 Shield](https://www.adafruit.com/product/2636)
@@ -24,9 +20,12 @@ The hardwares needed to use this solution.
 * 1* GPS Antenna (Compatible with Fona 808)
 * 1* GSM Antenna (Compatible with Fona 808)
 * 1* Battery (Compatible with Fona 808)
-* 1* active GPRS enabled Simcard
+* 1* Active GPRS enabled Simcard
 
 ## Installation
+
+These instructions will get you a copy of the project up and running on your development environment.
+
 ### Hardware installation
 
 Here is a list of hardware and their connections step by step with preferred cable colors.
@@ -46,8 +45,10 @@ Here is a list of hardware and their connections step by step with preferred cab
 	*	TX -> Pin 8 (Brown)
 *	USB to TTL adapter > Arduino
 	*	
+### Notice for PIN number of simcard
+Be sure that simcard doesn't protected with a PIN number. Fona 808 fails if the simcard has a PIN number.
 
-### Notice for the USB to TTL Adapter and its voltage value
+#### Notice for the USB to TTL Adapter and its voltage value
 Please be sure that the adapter provides the same voltage with the Arduino that you will use.
 For example: If you will use an "Arduino Mini Pro 8 MHz, 3.3v with Atmega328P". you need to be sure it provides 3.3v output.
 
@@ -64,7 +65,7 @@ const PROGMEM int TCP_PORT = 23101;
 // them in your TCP Socket server, if you want.
 // If you will use it on a common platform like qberry.io,
 // it's strongly recommended you to change this passcode.
-char PASSWORD[7] = "B23a56";
+char SECRET[7] = "B23a56";
 ```
 ```
 // Definitions of APN.
@@ -74,7 +75,7 @@ const PROGMEM String APN_NAME = "internet";
 char APN_USER [] = "";
 char APN_PASS [] = "";
 ```
-### An important notice for Compiling and Uploading the Sketch
+#### An important notice for Compiling and Uploading the Sketch
 Please be sure that you're compiling for the right microcontroller.
 For example: If you will use an "Arduino Mini Pro 8 MHz, 3.3v with Atmega328P" you need to be sure;
 * "ATmega328P (3.3v, 8MHz)" is selected on "Arduino IDE > Tools > Processor"
@@ -83,7 +84,7 @@ For example: If you will use an "Arduino Mini Pro 8 MHz, 3.3v with Atmega328P" y
 
 
 
-## Running for the first time!
+### Running for the first time!
 
 All sets! And your TCP Socket server is ready to receive messages.
 After uploading the code to your Arduino, please monitor it using Arduino IDE's built in Serial Monitor tool (Arduino IDE > Tools > Serial Monitor). The result looks like this:
@@ -92,7 +93,7 @@ Give an example
 ```
 
 
-### Problems
+### Common issues when the first runnings
 Problem: It restarts recursively, when it comes to TCP Connection step.
 Device restarts if the establishing a connection has failed. Please be sure;
 * The APN information is correct,
@@ -104,6 +105,8 @@ Device restarts if the established connection has droped and sending the message
 * The target TCP Socket Server doesn't drop the connection.
 * If you use a common platform like qberry.io, please be sure that the device is already defined to your account, licence is not expired and the password is correct. 
 
+## Messaging Protocol
+Please refer [Open Qberry Messaging Protocol]()
 
 ## Known issues and missing important functions
 After the development, there are some technical issues as well as some missing functions showed themselves. They will be solved with the incoming versions.
