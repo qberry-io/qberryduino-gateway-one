@@ -51,13 +51,13 @@ String Messaging::keyval(int key, String val) {
 
 // Creates ready to send "HOLA" message with given parameters.
 String Messaging::hola(char devId[],
-                       char pass[],
+                       char secret[],
                        char devModel[]) {
   return
     message(
       keyval(MESSAGE_TYPE_KEY, HOLA)
       + keyval(DEV_ID_KEY, devId)
-      + keyval(PASS_KEY, pass)
+      + keyval(SECRET_KEY, secret)
       + keyval(DEV_MODEL_KEY, devModel)
       + keyval(PROTOCOL_VERSION_KEY, PROTOCOL_VERSION)
     );
@@ -66,13 +66,13 @@ String Messaging::hola(char devId[],
 // Creates ready to send "CURR" message for CGNS with given
 // parameters.
 String Messaging::currCGNS(char devId[],
-                           char pass[],
+                           char secret[],
                            char devModel[],
                            String cgnsData[]) {
 
   t =   keyval(MESSAGE_TYPE_KEY, CURR)
         + keyval(DEV_ID_KEY, devId)
-        + keyval(PASS_KEY, pass)
+        + keyval(SECRET_KEY, secret)
         + keyval(PROTOCOL_VERSION_KEY, PROTOCOL_VERSION);
 
   lineI = CGNSS_START_INDEX;
@@ -86,13 +86,13 @@ String Messaging::currCGNS(char devId[],
 // Creates ready to send "CURR" message for Battery with given
 // parameters.
 String Messaging::currBatt(char devId[],
-                           char pass[],
+                           char secret[],
                            char devModel[],
                            String battData[]) {
 
   t =   keyval(MESSAGE_TYPE_KEY, CURR)
         + keyval(DEV_ID_KEY, devId)
-        + keyval(PASS_KEY, pass)
+        + keyval(SECRET_KEY, secret)
         + keyval(PROTOCOL_VERSION_KEY, PROTOCOL_VERSION);
 
   lineI = BATT_START_INDEX;

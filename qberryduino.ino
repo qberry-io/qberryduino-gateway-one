@@ -43,7 +43,7 @@ const PROGMEM int TCP_PORT = 23101;
 // them in your TCP Socket server, if you want.
 // If you will use it on a common platform like qberry.io,
 // it's strongly recommended you to change this passcode.
-char PASSWORD[7] = "B23a56";
+char SECRET[7] = "B23a56";
 
 // Definitions of APN.
 // NOTICE: To get your APN information, please refer to your
@@ -57,7 +57,7 @@ const PROGMEM boolean DEBUG_MODE = true;
 const PROGMEM int SERIAL_BAUD_RATE = 9600;
 
 // Definitions of device
-const PROGMEM byte DEVICE_IDENTITY_LENGTH = 19;
+const PROGMEM byte DEVICE_IDENTITY_LENGTH = 17;
 char DEVICE_IDENTITY_PREFIX[] = "90";
 char DEVICE_IDENTITY[DEVICE_IDENTITY_LENGTH];
 char DEVICE_MODEL[] = "ONE";
@@ -154,7 +154,7 @@ void setup() {
 
   // Send a "HOLA" message to the server.
   sendToServer(_messaging.hola(DEVICE_IDENTITY,
-                               PASSWORD,
+                               SECRET,
                                DEVICE_MODEL));
 
   _parsing.clear();
@@ -167,7 +167,7 @@ void setup() {
 // 4-) Sends it to the server.
 void processToSendCurrentCGNSS() {
   sendToServer(_messaging.currCGNS(DEVICE_IDENTITY,
-                                   PASSWORD,
+                                   SECRET,
                                    DEVICE_MODEL,
                                    _parsing.parseNMEAData(
                                      _modem.getCGNSSData())
@@ -183,7 +183,7 @@ void processToSendCurrentCGNSS() {
 // 4-) Sends it to the server.
 void processToSendCurrentBatteryStat() {
   sendToServer(_messaging.currBatt(DEVICE_IDENTITY,
-                                   PASSWORD,
+                                   SECRET,
                                    DEVICE_MODEL,
                                    _parsing.parseBatt(
                                      _modem.getBatteryStat()

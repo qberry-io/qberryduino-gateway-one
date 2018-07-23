@@ -34,7 +34,7 @@ class Messaging
 
     const byte MESSAGE_TYPE_KEY = 11;
     const byte DEV_ID_KEY = 12;
-    const byte PASS_KEY = 13;
+    const byte SECRET_KEY = 13;
     const byte DEV_MODEL_KEY = 14;
     const byte PROTOCOL_VERSION_KEY = 15;
 
@@ -58,20 +58,20 @@ class Messaging
 
     // Creates ready to send "HOLA" message with given parameters.
     String hola(char devId[],
-                char pass[],
+                char secret[],
                 char devModel[]);
 
     // Creates ready to send "CURR" message for CGNS with given
     // parameters.
     String currCGNS(char devId[],
-                    char pass[],
+                    char secret[],
                     char devModel[],
                     String cgnsData[]);
 
     // Creates ready to send "CURR" message for Battery with given
     // parameters.
     String currBatt(char devId[],
-                    char pass[],
+                    char secret[],
                     char devModel[],
                     String battData[]);
 };
