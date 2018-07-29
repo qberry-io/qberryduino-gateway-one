@@ -45,8 +45,11 @@ Here is a list of hardware and their connections step by step with preferred cab
 	*	TX -> Pin 8 (Brown)
 *	USB to TTL adapter > Arduino
 	*	
-### Notice for PIN number of simcard
-Be sure that simcard doesn't protected with a PIN number. Fona 808 fails if the simcard has a PIN number.
+#### Notice for PIN number of simcard
+Please be sure that simcard doesn't protected with a PIN number. Fona 808 fails if the simcard has a PIN number.
+
+#### Notice for the registration of Fona 808
+Please be sure that IMEI number of Fona 808 is registered for your country.
 
 #### Notice for the USB to TTL Adapter and its voltage value
 Please be sure that the adapter provides the same voltage with the Arduino that you will use.
