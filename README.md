@@ -42,12 +42,10 @@ Here is a list of hardware and their connections step by step with preferred cab
 	*	GND -> GND (Black)
 	*	RX -> Pin 7 (Orange)
 	*	TX -> Pin 8 (Brown)
-*	USB to TTL adapter > Arduino
-	*	
 
-![The circuit](https://drive.google.com/open?id=1hjsikDnhzzOBHAQsJnRK1CbnFRkeTqpp)
+![enter image description here](https://lh3.googleusercontent.com/OZIM_0mFb-jgyUuYGuuslm1Z3meFcrUUe49EGT8yfN1WwXtKgSnmazm6Cj4eHPAh9LiuSCHu2iZd "The sketch of the circuit")
 
-#### Notice for PIN number of simcard
+#### Notice for the PIN number of simcard
 Please be sure that simcard doesn't protected with a PIN number. Fona 808 fails if the simcard has a PIN number.
 
 #### Notice for the registration of Fona 808
