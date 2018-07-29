@@ -1,4 +1,3 @@
-
 # Qberryduino One v.1
 
 "Qberryduino One" is an open source IOT Gateway developed for bringing telemetry-kind data to TCP Socket server over GPRS. 
@@ -9,17 +8,17 @@ If wanted to use as a basic Vehicle / Asset Tracker, it's ready to use. No devel
 
 ## Prerequisites
 The hardwares needed to use this solution.
-* 1 * Arduino Mini Pro 8 MHz, 3.3v with Atmega328P (or higher version of Arduino)
+* 1 * Arduino Mini Pro 16 MHz, 5v with Atmega328P (or equivalent version of Arduino)
 * 1 * [Adafruit Fona 808 Version 2 Shield](https://www.adafruit.com/product/2636)
 * 1 * USB to TTL Adaptor (Compatible with 3,3v)
 * 3 * LEDs
 	* Red
 	* Yellow
 	* Blue
-* 3 * 250 ohm resistors
-* 1* GPS Antenna (Compatible with Fona 808)
+* 3 * 220 ohm 5% resistors
+* 1* GPS Antenna (uFL - 15x15 mm 1 dBi)
 * 1* GSM Antenna (Compatible with Fona 808)
-* 1* Battery (Compatible with Fona 808)
+* 1* 3.7 V 950 mAh 25C Li-Po Battery
 * 1* Active GPRS enabled Simcard
 
 ## Installation
@@ -45,6 +44,9 @@ Here is a list of hardware and their connections step by step with preferred cab
 	*	TX -> Pin 8 (Brown)
 *	USB to TTL adapter > Arduino
 	*	
+
+![The circuit](https://drive.google.com/open?id=1hjsikDnhzzOBHAQsJnRK1CbnFRkeTqpp)
+
 #### Notice for PIN number of simcard
 Please be sure that simcard doesn't protected with a PIN number. Fona 808 fails if the simcard has a PIN number.
 
