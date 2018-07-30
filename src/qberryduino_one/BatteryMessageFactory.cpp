@@ -20,46 +20,16 @@
 #include "Arduino.h"
 #include "BatteryMessageFactory.h"
 
-// Creates message based on given message.
-// (This is the last step of preparing a message to send to
-// the server.)
-String BatteryMessageFactory::message(String msg) {
-  return
-    String(MARKER)
-    + String(msg)
-    + String(SPLITTER)
-    + String(MARKER);
-}
-
-// Creates partition for given value.
-String BatteryMessageFactory::keyval(int key, char val[]) {
-  return
-    String(SPLITTER)
-    + String(key)
-    + String(SPLITTER)
-    + String(val);
-}
-
-// Creates partition for given value.
-String BatteryMessageFactory::keyval(int key, String val) {
-  return
-    String(SPLITTER)
-    + String(key)
-    + String(SPLITTER)
-    + val;
-}
 
 // Creates ready to send "CURR" message for Battery with given
 // parameters.
 String BatteryMessageFactory::create(char devId[],
-                           char secret[],
-                           char devModel[],
-                           String battData[]) {
+                                     char connectionId[],
+                                     String battData[]) {
 
   t =   keyval(MESSAGE_TYPE_KEY, CURR)
         + keyval(DEV_ID_KEY, devId)
-        + keyval(SECRET_KEY, secret)
-        + keyval(PROTOCOL_VERSION_KEY, PROTOCOL_VERSION);
+        + keyval(CONNECTION_ID_KEY, connectionId);
 
   lineI = BATT_START_INDEX;
   for (i = 0; i < BATT_LINES_LENGTH; i++) {

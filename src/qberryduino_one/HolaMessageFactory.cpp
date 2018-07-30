@@ -20,43 +20,16 @@
 #include "Arduino.h"
 #include "HolaMessageFactory.h"
 
-// Creates message based on given message.
-// (This is the last step of preparing a message to send to
-// the server.)
-String HolaMessageFactory::message(String msg) {
-  return
-    String(MARKER)
-    + String(msg)
-    + String(SPLITTER)
-    + String(MARKER);
-}
-
-// Creates partition for given value.
-String HolaMessageFactory::keyval(int key, char val[]) {
-  return
-    String(SPLITTER)
-    + String(key)
-    + String(SPLITTER)
-    + String(val);
-}
-
-// Creates partition for given value.
-String HolaMessageFactory::keyval(int key, String val) {
-  return
-    String(SPLITTER)
-    + String(key)
-    + String(SPLITTER)
-    + val;
-}
-
 // Creates ready to send "HOLA" message with given parameters.
 String HolaMessageFactory::create(char devId[],
-                       char secret[],
-                       char devModel[]) {
+                                  char connectionId[],
+                                  char secret[],
+                                  char devModel[]) {
   return
     message(
       keyval(MESSAGE_TYPE_KEY, HOLA)
       + keyval(DEV_ID_KEY, devId)
+      + keyval(CONNECTION_ID_KEY, connectionId)
       + keyval(SECRET_KEY, secret)
       + keyval(DEV_MODEL_KEY, devModel)
       + keyval(PROTOCOL_VERSION_KEY, PROTOCOL_VERSION)

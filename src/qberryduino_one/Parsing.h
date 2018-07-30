@@ -19,7 +19,7 @@
 class Parsing {
   private:
 
-    static const PROGMEM byte LINES_LENGTH = 8;
+    static const PROGMEM byte LINES_LENGTH = 9;
     static const PROGMEM char SEPERATOR = ',';
 
     String s[LINES_LENGTH];

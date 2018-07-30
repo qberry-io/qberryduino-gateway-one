@@ -17,20 +17,35 @@
 //  functions to create appropriate messages for server using
 //  declared version in the local variable named PROTOCOL_VERSION.
 
+#include "Arduino.h"
 #include "MessageFactoryBase.h"
 
-class HolaMessageFactory : private MessageFactoryBase
-{
-  private:
+// Creates message based on given message.
+// (This is the last step of preparing a message to send to
+// the server.)
+String MessageFactoryBase::message(String msg) {
+  return
+    String(MARKER)
+    + String(msg)
+    + String(SPLITTER)
+    + String(MARKER);
+}
 
-    char HOLA[5] = "HOLA";
+// Creates partition for given value.
+String MessageFactoryBase::keyval(int key, char val[]) {
+  return
+    String(SPLITTER)
+    + String(key)
+    + String(SPLITTER)
+    + String(val);
+}
 
-  public:
-
-    // Creates ready to send "HOLA" message with given parameters.
-    String create(char devId[],
-                  char connectionId[],
-                  char secret[],
-                  char devModel[]);
-};
+// Creates partition for given value.
+String MessageFactoryBase::keyval(int key, String val) {
+  return
+    String(SPLITTER)
+    + String(key)
+    + String(SPLITTER)
+    + val;
+}
 

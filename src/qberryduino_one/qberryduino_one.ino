@@ -24,6 +24,7 @@
 #include "LED.h"
 #include "Modem.h"
 #include "Parsing.h"
+#include "RandomString.h"
 
 // Including message factories
 #include "GNSSMessageFactory.h"
@@ -36,6 +37,7 @@ LED _led;
 MainSerial _mainSerial;
 Modem _modem;
 Parsing _parsing = Parsing();
+RandomString _rndStr = RandomString();
 
 // Definitions of message factories.
 GNSSMessageFactory _gnssMF = GNSSMessageFactory();
@@ -69,8 +71,9 @@ const PROGMEM int SERIAL_BAUD_RATE = 9600;
 // Definitions of device
 const PROGMEM byte DEVICE_IDENTITY_LENGTH = 18;
 char DEVICE_IDENTITY_PREFIX[] = "90";
-char DEVICE_IDENTITY[DEVICE_IDENTITY_LENGTH];
 char DEVICE_MODEL[] = "ONE";
+
+const PROGMEM byte CONNECTION_ID_LENGTH = 7;
 
 // Definitions of leds
 const PROGMEM byte LED_PINS_LENGTH = 4;
@@ -89,6 +92,8 @@ const PROGMEM int STARTUP_DELAY = 5000;
 int i; // Used in loops only
 unsigned long now = 0;
 unsigned long lastCurrTime = 0;
+char connectionId[CONNECTION_ID_LENGTH];
+char deviceIdentity[DEVICE_IDENTITY_LENGTH];
 
 // Resets the device.
 void(* reset) (void) = 0;
@@ -99,7 +104,6 @@ void sendToServer(String msg) {
   // Send the message to the server.
   if (_modem.sendToServer(msg)) {
     _led.indicateTCPSendSuccess();
-
   } else {
 
     _led.indicateDisconnected();
@@ -112,7 +116,7 @@ void sendToServer(String msg) {
 }
 
 void setup() {
-
+  
   // Initialize the main serial if debug mode enabled.
   if (DEBUG_MODE) {
     _mainSerial.init(SERIAL_BAUD_RATE);
@@ -127,6 +131,9 @@ void setup() {
 
   // Indicate for "Powered On".
   _led.indicatePoweredOn();
+
+  // Set up random seed.
+  randomSeed(analogRead(0));
 
   // Give the modem some time.
   delay(STARTUP_DELAY);
@@ -155,17 +162,21 @@ void setup() {
   // Indicate successfuly connected.
   _led.indicateConnected();
 
+  // Initializing a new headerId.
+  _rndStr.generate(CONNECTION_ID_LENGTH - 1).toCharArray(connectionId, CONNECTION_ID_LENGTH);
+
   // Set device identity using DEVICE_IDENTITY_PREFIX and
   // IMEI of the Modem.
   (String(DEVICE_IDENTITY_PREFIX)
    + String(_modem.getImei())).toCharArray(
-     DEVICE_IDENTITY,
+     deviceIdentity,
      DEVICE_IDENTITY_LENGTH);
 
   // Send a "HOLA" message to the server.
-  sendToServer(_holaMF.create(DEVICE_IDENTITY,
+  sendToServer(_holaMF.create(deviceIdentity,
                                SECRET,
-                               DEVICE_MODEL));
+                               DEVICE_MODEL,
+                               connectionId));
 
   _parsing.clear();
   _modem.clearBuffer();
@@ -176,9 +187,8 @@ void setup() {
 // 3-) Creates "CURR" message for "CGNS"
 // 4-) Sends it to the server.
 void processToSendCurrentCGNSS() {
-  sendToServer(_gnssMF.create(DEVICE_IDENTITY,
-                                   SECRET,
-                                   DEVICE_MODEL,
+  sendToServer(_gnssMF.create(deviceIdentity,
+                                   connectionId,
                                    _parsing.parseNMEAData(
                                      _modem.getCGNSSData())
                                   ));
@@ -192,9 +202,8 @@ void processToSendCurrentCGNSS() {
 // 3-) Creates "CURR" message for "Battery"
 // 4-) Sends it to the server.
 void processToSendCurrentBatteryStat() {
-  sendToServer(_battMF.create(DEVICE_IDENTITY,
-                                   SECRET,
-                                   DEVICE_MODEL,
+  sendToServer(_battMF.create(deviceIdentity,
+                                   connectionId,
                                    _parsing.parseBatt(
                                      _modem.getBatteryStat()
                                    )));
@@ -219,5 +228,7 @@ void loop() {
 
     // Process to send my lovely data to the server.
     // processMyLovelyData();
+
+    
   }
 }

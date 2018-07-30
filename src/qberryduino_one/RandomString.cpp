@@ -13,24 +13,20 @@
 
 //  E-mail: denizkanmaz@gmail.com
 
-//  Description: "Messaging.cpp" is a helper class that includes
-//  functions to create appropriate messages for server using
-//  declared version in the local variable named PROTOCOL_VERSION.
+//  Description: "R.cpp" is a helper class that includes functions
+//  for indication using LEDs.
 
-#include "MessageFactoryBase.h"
 
-class HolaMessageFactory : private MessageFactoryBase
-{
-  private:
+#include "RandomString.h"
+#include "Arduino.h"
 
-    char HOLA[5] = "HOLA";
+String RandomString::generate(byte length) {
+  char rnd[length];
 
-  public:
+  for (byte i = 0; i < length; i++) {
+    rnd[i] = (char) random(65, 90);
+  }
 
-    // Creates ready to send "HOLA" message with given parameters.
-    String create(char devId[],
-                  char connectionId[],
-                  char secret[],
-                  char devModel[]);
-};
+  return String(rnd);
+}
 

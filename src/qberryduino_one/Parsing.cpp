@@ -28,7 +28,8 @@ boolean Parsing::isInCGNSSIndexes(byte lineIndex) {
          || lineIndex == 6
          || lineIndex == 7
          || lineIndex == 8
-         || lineIndex == 15;
+         || lineIndex == 15
+         || lineIndex == 16;
 }
 
 // Returns whether the given index includes data we interest.

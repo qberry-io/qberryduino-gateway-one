@@ -20,46 +20,15 @@
 #include "Arduino.h"
 #include "GNSSMessageFactory.h"
 
-// Creates message based on given message.
-// (This is the last step of preparing a message to send to
-// the server.)
-String GNSSMessageFactory::message(String msg) {
-  return
-    String(MARKER)
-    + String(msg)
-    + String(SPLITTER)
-    + String(MARKER);
-}
-
-// Creates partition for given value.
-String GNSSMessageFactory::keyval(int key, char val[]) {
-  return
-    String(SPLITTER)
-    + String(key)
-    + String(SPLITTER)
-    + String(val);
-}
-
-// Creates partition for given value.
-String GNSSMessageFactory::keyval(int key, String val) {
-  return
-    String(SPLITTER)
-    + String(key)
-    + String(SPLITTER)
-    + val;
-}
-
 // Creates ready to send "CURR" message for CGNS with given
 // parameters.
 String GNSSMessageFactory::create(char devId[],
-                           char secret[],
-                           char devModel[],
+                           char connectionId[],
                            String cgnsData[]) {
 
   t =   keyval(MESSAGE_TYPE_KEY, CURR)
         + keyval(DEV_ID_KEY, devId)
-        + keyval(SECRET_KEY, secret)
-        + keyval(PROTOCOL_VERSION_KEY, PROTOCOL_VERSION);
+        + keyval(CONNECTION_ID_KEY, connectionId);
 
   lineI = CGNSS_START_INDEX;
   for (i = 0; i < CGNSS_LINES_LENGTH; i++) {

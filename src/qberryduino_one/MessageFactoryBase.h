@@ -17,20 +17,38 @@
 //  functions to create appropriate messages for server using
 //  declared version in the local variable named PROTOCOL_VERSION.
 
-#include "MessageFactoryBase.h"
+#ifndef MessageFactoryBase_h
+#define MessageFactoryBase_h
 
-class HolaMessageFactory : private MessageFactoryBase
+class MessageFactoryBase
 {
-  private:
+  protected:
+    int lineI;
+    int i;
+    String t;
 
-    char HOLA[5] = "HOLA";
+    char PROTOCOL_VERSION[6] = "1.0.0";
 
-  public:
+    const char MARKER = '$';
+    const char SPLITTER = '|';
 
-    // Creates ready to send "HOLA" message with given parameters.
-    String create(char devId[],
-                  char connectionId[],
-                  char secret[],
-                  char devModel[]);
+    const byte MESSAGE_TYPE_KEY = 11;
+    const byte DEV_ID_KEY = 12;
+    const byte CONNECTION_ID_KEY = 13;
+    const byte SECRET_KEY = 14;
+    const byte DEV_MODEL_KEY = 15;
+    const byte PROTOCOL_VERSION_KEY = 16;
+
+    // Creates message based on given message.
+    // (This is the last step of preparing a message to send to
+    // the server.)
+    String message(String msg);
+
+    // Creates partition for given value.
+    String keyval(int key, char val[]);
+
+    // Creates partition for given value.
+    String keyval(int key, String val);
+
 };
-
+#endif
