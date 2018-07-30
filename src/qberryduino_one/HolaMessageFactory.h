@@ -17,7 +17,7 @@
 //  functions to create appropriate messages for server using
 //  declared version in the local variable named PROTOCOL_VERSION.
 
-class Messaging
+class HolaMessageFactory
 {
   private:
     int lineI;
@@ -29,19 +29,13 @@ class Messaging
     const char MARKER = '$';
     const char SPLITTER = '|';
 
-    char HOLA[5] = "hola";
-    char CURR[5] = "curr";
+    char HOLA[5] = "HOLA";
 
     const byte MESSAGE_TYPE_KEY = 11;
     const byte DEV_ID_KEY = 12;
     const byte SECRET_KEY = 13;
     const byte DEV_MODEL_KEY = 14;
     const byte PROTOCOL_VERSION_KEY = 15;
-
-    const int CGNSS_START_INDEX = 211;
-    const int BATT_START_INDEX = 111;
-    const byte CGNSS_LINES_LENGTH = 8;
-    const byte BATT_LINES_LENGTH = 3;
 
     // Creates message based on given message.
     // (This is the last step of preparing a message to send to
@@ -57,22 +51,8 @@ class Messaging
   public:
 
     // Creates ready to send "HOLA" message with given parameters.
-    String hola(char devId[],
+    String create(char devId[],
                 char secret[],
                 char devModel[]);
-
-    // Creates ready to send "CURR" message for CGNS with given
-    // parameters.
-    String currCGNS(char devId[],
-                    char secret[],
-                    char devModel[],
-                    String cgnsData[]);
-
-    // Creates ready to send "CURR" message for Battery with given
-    // parameters.
-    String currBatt(char devId[],
-                    char secret[],
-                    char devModel[],
-                    String battData[]);
 };
 

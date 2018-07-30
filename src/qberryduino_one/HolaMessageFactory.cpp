@@ -18,12 +18,12 @@
 //  declared version in the local variable named PROTOCOL_VERSION.
 
 #include "Arduino.h"
-#include "Messaging.h"
+#include "HolaMessageFactory.h"
 
 // Creates message based on given message.
 // (This is the last step of preparing a message to send to
 // the server.)
-String Messaging::message(String msg) {
+String HolaMessageFactory::message(String msg) {
   return
     String(MARKER)
     + String(msg)
@@ -32,7 +32,7 @@ String Messaging::message(String msg) {
 }
 
 // Creates partition for given value.
-String Messaging::keyval(int key, char val[]) {
+String HolaMessageFactory::keyval(int key, char val[]) {
   return
     String(SPLITTER)
     + String(key)
@@ -41,7 +41,7 @@ String Messaging::keyval(int key, char val[]) {
 }
 
 // Creates partition for given value.
-String Messaging::keyval(int key, String val) {
+String HolaMessageFactory::keyval(int key, String val) {
   return
     String(SPLITTER)
     + String(key)
@@ -50,7 +50,7 @@ String Messaging::keyval(int key, String val) {
 }
 
 // Creates ready to send "HOLA" message with given parameters.
-String Messaging::hola(char devId[],
+String HolaMessageFactory::create(char devId[],
                        char secret[],
                        char devModel[]) {
   return
@@ -61,45 +61,5 @@ String Messaging::hola(char devId[],
       + keyval(DEV_MODEL_KEY, devModel)
       + keyval(PROTOCOL_VERSION_KEY, PROTOCOL_VERSION)
     );
-}
-
-// Creates ready to send "CURR" message for CGNS with given
-// parameters.
-String Messaging::currCGNS(char devId[],
-                           char secret[],
-                           char devModel[],
-                           String cgnsData[]) {
-
-  t =   keyval(MESSAGE_TYPE_KEY, CURR)
-        + keyval(DEV_ID_KEY, devId)
-        + keyval(SECRET_KEY, secret)
-        + keyval(PROTOCOL_VERSION_KEY, PROTOCOL_VERSION);
-
-  lineI = CGNSS_START_INDEX;
-  for (i = 0; i < CGNSS_LINES_LENGTH; i++) {
-    t += keyval(lineI, cgnsData[i]);
-    lineI++;
-  }
-  return message(t);
-}
-
-// Creates ready to send "CURR" message for Battery with given
-// parameters.
-String Messaging::currBatt(char devId[],
-                           char secret[],
-                           char devModel[],
-                           String battData[]) {
-
-  t =   keyval(MESSAGE_TYPE_KEY, CURR)
-        + keyval(DEV_ID_KEY, devId)
-        + keyval(SECRET_KEY, secret)
-        + keyval(PROTOCOL_VERSION_KEY, PROTOCOL_VERSION);
-
-  lineI = BATT_START_INDEX;
-  for (i = 0; i < BATT_LINES_LENGTH; i++) {
-    t += keyval(lineI, battData[i]);
-    lineI++;
-  }
-  return message(t);
 }
 

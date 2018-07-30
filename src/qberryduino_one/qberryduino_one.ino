@@ -23,15 +23,25 @@
 #include "MainSerial.h"
 #include "LED.h"
 #include "Modem.h"
-#include "Messaging.h"
 #include "Parsing.h"
+
+// Including message factories
+#include "GNSSMessageFactory.h"
+#include "BatteryMessageFactory.h"
+#include "HolaMessageFactory.h"
+// #include "MyLovelyMessage.h"
 
 // Definitions of necessary utilities.
 LED _led;
 MainSerial _mainSerial;
 Modem _modem;
-Messaging _messaging = Messaging();
 Parsing _parsing = Parsing();
+
+// Definitions of message factories.
+GNSSMessageFactory _gnssMF = GNSSMessageFactory();
+BatteryMessageFactory _battMF = BatteryMessageFactory();
+HolaMessageFactory _holaMF = HolaMessageFactory();
+// MyLovelyMessageFactory _myLovelyMF = MyLovelyMessageFactory();
 
 // Definitions of the target TCP Socket server.
 char SERVER_ADDRES [] = "37.48.83.216";
@@ -57,7 +67,7 @@ const PROGMEM boolean DEBUG_MODE = true;
 const PROGMEM int SERIAL_BAUD_RATE = 9600;
 
 // Definitions of device
-const PROGMEM byte DEVICE_IDENTITY_LENGTH = 17;
+const PROGMEM byte DEVICE_IDENTITY_LENGTH = 18;
 char DEVICE_IDENTITY_PREFIX[] = "90";
 char DEVICE_IDENTITY[DEVICE_IDENTITY_LENGTH];
 char DEVICE_MODEL[] = "ONE";
@@ -153,7 +163,7 @@ void setup() {
      DEVICE_IDENTITY_LENGTH);
 
   // Send a "HOLA" message to the server.
-  sendToServer(_messaging.hola(DEVICE_IDENTITY,
+  sendToServer(_holaMF.create(DEVICE_IDENTITY,
                                SECRET,
                                DEVICE_MODEL));
 
@@ -166,7 +176,7 @@ void setup() {
 // 3-) Creates "CURR" message for "CGNS"
 // 4-) Sends it to the server.
 void processToSendCurrentCGNSS() {
-  sendToServer(_messaging.currCGNS(DEVICE_IDENTITY,
+  sendToServer(_gnssMF.create(DEVICE_IDENTITY,
                                    SECRET,
                                    DEVICE_MODEL,
                                    _parsing.parseNMEAData(
@@ -182,7 +192,7 @@ void processToSendCurrentCGNSS() {
 // 3-) Creates "CURR" message for "Battery"
 // 4-) Sends it to the server.
 void processToSendCurrentBatteryStat() {
-  sendToServer(_messaging.currBatt(DEVICE_IDENTITY,
+  sendToServer(_battMF.create(DEVICE_IDENTITY,
                                    SECRET,
                                    DEVICE_MODEL,
                                    _parsing.parseBatt(
@@ -207,7 +217,7 @@ void loop() {
     // Process to send current Battery status to the server.
     processToSendCurrentBatteryStat();
 
-    // Process to send whatever you want here :)
+    // Process to send my lovely data to the server.
     // processMyLovelyData();
   }
 }
