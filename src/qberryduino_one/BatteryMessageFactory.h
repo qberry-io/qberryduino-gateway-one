@@ -13,9 +13,10 @@
 
 //  E-mail: denizkanmaz@gmail.com
 
-//  Description: "Messaging.cpp" is a helper class that includes
-//  functions to create appropriate messages for server using
-//  declared version in the local variable named PROTOCOL_VERSION.
+//  Description: "BatteryMessageFactory" is a factory class that
+//  includes a function to create "Current State" message for Battery
+//  using the declared version in local variable named PROTOCOL_VERSION
+//  located on the inherited class.
 
 #include "MessageFactoryBase.h"
 

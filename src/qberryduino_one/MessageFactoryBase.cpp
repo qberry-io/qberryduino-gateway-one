@@ -13,9 +13,7 @@
 
 //  E-mail: denizkanmaz@gmail.com
 
-//  Description: "Messaging.cpp" is a helper class that includes
-//  functions to create appropriate messages for server using
-//  declared version in the local variable named PROTOCOL_VERSION.
+//  Description: Please refer to "MessageFactoryBase.h".
 
 #include "Arduino.h"
 #include "MessageFactoryBase.h"

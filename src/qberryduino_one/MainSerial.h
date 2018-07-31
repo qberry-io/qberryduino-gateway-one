@@ -13,8 +13,8 @@
 
 //  E-mail: denizkanmaz@gmail.com
 
-//  Description: "MainSerial.h" is a helper class that includes functions
-//  for printing out to Main Serial.
+//  Description: "MainSerial" is a helper class that includes
+//  functions for printing out to Main Serial.
 
 #include "Arduino.h"
 

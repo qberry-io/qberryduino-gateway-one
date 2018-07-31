@@ -13,7 +13,7 @@
 
 //  E-mail: denizkanmaz@gmail.com
 
-//  Description: "AT.h" is a helper class that includes the
+//  Description: "AT" is a helper class that includes the
 //  necessary AT commands.
 
 #include "Arduino.h"

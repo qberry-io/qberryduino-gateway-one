@@ -13,9 +13,7 @@
 
 //  E-mail: denizkanmaz@gmail.com
 
-//  Description: "LED.cpp" is a helper class that includes functions
-//  for indication using LEDs.
-
+//  Description: Please refer to "LED.h"
  
 #include "LED.h"
 #include "Arduino.h"

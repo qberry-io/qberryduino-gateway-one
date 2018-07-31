@@ -13,8 +13,7 @@
 
 //  E-mail: denizkanmaz@gmail.com
 
-//  Description: "Modem.h" is a class that includes functions to
-//  manage Fona/Sim808 module.
+//  Description: Please refer to "Modem.h".
 
 #include "Modem.h"
 #include "Arduino.h"

@@ -13,13 +13,12 @@
 
 //  E-mail: denizkanmaz@gmail.com
 
-//  Description: "R.cpp" is a helper class that includes functions
-//  for indication using LEDs.
-
+//  Description: Please refer to "RandomString.h".
 
 #include "RandomString.h"
 #include "Arduino.h"
 
+// Generates a string randomly with given length.
 String RandomString::generate(byte length) {
   char rnd[length];
 

@@ -13,7 +13,7 @@
 
 //  E-mail: denizkanmaz@gmail.com
 
-//  Description: "LED.h" is a helper class that includes functions
+//  Description: "LED" is a helper class that includes functions
 //  for indication using LEDs.
 
 #include <stdint.h>

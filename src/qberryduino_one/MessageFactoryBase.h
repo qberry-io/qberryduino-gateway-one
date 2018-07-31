@@ -13,9 +13,11 @@
 
 //  E-mail: denizkanmaz@gmail.com
 
-//  Description: "Messaging.cpp" is a helper class that includes
-//  functions to create appropriate messages for server using
-//  declared version in the local variable named PROTOCOL_VERSION.
+//  Description: "MessageFactoryBase" is an abstract base class
+//  that includes necessary functions and variables to create
+//  appropriate messages for server using the version of
+//  "Open Qberry Protocol" declared in the local variable named
+//  PROTOCOL_VERSION.
 
 #ifndef MessageFactoryBase_h
 #define MessageFactoryBase_h
@@ -27,11 +29,16 @@ class MessageFactoryBase
     int i;
     String t;
 
+    // Version of "Open Qberry Protocol"
     char PROTOCOL_VERSION[6] = "1.0.0";
 
+    // The symbol of the beginning and the end of messages.
     const char MARKER = '$';
+
+    // The symbol for splitting the keyvals.
     const char SPLITTER = '|';
 
+    // Definitions of the header keys.
     const byte MESSAGE_TYPE_KEY = 11;
     const byte DEV_ID_KEY = 12;
     const byte CONNECTION_ID_KEY = 13;

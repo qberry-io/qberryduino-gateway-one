@@ -13,8 +13,7 @@
 
 //  E-mail: denizkanmaz@gmail.com
 
-//  Description: "AT.cpp" is a helper class that includes the
-//  necessary AT commands.
+//  Description: Please refer to "AT.h".
 
 #include "Arduino.h"
 #include "AT.h"

@@ -26,11 +26,11 @@
 #include "Parsing.h"
 #include "RandomString.h"
 
-// Including message factories
+// Including the message factories
 #include "GNSSMessageFactory.h"
 #include "BatteryMessageFactory.h"
 #include "HolaMessageFactory.h"
-// #include "MyLovelyMessage.h"
+// #include "MyLovelyMessageFactory.h"
 
 // Definitions of necessary utilities.
 LED _led;
@@ -39,7 +39,7 @@ Modem _modem;
 Parsing _parsing = Parsing();
 RandomString _rndStr = RandomString();
 
-// Definitions of message factories.
+// Instances of message factories.
 GNSSMessageFactory _gnssMF = GNSSMessageFactory();
 BatteryMessageFactory _battMF = BatteryMessageFactory();
 HolaMessageFactory _holaMF = HolaMessageFactory();
@@ -54,7 +54,7 @@ const PROGMEM int TCP_PORT = 23101;
 // It lets you filter illegal posts. You can block
 // them in your TCP Socket server, if you want.
 // If you will use it on a common platform like qberry.io,
-// it's strongly recommended you to change this passcode.
+// it's strongly recommended you to change this secret key.
 char SECRET[7] = "B23a56";
 
 // Definitions of APN.
@@ -132,7 +132,7 @@ void setup() {
   // Indicate for "Powered On".
   _led.indicatePoweredOn();
 
-  // Set up random seed.
+  // Initialize the pseudo-random number generator.
   randomSeed(analogRead(0));
 
   // Give the modem some time.
@@ -216,19 +216,17 @@ void loop() {
 
   now = millis();
 
-  // If it's time to send a "CURR" message...
+  // If it's time to send a "Current State" message...
   if (now > (lastCurrTime + CURR_INTERVAL)) {
     lastCurrTime = millis();
 
-    // Process to send current CGNSS data to the server.
+    // Process to send current CGNSS state to the server.
     processToSendCurrentCGNSS();
 
-    // Process to send current Battery status to the server.
+    // Process to send current Battery state to the server.
     processToSendCurrentBatteryStat();
 
     // Process to send my lovely data to the server.
     // processMyLovelyData();
-
-    
   }
 }

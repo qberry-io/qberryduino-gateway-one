@@ -13,16 +13,13 @@
 
 //  E-mail: denizkanmaz@gmail.com
 
-//  Description: "Messaging.cpp" is a helper class that includes
-//  functions to create appropriate messages for server using
-//  declared version in the local variable named PROTOCOL_VERSION.
+//  Description: Please refer to "BatteryMessageFactory.h".
 
 #include "Arduino.h"
 #include "BatteryMessageFactory.h"
 
-
-// Creates ready to send "CURR" message for Battery with given
-// parameters.
+// Creates a ready to send "Current State" message for Battery using
+// the given parameters.
 String BatteryMessageFactory::create(char devId[],
                                      char connectionId[],
                                      String battData[]) {

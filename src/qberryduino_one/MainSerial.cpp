@@ -13,8 +13,7 @@
 
 //  E-mail: denizkanmaz@gmail.com
 
-//  Description: "MainSerial.cpp" is a helper class that includes functions
-//  for printing out to Main Serial.
+//  Description: Please refer to "MainSerial.h".
 
 #include "MainSerial.h"
 #include "Arduino.h"
