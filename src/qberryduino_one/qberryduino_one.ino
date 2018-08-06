@@ -116,7 +116,7 @@ void sendToServer(String msg) {
 }
 
 void setup() {
-  
+
   // Initialize the main serial if debug mode enabled.
   if (DEBUG_MODE) {
     _mainSerial.init(SERIAL_BAUD_RATE);
@@ -174,9 +174,9 @@ void setup() {
 
   // Send a "HOLA" message to the server.
   sendToServer(_holaMF.create(deviceIdentity,
-                               SECRET,
-                               DEVICE_MODEL,
-                               connectionId));
+                              connectionId,
+                              SECRET,
+                              DEVICE_MODEL));
 
   _parsing.clear();
   _modem.clearBuffer();
@@ -188,10 +188,10 @@ void setup() {
 // 4-) Sends it to the server.
 void processToSendCurrentCGNSS() {
   sendToServer(_gnssMF.create(deviceIdentity,
-                                   connectionId,
-                                   _parsing.parseNMEAData(
-                                     _modem.getCGNSSData())
-                                  ));
+                              connectionId,
+                              _parsing.parseNMEAData(
+                                _modem.getCGNSSData())
+                             ));
   _parsing.clear();
   _modem.clearBuffer();
   delay(1000);
@@ -203,10 +203,10 @@ void processToSendCurrentCGNSS() {
 // 4-) Sends it to the server.
 void processToSendCurrentBatteryStat() {
   sendToServer(_battMF.create(deviceIdentity,
-                                   connectionId,
-                                   _parsing.parseBatt(
-                                     _modem.getBatteryStat()
-                                   )));
+                              connectionId,
+                              _parsing.parseBatt(
+                                _modem.getBatteryStat()
+                              )));
   _parsing.clear();
   _modem.clearBuffer();
   delay(1000);
