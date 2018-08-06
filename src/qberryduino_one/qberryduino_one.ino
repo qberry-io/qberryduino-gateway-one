@@ -49,11 +49,11 @@ HolaMessageFactory _holaMF = HolaMessageFactory();
 char SERVER_ADDRES [] = "37.48.83.216";
 const PROGMEM int TCP_PORT = 23101;
 
-// This is not a password for accessing the
+// This is not a secret or password for accessing the
 // TCP Socket Server.
-// It lets you filter illegal posts. You can block
-// them in your TCP Socket server, if you want.
-// If you will use it on a common platform like qberry.io,
+// It lets you filter the illegal messages. Then, you can block
+// them in your TCP Socket server.
+// NOTICE: If you will use it on a common platform like qberry.io,
 // it's strongly recommended you to change this secret key.
 char SECRET[7] = "B23a56";
 
