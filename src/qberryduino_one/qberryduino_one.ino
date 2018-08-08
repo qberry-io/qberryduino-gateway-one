@@ -146,7 +146,7 @@ void setup() {
               APN_PASS,
               _mainSerial);
 
-  // Connect to TCP server..
+  // Connect to the TCP server..
   if (!_modem.connectToTCP(SERVER_ADDRES,
                            TCP_PORT)) {
 
@@ -173,18 +173,24 @@ void setup() {
      DEVICE_IDENTITY_LENGTH);
 
   // Send a "HOLA" message to the server.
-  sendToServer(_holaMF.create(deviceIdentity,
-                              connectionId,
-                              SECRET,
-                              DEVICE_MODEL));
+  processToSendHOLA();
 
   _parsing.clear();
   _modem.clearBuffer();
 }
 
+// 1-) Creates "HOLA" message,
+// 2-) Sends it to the server.
+void processToSendHOLA() {
+  sendToServer(_holaMF.create(deviceIdentity,
+                              connectionId,
+                              SECRET,
+                              DEVICE_MODEL));
+}
+
 // 1-) Gets the current CGNSS data,
 // 2-) Parses it,
-// 3-) Creates "CURR" message for "CGNS"
+// 3-) Creates "GNSS" message,
 // 4-) Sends it to the server.
 void processToSendCurrentCGNSS() {
   sendToServer(_gnssMF.create(deviceIdentity,
@@ -199,7 +205,7 @@ void processToSendCurrentCGNSS() {
 
 // 1-) Gets the current Battery data,
 // 2-) Parses it,
-// 3-) Creates "CURR" message for "Battery"
+// 3-) Creates "BATT" message,
 // 4-) Sends it to the server.
 void processToSendCurrentBatteryStat() {
   sendToServer(_battMF.create(deviceIdentity,
