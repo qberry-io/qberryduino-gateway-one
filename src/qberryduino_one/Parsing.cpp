@@ -73,7 +73,8 @@ String* Parsing::parseBatt(char * rawBattData) {
 
     if (isInBattIndexes(lineIndex)) {
       if (lineIndex == 0) {
-        if (rawCharIndex > 11) {
+        Serial.println(String(rawBattData[rawCharIndex]));
+        if (rawCharIndex == 6) {
           s[actualLineIndex] += String(rawBattData[rawCharIndex]);
         }
       } else {
