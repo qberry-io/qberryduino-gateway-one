@@ -21,8 +21,8 @@
 // Creates ready to send "CURR" message for CGNS with given
 // parameters.
 String GNSSMessageFactory::create(char devId[],
-                           char connectionId[],
-                           String cgnsData[]) {
+                                  char connectionId[],
+                                  String cgnsData[]) {
 
   t =   keyval(MESSAGE_TYPE_KEY, CURR)
         + keyval(DEV_ID_KEY, devId)
@@ -30,7 +30,8 @@ String GNSSMessageFactory::create(char devId[],
 
   lineI = CGNSS_START_INDEX;
   for (i = 0; i < CGNSS_LINES_LENGTH; i++) {
-    t += keyval(lineI, cgnsData[i]);
+    // TODO: There should be a pre-defined default value...
+    t += keyval(lineI, (cgnsData[i] == "" ? "0" : cgnsData[i]));
     lineI++;
   }
   return message(t);

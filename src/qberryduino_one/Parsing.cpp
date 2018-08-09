@@ -15,6 +15,10 @@
 
 //  Description: Please refer to "Parsing.h".
 
+/////////
+// TODO: Refactor all the class.
+/////////
+
 #include "Arduino.h"
 #include "Parsing.h"
 
