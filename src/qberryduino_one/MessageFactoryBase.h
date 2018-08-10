@@ -29,7 +29,7 @@ class MessageFactoryBase
     int i;
     String t;
 
-    // Version of "Open Qberry Protocol"
+    // The version of "Open Qberry Protocol"
     char PROTOCOL_VERSION[12] = "1.0.0-beta1";
 
     // The symbol of the beginning and the end of messages.

@@ -18,7 +18,7 @@
 //  server over GPRS.
 
 //  Model: Qberyduino One
-//  Version: 1.0.0
+//  Version: 1.0.0-beta1
 
 #include "MainSerial.h"
 #include "LED.h"
@@ -46,8 +46,8 @@ HolaMessageFactory _holaMF = HolaMessageFactory();
 // MyLovelyMessageFactory _myLovelyMF = MyLovelyMessageFactory();
 
 // Definitions of the target TCP Socket server.
-char SERVER_ADDRES [] = "37.48.83.216";
-const PROGMEM int TCP_PORT = 23101;
+char SERVER_ADDRES [] = "your_ip";
+const PROGMEM int TCP_PORT = 13101;
 
 // This is not a secret or password for accessing the
 // TCP Socket Server.

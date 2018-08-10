@@ -1,4 +1,4 @@
-# Qberryduino One v.1
+# Qberryduino One v.1.0.0-beta1
 
 "Qberryduino One" is an open source IOT Gateway developed for bringing telemetry-kind data to TCP Socket server over GPRS. 
 
@@ -11,10 +11,9 @@ The hardwares needed to use this solution.
 * 1 * Arduino Mini Pro 16 MHz, 5v with Atmega328P (or equivalent version of Arduino)
 * 1 * [Adafruit Fona 808 Version 2 Shield](https://www.adafruit.com/product/2636)
 * 1 * USB to TTL Adaptor (Compatible with 3,3v)
-* 3 * LEDs
-	* Red
-	* Yellow
-	* Blue
+* 1 * Red LED
+* 1 * Yellow LED
+* 1 *  Blue LED
 * 3 * 220 ohm 5% resistors
 * 1* GPS Antenna (uFL - 15x15 mm 1 dBi)
 * 1* GSM Antenna (Compatible with Fona 808)
@@ -53,21 +52,21 @@ Please be sure that IMEI number of Fona 808 is registered for your country.
 
 #### Notice for the USB to TTL Adapter and its voltage value
 Please be sure that the adapter provides the same voltage with the Arduino that you will use.
-For example: If you will use an "Arduino Mini Pro 8 MHz, 3.3v with Atmega328P". you need to be sure it provides 3.3v output.
+For example: If you will use an "Arduino Mini Pro 16 MHz, 5v with Atmega328P". you need to be sure it provides 5v output.
 
 ### Some configuration on code
 There are two blocks of definitions needed to be configured in "qberryduino.ino". These are the informations of the target TCP Socket server and APN configurations of the current SIM line.
 ```
 // Definitions of the target TCP Socket server.
-char SERVER_ADDRES [] = "37.48.83.216";
-const PROGMEM int TCP_PORT = 23101;
+char SERVER_ADDRES [] = "your_ip";
+const PROGMEM int TCP_PORT = 13101;
 
-// This is not a password for accessing the
+// This is not a secret or password for accessing the
 // TCP Socket Server.
-// It lets you filter illegal posts. You can block
-// them in your TCP Socket server, if you want.
-// If you will use it on a common platform like qberry.io,
-// it's strongly recommended you to change this passcode.
+// It lets you filter the illegal messages. Then, you can block
+// them in your TCP Socket server.
+// NOTICE: If you will use it on a common platform like qberry.io,
+// it's strongly recommended you to change this secret key.
 char SECRET[7] = "B23a56";
 ```
 ```
@@ -80,21 +79,10 @@ char APN_PASS [] = "";
 ```
 #### An important notice for Compiling and Uploading the Sketch
 Please be sure that you're compiling for the right microcontroller.
-For example: If you will use an "Arduino Mini Pro 8 MHz, 3.3v with Atmega328P" you need to be sure;
-* "ATmega328P (3.3v, 8MHz)" is selected on "Arduino IDE > Tools > Processor"
+For example: If you will use an "Arduino Mini Pro 16 MHz, 5v with Atmega328P" you need to be sure;
+* "ATmega328P (5v, 16MHz)" is selected on "Arduino IDE > Tools > Processor"
 * "Arduino Pro or Pro Mini" is selected on "Arduino IDE > Tools > Board"
 * The right port is selected on "Arduino IDE > Tools > Port"
-
-
-
-### Running for the first time!
-
-All sets! And your TCP Socket server is ready to receive messages.
-After uploading the code to your Arduino, please monitor it using Arduino IDE's built in Serial Monitor tool (Arduino IDE > Tools > Serial Monitor). The result looks like this:
-```
-Give an example
-```
-
 
 ### Common issues when the first runnings
 Problem: It restarts recursively, when it comes to TCP Connection step.
@@ -114,10 +102,9 @@ Please refer [Open Qberry Messaging Protocol]()
 ## Known issues and missing important functions
 After the development, there are some technical issues as well as some missing functions showed themselves. They will be solved with the incoming versions.
 
-* Memory leaks,
 * Impossible to change the configurations remotely,
-* A couple of dirty blocks of code.
-* Missing comments / documentation on code.
+* A couple of dirty blocks of code (Parsing.cpp for examle).
+* Some missed comments / documentation on code.
 
 ## Versioning
 
@@ -125,7 +112,7 @@ Used [SemVer](http://semver.org/) for versioning. For the versions available, se
 
 ## Authors
 
-* **[Deniz Kanmaz](https://github.com/denizkanmaz)** - *Initial work* - [qberry.io](https://qberry.io)
+* **[Deniz Kanmaz (denizkanmaz@gmail.com)](https://github.com/denizkanmaz)** - *Initial work* - [qberry.io](https://qberry.io)
 
 ## License
 
