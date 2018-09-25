@@ -217,7 +217,7 @@ boolean Modem::connectToTCP(char address[], int port) {
 boolean Modem::sendToServer(String msg) {
   boolean success = writeLine(at.activateCIPSendMode(),
                               DELAY_1000)
-                    .lastIndexOf(F("CIPSENDERROR")) == -1;
+                    .lastIndexOf(F("not allowed")) == -1;
   if (success) {
     write(msg, DELAY_250);
   }
