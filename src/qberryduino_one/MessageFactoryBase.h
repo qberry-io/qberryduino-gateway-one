@@ -30,7 +30,7 @@ class MessageFactoryBase
     String t;
 
     // The version of "Open Qberry Protocol"
-    char PROTOCOL_VERSION[12] = "1.0.0-beta1";
+    char PROTOCOL_VERSION[12] = "1.0.0";
 
     // The symbol of the beginning and the end of messages.
     const char MARKER = '$';
