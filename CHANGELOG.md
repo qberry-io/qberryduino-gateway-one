@@ -7,7 +7,7 @@ Used [SemVer](http://semver.org/) for versioning. For the versions available, se
 ## [1.0.0-beta1] - 2018-08-10
 ### Initial beta version
 
-## [1.0.0] - 2018-09-26
+## [1.0.0] - 2018-09-25
 ### Added
 - "CHANGELOG.md" file.
 - Added "Nuget.org feed page" and "Github Release page" links to the "README.md" file.
