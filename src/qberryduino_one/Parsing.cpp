@@ -24,23 +24,23 @@
 
 // Returns whether the given index includes data we interest.
 boolean Parsing::isInCGNSSIndexes(byte lineIndex) {
-  return lineIndex == 1
-         || lineIndex == 3
-         || lineIndex == 4
-         || lineIndex == 5
-         || lineIndex == 6
-         || lineIndex == 7
-         || lineIndex == 8
-         || lineIndex == 15
-         || lineIndex == 16;
+  return lineIndex == 1 // Fix Status
+         || lineIndex == 3 // Latitude
+         || lineIndex == 4 // Longtitude
+         || lineIndex == 5 // MSL Altitude
+         || lineIndex == 6 // Speed Over Ground
+         || lineIndex == 7 // Course Over Ground
+         || lineIndex == 8 // Fix Mode
+         || lineIndex == 15 // GNSS Satellites Used
+         || lineIndex == 16; // GLONASS Satellites in View
 }
 
 // Returns whether the given index includes data we interest.
 boolean Parsing::isInBattIndexes(byte lineIndex) {
   return
-    lineIndex == 0
-    || lineIndex == 1
-    || lineIndex == 2;
+    lineIndex == 0 // Charge Status
+    || lineIndex == 1 // Battery Level (%)
+    || lineIndex == 2; // Battery Voltage (mV)
 }
 
 // Clears the temprorary values.
