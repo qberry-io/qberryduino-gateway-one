@@ -1,4 +1,4 @@
-# Qberryduino One v.1.0.0-beta1
+# Qberryduino One v.1.0.0
 
 "Qberryduino One" is an open source IOT Gateway developed for bringing telemetry-kind data to TCP Socket server over GPRS. 
 
