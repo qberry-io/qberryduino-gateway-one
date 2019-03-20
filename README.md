@@ -97,7 +97,7 @@ Device restarts if the established connection has droped and sending the message
 * If you use a common platform like qberry.io, please be sure that the device is already defined to your account, licence is not expired and the password is correct. 
 
 ## Messaging Protocol
-Please refer [Open Qberry Messaging Protocol]()
+Please refer [Open Qberry Messaging Protocol](https://github.com/denizkanmaz/qberry-open-protocol)
 
 ## Known issues and missing important functions
 After the development, there are some technical issues as well as some missing functions showed themselves. They will be solved with the incoming versions.
