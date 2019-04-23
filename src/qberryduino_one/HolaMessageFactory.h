@@ -24,7 +24,7 @@ class HolaMessageFactory : private MessageFactoryBase
 {
   private:
 
-    char HOLA[5] = "HOLA";
+    const char HOLA[5] = "HOLA";
 
   public:
 
@@ -34,4 +34,3 @@ class HolaMessageFactory : private MessageFactoryBase
                   char secret[],
                   char devModel[]);
 };
-

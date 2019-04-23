@@ -33,3 +33,6 @@
 
 # Others
 *.DS_Store
+
+# Editors, user profiles
+.vscode

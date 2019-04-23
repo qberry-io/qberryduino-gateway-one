@@ -17,7 +17,6 @@
 //  manage Fona/Sim808 module.
 
 #include <stdint.h>
-#include "MainSerial.h"
 #include "AT.h"
 #include <SoftwareSerial.h>
 
@@ -27,13 +26,12 @@ class Modem
 
     static const unsigned int SS_BUFFER_SIZE = 108;
     const uint8_t DELAY_60 = 60;
-    const  uint8_t DELAY_250 = 250;
-    const  unsigned int DELAY_1000 = 1000;
-    const  unsigned int DELAY_2000 = 2000;
-    const  unsigned int DELAY_3000 = 3000;
-    const  unsigned int DELAY_7000 = 7000;
+    const uint8_t DELAY_250 = 250;
+    const unsigned int DELAY_1000 = 1000;
+    const unsigned int DELAY_2000 = 2000;
+    const unsigned int DELAY_3000 = 3000;
+    const unsigned int DELAY_7000 = 7000;
 
-    MainSerial mainSerial;
     AT at = AT();
     String ssBuffer;
     String apnName;
@@ -78,10 +76,9 @@ class Modem
     void init(byte rx,
               byte tx,
               int baudRate,
-              String apnN,
+              char apnN[],
               char apnUsername[],
-              char apnPass[],
-              MainSerial ms);
+              char apnPass[]);
 
     // Clears the buffered data on MC's memory
     void clearBuffer();

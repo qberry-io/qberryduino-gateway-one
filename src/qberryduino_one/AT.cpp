@@ -118,7 +118,7 @@ String AT::attachGPRS() {
 // Starts a TCP connection.
 // For more: https://m2msupport.net/m2msupport/atcipstart-start-up-tcp-or-udp-connection/
 String AT::startTCPConnection(String address, String port) {
-  return ATCommand("CIPSTART=" + capsulateWithDoubleQuote(F("TCP")) + "," + capsulateWithDoubleQuote(address) + "," + capsulateWithDoubleQuote(port));
+  return ATCommand("CIPSTART=" + capsulateWithDoubleQuote(F("TCP")) + F(",") + capsulateWithDoubleQuote(address) + F(",") + capsulateWithDoubleQuote(port));
 }
 
 // Sends data over the TCP or UDP.
