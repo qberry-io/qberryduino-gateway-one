@@ -30,7 +30,7 @@ class MessageFactoryBase
     String t;
 
     // The version of "Open Qberry Protocol"
-    char PROTOCOL_VERSION[12] = "1.0.0";
+    char PROTOCOL_VERSION[6] = "1.1.0";
 
     // The symbol of the beginning and the end of messages.
     const char MARKER = '$';
@@ -45,6 +45,7 @@ class MessageFactoryBase
     const byte SECRET_KEY = 14;
     const byte DEV_MODEL_KEY = 15;
     const byte PROTOCOL_VERSION_KEY = 16;
+    const byte CHILD_DEV_ID = 17;
 
     // Creates message based on given message.
     // (This is the last step of preparing a message to send to

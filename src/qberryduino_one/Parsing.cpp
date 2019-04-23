@@ -120,3 +120,109 @@ String* Parsing::parseNMEAData(char* rawNMEAData) {
   return s;
 }
 
+// https://stackoverflow.com/a/14824108
+String getValue(String data, char separator, int index)
+{
+  int found = 0;
+  int strIndex[] = {0, -1};
+  int maxIndex = data.length() - 1;
+
+  for (int i = 0; i <= maxIndex && found <= index; i++) {
+    if (data.charAt(i) == separator || i == maxIndex) {
+      found++;
+      strIndex[0] = strIndex[1] + 1;
+      strIndex[1] = (i == maxIndex) ? i + 1 : i;
+    }
+  }
+
+  return found > index ? data.substring(strIndex[0], strIndex[1]) : F("");
+}
+
+// Parses given Raw CGNSINF response taken from the module.
+// NOTICE: The raw message must be in "RMC" sequence.
+String* Parsing::parseTEHURFData(String rawTEHURFData) {
+
+  clear();
+
+  //$|11|TEHU|12|123456789|13|RF|311|22.60|312|46.50|$
+
+  s[0] = getValue(rawTEHURFData, '|', 4);
+  s[1] = getValue(rawTEHURFData, '|', 8);
+  s[2] = getValue(rawTEHURFData, '|', 10);
+ 
+  /*
+    StringSplitter ss = StringSplitter(rawTEHURFData, '|', 11);
+    int count = ss.getItemCount();
+
+    s[0] = ss.getItemAtIndex(4);
+    s[1] = ss.getItemAtIndex(8);
+    s[2] = ss.getItemAtIndex(10);
+
+    Serial.println(s[0]);
+    Serial.println(s[1]);
+    Serial.println(s[2]);
+  */
+  /*
+    for (int i = 0; i < count; i++) {
+      //s[i] = ss.getItemAtIndex(i);
+
+      Serial.println(ss.getItemAtIndex(i));
+    }
+  */
+
+  return s;
+}
+
+
+
+/*
+  int[] getCharIndexes(String data, char character) {
+  int indexes[];
+  for (int i = 0; i < data.length(); i++) {
+    if (data.charAt(i) == character) {
+      count++;
+    }
+  }
+  return count;
+  }
+
+
+
+
+
+
+
+  int countSplitCharacters(String text, char splitChar) {
+  int returnValue = 0;
+  int index = -1;
+
+  while (index > -1) {
+    index = text.indexOf(splitChar, index + 1);
+
+    if (index > -1) returnValue += 1;
+  }
+
+  return returnValue;
+  }
+
+
+
+  String* splitCommand(String text, char splitChar) {
+  int splitCount = countSplitCharacters(text, splitChar);
+  String returnValue[splitCount];
+  int index = -1;
+  int index2;
+
+  for (int i = 0; i < splitCount - 1; i++) {
+    index = text.indexOf(splitChar, index + 1);
+    index2 = text.indexOf(splitChar, index + 1);
+
+    if (index2 < 0) index2 = text.length() - 1;
+    returnValue[i] = text.substring(index, index2);
+  }
+
+  return returnValue;
+  }
+
+
+*/

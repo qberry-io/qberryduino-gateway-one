@@ -27,12 +27,12 @@ void Modem::clearSerial() {
 
 // Prints given string to the MainSerial (For dubugging).
 void Modem::printReceived(String text) {
-  mainSerial.println(text);
+  Serial.println(text);
 }
 
 // Prints given string to the MainSerial (For dubugging)
 void Modem::printSent(String text) {
-  mainSerial.println(text);
+  Serial.println(text);
 }
 
 // Returns whether the given character is a special character.
@@ -124,10 +124,9 @@ char * Modem::writeLine2(String message, int delayer) {
 void Modem::init(byte rx,
                  byte tx,
                  int baudRate,
-                 String apnN,
+                 char apnN[],
                  char apnUsername[],
-                 char apnPass[],
-                 MainSerial ms) {
+                 char apnPass[]) {
 
   apnName = apnN;
   apnUser = apnUsername;
@@ -137,7 +136,6 @@ void Modem::init(byte rx,
 
   ss = SoftwareSerial(rx, tx);
   ss.begin(baudRate);
-  mainSerial = ms;
   delay(100);
 
   writeLine(at.begin(), DELAY_1000);
@@ -224,4 +222,3 @@ boolean Modem::sendToServer(String msg) {
 
   return success;
 }
-

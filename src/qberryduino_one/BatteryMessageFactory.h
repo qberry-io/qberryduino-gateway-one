@@ -24,7 +24,7 @@ class BatteryMessageFactory: private MessageFactoryBase
 {
   private:
     
-    char CURR[5] = "BATT";
+    const char CURR[5] = "BATT";
 
     const int BATT_START_INDEX = 111;
     const byte BATT_LINES_LENGTH = 3;
@@ -37,4 +37,3 @@ class BatteryMessageFactory: private MessageFactoryBase
                   char connectionId[],
                   String battData[]);
 };
-

@@ -36,13 +36,15 @@ class Parsing {
   public:
 
     // Parses given Raw CBC response taken from the module.
-    String* parseBatt(char * rawBattData);
+    String* parseBatt(char rawBattData[]);
 
     // Parses given Raw CGNSINF response taken from the module.
     // NOTICE: The raw message must be in "RMC" sequence.
-    String* parseNMEAData(char* rawNMEAData);
+    String* parseNMEAData(char rawNMEAData[]);
 
     // Clears the temprorary values.
     void clear();
+
+    String* parseTEHURFData(String rawTEHURFData);
 };
 
