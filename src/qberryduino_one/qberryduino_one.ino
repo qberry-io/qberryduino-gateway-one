@@ -45,7 +45,7 @@ TEHUMessageFactory _tehuMF = TEHUMessageFactory();
 // MyLovelyMessageFactory _myLovelyMF = MyLovelyMessageFactory();
 
 // Definitions of the target TCP Socket server.
-char SERVER_ADDRES [] = "37.48.83.216";
+char SERVER_ADDRES [] = "173.249.22.90";
 const PROGMEM int TCP_PORT = 23101;
 
 // This is not a secret or password for accessing the
@@ -95,11 +95,13 @@ const PROGMEM int RF_TX = 10;
 // Definitions of Intervals and Delays
 const PROGMEM int CURR_INTERVAL = 15000;
 const PROGMEM int STARTUP_DELAY = 5000;
+long RESET_INTERVAL = 3600000;
 
 // Current State
 int i; // Used in loops only
 unsigned long now = 0;
 unsigned long lastCurrTime = 0;
+unsigned long timeStarted = 0;
 char connectionId[CONNECTION_ID_LENGTH];
 char deviceIdentity[DEVICE_IDENTITY_LENGTH];
 
@@ -165,6 +167,10 @@ void setup() {
     reset();
     return;
   }
+
+  // Mark the current time as "Time that we started up".
+  timeStarted = millis();
+  Serial.println(timeStarted);
 
   // Indicate successfuly connected.
   _led.indicateConnected();
@@ -236,6 +242,22 @@ void loop() {
   // If it's time to send a "Current State" message...
   if (now > (lastCurrTime + CURR_INTERVAL)) {
     lastCurrTime = millis();
+
+    /*
+        Serial.println(now);
+        Serial.println(timeStarted);
+        Serial.println(RESET_INTERVAL);
+        if (now > (timeStarted + RESET_INTERVAL)) {
+          Serial.println(F("TTR"));
+          reset();
+        }
+    */
+    Serial.println(now);
+    Serial.println(RESET_INTERVAL);
+    if (now > RESET_INTERVAL) {
+      // Serial.println(F("TTR"));
+      reset();
+    }
 
     // Process to send current Battery state to the server.
     processToSendCurrentBatteryStat();
