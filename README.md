@@ -42,7 +42,7 @@ Here is a list of hardware and their connections step by step with preferred cab
 	*	RX -> Pin 7 (Orange)
 	*	TX -> Pin 8 (Brown)
 
-![enter image description here](https://lh3.googleusercontent.com/OZIM_0mFb-jgyUuYGuuslm1Z3meFcrUUe49EGT8yfN1WwXtKgSnmazm6Cj4eHPAh9LiuSCHu2iZd "The sketch of the circuit")
+![The sketch of the circuit](https://raw.githubusercontent.com/qberry-io/qberryduino-gateway-one/master/circuit/sketch_bb.png "The sketch of the circuit")
 
 #### Notice for the PIN number of simcard
 Please be sure that simcard doesn't protected with a PIN number. Fona 808 fails if the simcard has a PIN number.
